@@ -17,7 +17,12 @@ original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
   su dirección noreply); la global no cambia y los commits antiguos no se
   reescriben (siguen bloqueados en Vercel, sin efecto). Documentado en
   PROJECT-CONTEXT, README, AGENTS.md y CLAUDE.md.
-- Prueba: el push de este commit de documentación.
+- Verificado: el push de `2ae20c5` (autor `dreiklx` según GitHub) creó
+  desde GitHub el despliegue de producción y llegó a **READY**; el dominio
+  público apunta a él. Catálogo, las 7 demos, calendario, vista previa,
+  fotos de Olivo y audio responden; la música arranca al abrir en los 7
+  diseños en producción (Chrome automatizado). El despliegue de `198b96c`
+  (autor `dreik0`) queda bloqueado en el historial de Vercel, sin efecto.
 
 ## 2026-10-09 (4) — Olivo es "Ramón & Florinda" y flujo de trabajo permanente
 
