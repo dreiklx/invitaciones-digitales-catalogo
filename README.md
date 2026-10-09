@@ -153,10 +153,10 @@ que el cliente tenga derecho a publicar. Sin música: `music: null`.
 
 Cada invitación es un **proyecto de Vercel nuevo**; el catálogo es otro
 proyecto (`invitaciones-digitales-catalogo`,
-https://invitaciones-digitales-catalogo.vercel.app). El catálogo se
-despliega con la CLI desde `main`; no está conectado a GitHub, así que un
-push a https://github.com/dreiklx/invitaciones-digitales-catalogo (privado)
-no despliega. Nunca copiar ni reutilizar `.vercel/` (enlazaría y
+https://invitaciones-digitales-catalogo.vercel.app). El catálogo está
+conectado a https://github.com/dreiklx/invitaciones-digitales-catalogo
+(privado): `git push origin main` despliega a producción y las demás ramas
+crean vistas previas. Nunca copiar ni reutilizar `.vercel/` (enlazaría y
 sobrescribiría el proyecto de otro).
 
 ```bash

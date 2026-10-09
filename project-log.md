@@ -4,6 +4,16 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-09 — Despliegue automático desde GitHub
+
+- El proyecto de Vercel existente `invitaciones-digitales-catalogo` se
+  conectó al repositorio privado `dreiklx/invitaciones-digitales-catalogo`
+  (`vercel git connect`). Rama de producción: `main`; las demás ramas
+  crean vistas previas. Sin cambios de dominio, variables ni comandos de
+  build (Next.js, raíz `.`, `npm run build` con `check` como prebuild).
+- La prueba del flujo automático es el push de este mismo commit de
+  documentación (sin `vercel --prod`).
+
 ## 2026-10-08 (9) — Repositorio privado en GitHub
 
 - Repositorio **privado** https://github.com/dreiklx/invitaciones-digitales-catalogo

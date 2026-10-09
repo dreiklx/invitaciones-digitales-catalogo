@@ -46,9 +46,11 @@ escaparate.
 - Archivos de la arquitectura anterior movidos a `_anterior/` (ignorada
   por git, TypeScript, ESLint y Vercel), pendientes de que el dueño los borre.
 - **Despliegue del catálogo:** https://invitaciones-digitales-catalogo.vercel.app
-  (proyecto de Vercel `invitaciones-digitales-catalogo`). Se despliega con
-  la CLI (`vercel deploy --prod`); **no** está conectado a GitHub, así que
-  un push no despliega nada.
+  (proyecto de Vercel `invitaciones-digitales-catalogo`). **Conectado a
+  GitHub** (2026-10-09): cada push a `main` despliega a producción y cada
+  push a otra rama crea un despliegue de vista previa. No hace falta
+  `vercel --prod`. El build corre `npm run check` (prebuild) y la
+  verificación de tipos de `next build`; si fallan, no se publica.
 
 ## Stack
 
