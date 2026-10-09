@@ -1,0 +1,356 @@
+# Contexto del proyecto — LEER ANTES DE CAMBIAR NADA
+
+Punto de partida de cualquier sesión. Después: `project-log.md`
+(historial), `docs/templates/<n>-<diseño>.md` (el diseño con el que se va a
+trabajar) y `photo-map.md`. La guía práctica está en `README.md`. No
+duplicar esta información en otros `.md`; actualizar estos archivos.
+
+## Propósito y origen
+
+Proyecto interno para producir invitaciones digitales (bodas, quinceaños
+y cumpleaños) para un posible servicio. Nació como **copia** de la
+invitación que el autor hizo para su propia boda (proyecto aparte, ya
+publicado):
+
+- **2026-10-03:** se limpió de todo dato de esa boda.
+- **2026-10-08:** se convirtió en un **catálogo de cinco diseños** de boda.
+- **2026-10-08 (4):** se agregaron Aurora (quinceaños) y Nube (cumpleaños
+  de bebé/infantil): **siete diseños**.
+
+**No recuperar ni reintroducir datos de la boda original**, tampoco desde
+su historial Git antiguo (archivado fuera del proyecto; ver "Riesgos").
+
+**No es un CMS ni un SaaS.** No hay login, editor visual, base de datos,
+panel, cuentas ni pagos. Nosotros editamos un archivo de datos y
+desplegamos una copia del proyecto por cliente. El catálogo es solo un
+escaparate.
+
+## Estado (2026-10-08)
+
+- Siete diseños completos (5 de boda, 1 de quinceaños, 1 de cumpleaños
+  infantil), un catálogo en `/` agrupado por tipo de evento, con transición hacia cada
+  demo, validación `npm run check`, demos con imágenes abstractas generadas.
+- typecheck, lint, check y build sin errores. Revisión visual "teléfono
+  primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
+  escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
+- Logo del estudio solo en el pie del catálogo (ver "Marca del estudio").
+- **Git:** repositorio **nuevo y limpio** desde 2026-10-08: rama `main`,
+  un solo commit inicial con el estado actual (catálogo y siete diseños).
+  **Sin remoto configurado; todavía no se publicó en GitHub.** El historial
+  antiguo (con datos de la boda) no está en este repositorio: se archivó
+  fuera de la carpeta del proyecto, en una carpeta privada del dueño, solo
+  para recuperación. `.env.local` y `.vercel/` (vínculo local con el
+  proyecto de Vercel del catálogo) existen solo en la máquina del dueño y
+  están ignorados por git.
+- Archivos de la arquitectura anterior movidos a `_anterior/` (ignorada
+  por git, TypeScript, ESLint y Vercel), pendientes de que el dueño los borre.
+- Despliegue del catálogo: ver la entrada más reciente de `project-log.md`.
+
+## Stack
+
+Next.js 16.3 (App Router, Turbopack) · React 19.2 · TypeScript 5 ·
+Tailwind CSS v4 · `sharp` (imágenes) · `tsx` (scripts) · Vercel. Todo se
+prerenderiza estático. Next 16 cambia APIs: leer `node_modules/next/dist/docs/`
+antes de usar APIs de Next (ver `AGENTS.md`).
+
+## Estructura
+
+```
+config/invitation.ts      ← null = catálogo; o los datos de UNA invitación
+config/catalog.ts         ← URL, título y descripción del catálogo
+lib/invitation/
+  types.ts                ← forma de los datos (contenido común + fotos por diseño)
+  resolve.ts              ← invitación → valores listos (fechas, paleta, textos, enlaces)
+  time.ts                 ← fecha/hora con zona horaria, formatos, números romanos
+  whatsapp.ts             ← mensajes del RSVP
+  calendar.ts             ← archivo .ics
+  share-image.tsx         ← tarjeta al compartir e ícono (next/og)
+  validate.ts             ← reglas de `npm run check`
+  active.ts, routes.tsx   ← qué se muestra en cada ruta según el modo
+templates/
+  registry.ts             ← metas de los 7 diseños (solo datos; orden del catálogo)
+  demos.ts, previews.tsx  ← demos (datos) y miniaturas del catálogo
+  shared/                 ← lógica común: Gate, MusicPlayer, RsvpForm, Lightbox,
+                            CopyValue, StickyRsvp, Reveal, ScrollCue, Frame,
+                            Shell, event-phase, icons…
+  <diseño>/               ← meta.ts, fonts.ts, demo.ts, Template.tsx,
+                            Countdown.tsx, Preview.tsx (+ ornamentos propios)
+app/
+  page.tsx                ← catálogo
+  plantillas/<diseño>/    ← página, imagen al compartir y .ics de cada diseño
+  layout.tsx, icon.tsx, apple-icon.tsx, opengraph-image.tsx, manifest.ts,
+  calendario.ics/         ← metadatos y calendario de la invitación del cliente
+components/catalog/       ← página del catálogo
+scripts/                  ← check.ts, new-invitation.mjs, placeholders.ts, optimize-images.mjs
+docs/templates/           ← una guía por diseño
+public/plantillas/<diseño>/ ← imágenes de demostración · public/images/, public/audio/ ← cliente
+public/logos/             ← logos del estudio (originales, sin modificar)
+next.config.ts            ← reescritura "/" → diseño del cliente; cssChunking
+```
+
+## Arquitectura (decisiones)
+
+- **Contenido común, diseño libre.** Todos los diseños usan el mismo tipo
+  de contenido (`InvitationContent`). Cada diseño define sus espacios de
+  foto (`PhotoSlots`), su paleta, sus tipografías y sus componentes. Los
+  componentes reciben la invitación ya resuelta (`ResolvedInvitation`) por
+  props; ninguno lee el config ni formatea fechas por su cuenta.
+- **Lógica compartida, aspecto propio.** Portada (por el audio), música,
+  RSVP, visor, copiar y barra flotante se comparten y cada diseño los
+  estiliza con clases. La cuenta regresiva comparte el hook
+  (`useCountdown`) pero cada diseño dibuja la suya. No se forzó compartir
+  marcado de secciones: cada `Template.tsx` es libre.
+- **Quién celebra según el diseño** (`types.ts`): los diseños de boda
+  (`WeddingTemplateId`) exigen `couple`; Aurora y Nube (`HonoreeTemplateId`)
+  exigen `honoree` (`name`, `age`, `ageLabel?`). TypeScript obliga a
+  elegir el correcto según `template`. `resolve.ts` lo unifica: `names.one`
+  es la persona que celebra y `names.two` queda vacío; `inv.honoree` trae
+  `ageText` ("15 años", "1 año", "6 meses"). Título, descripción, mensaje
+  de WhatsApp y calendario se arman con "Ana y Luis" o con el nombre solo
+  ("Fiesta de quince años de Mariana"). Con un solo festejado el RSVP no
+  pregunta "¿de parte de quién?" salvo que se den `referrerOptions`.
+- **`kind` en cada `meta.ts`** (`boda` · `quinceanos` · `cumpleanos-infantil`):
+  el catálogo agrupa los diseños por tipo de evento.
+- **`schedule` (programa del evento)**: opcional en el contenido común;
+  hoy solo lo muestran Aurora (línea de tiempo) y Nube (tarjetas). Horas en
+  24 h, validadas por `npm run check`.
+- **Tercera tipografía opcional** `--f-script` → clase `font-script`
+  (`globals.css`): la usa Aurora para el nombre en caligrafía.
+- **Colores centralizados.** Diez tokens (`Palette`): cada diseño trae los
+  suyos y el config los reemplaza con `colors`. Se aplican como variables
+  `--c-*` en el contenedor del diseño. En Tailwind se usan como `bg-paper`,
+  `bg-surface`, `text-ink`, `text-muted`, `bg-primary`,
+  `text-on-primary`, `text-secondary`, `bg-accent`, `text-on-accent` y
+  `border-line` (`app/globals.css`). Ningún color de diseño está escrito en
+  los componentes.
+- **Un modo por despliegue** (`config/invitation.ts`). Si es `null`, es el
+  catálogo: `/` más `/plantillas/<id>`. Si tiene datos, es una invitación:
+  `next.config.ts` reescribe `/` hacia `/plantillas/<diseño>` (la URL
+  sigue siendo `/`) y los demás diseños dan 404.
+- **Una carpeta de ruta por diseño** (no una ruta dinámica). Así cada
+  página solo incluye y precarga las tipografías de su diseño (2-3 en vez
+  de 17). Requiere `experimental.cssChunking: { type: "graph" }` en
+  `next.config.ts`; sin eso, Turbopack junta el CSS de las fuentes de todo
+  el sitio en un solo archivo.
+- **Rutas en español con nombre** (`/plantillas/olivo`, no `/plantillas/01`):
+  más fáciles de recordar y dictar; el número (01–05) aparece en el
+  catálogo, en la metadata y en los nombres de `docs/templates/`.
+- **Transición catálogo → diseño:** View Transitions de React
+  (`<ViewTransition name="cover-<id>" share="cover-morph">` en la tarjeta y
+  en la portada del diseño). La miniatura se transforma en la portada
+  (620 ms) y el resto hace un fundido. Sin soporte del navegador, la
+  navegación es normal. Respeta "reducir movimiento".
+- **Demos sin WhatsApp real:** en las demos, el RSVP muestra el mensaje que
+  llegaría en vez de abrir WhatsApp.
+- **Modo oscuro forzado bloqueado** (`color-scheme: only light` +
+  `<meta name="darkreader-lock">`). Las extensiones y el modo oscuro de
+  Chrome invertían los diseños; se detectó en la revisión visual.
+- **Imágenes de demostración abstractas** generadas por script (escenas de
+  luz desenfocada por diseño). No se usaron fotos de stock porque
+  descargarlas requiere decidir licencias (ver "Pendientes").
+
+## Funcionalidades comunes (cuando el diseño las muestra)
+
+Portada "Abrir invitación" · nombres y fecha · frase de apertura y de
+cierre · historia con foto · padres/padrinos · cuenta regresiva (con
+mensajes "hoy" y "después") · calendario `.ics` (todos los lugares en la
+descripción, recordatorio un día antes) y Google Calendar · uno o más
+lugares con Google Maps y Waze opcional · aviso importante (`*resaltado*`)
+· vestimenta con colores a evitar · regalos (copiar con alternativa si el
+navegador lo bloquea, enlace a mesa de regalos) · RSVP por WhatsApp guiado
++ "no podré asistir" + fecha límite · galería con visor · música · barra
+flotante "Confirmar asistencia" · tarjeta al compartir e ícono con la paleta.
+Todas las secciones opcionales se ocultan con `null`.
+
+## Plantilla vs. invitación personalizada (conceptual)
+
+| | Plantilla (uno de los 7 diseños) | Personalizada |
+|---|---|---|
+| Base | Un diseño del catálogo, tal cual | Copia del proyecto que se modifica |
+| Qué se cambia | Contenido, fotos, música, colores (`colors`), ocultar secciones | Además: secciones nuevas, otro orden, otro diseño, animaciones, funciones a medida |
+| Archivos | `config/invitation.ts`, `public/images/`, `public/audio/` | También `templates/`, `app/`, `lib/` |
+
+Regla de alcance: si se resuelve en `config/invitation.ts` o `public/`, es
+plantilla; si exige tocar código, es personalizada o un extra. Ejemplos
+fuera de la plantilla: secciones nuevas (itinerario, hospedaje, video),
+más fotos o galería distinta, fotos a color en Gala, otra tipografía,
+cambiar el orden, mapa embebido, integraciones, lista de invitados/panel,
+invitación con nombre por invitado, dominio propio, varios idiomas,
+licencias de música.
+
+### Decisiones comerciales — PENDIENTE DE DEFINICIÓN CON FOTOLAB
+No hay precios, paquetes, rondas de cambios, extras, duración del servicio,
+permanencia en línea, comisiones ni acuerdos aprobados. **No documentar
+precios como decisión.** Todo eso se definirá con la persona relacionada
+con Fotolab.
+
+### Riesgos de alcance con clientes
+Datos que llegan a cuentagotas (pedir todo de una vez, lista en
+`README.md`). Fotos con orientación equivocada (guía por diseño + `npm run
+check`). "Quiero exactamente mi color" (`colors` cubre ajustes; un rediseño
+es personalizado). Textos reescritos muchas veces. Música sin licencia.
+"Una sección más". Cambios después de publicar y tiempo en línea
+(pendientes).
+
+## Reglas heredadas (probadas en una boda real — no revertir)
+
+### Portada "Abrir invitación" (`templates/shared/Gate.tsx`)
+- Pantalla completa antes de todo; bloquea la página con `inert` y
+  `overflow: hidden` hasta tocar el botón.
+- **Existe por el audio**: Chrome y Brave bloquean `play()` sin interacción
+  previa (confirmado en producción). Ese toque real es lo único que
+  desbloquea el sonido. Se muestra aunque no haya música.
+- **No llama a `audio.play()`**: el clic llega al listener de "primera
+  interacción" de `MusicPlayer.tsx`.
+- Salida: fundido + escala 700 ms, se desmonta; respeta reducir movimiento.
+
+### Música (`templates/shared/MusicPlayer.tsx`)
+1. Un solo intento de autoplay al montar.
+2. Un único listener de primera interacción (`click` + `keydown`) que se
+   retira para siempre.
+3. Si la interacción fue sobre el reproductor, no hace nada; si no, y
+   nunca sonó, reintenta `play()` una vez.
+4. El botón solo hace play/pause.
+- **No reintroducir** trucos de `muted`, ciclos `pause()→play()`, refs de
+  supresión ni listeners de `pointerdown`/`touchstart`/`mousedown`.
+- Estado visual solo desde eventos nativos del `<audio>` + timeout 4 s.
+- < `sm` solo el círculo; < `lg` se oculta sobre `#confirmar`.
+- Claude in Chrome no reproduce audio real: la prueba definitiva es un
+  teléfono real.
+
+### Usabilidad para personas mayores (60-70+), en todos los diseños
+- "Desliza hacia abajo" con palabras + flecha (`ScrollCue`); tocarla avanza.
+- Botones con forma de botón y ≥ 48 px ("Cómo llegar" + "Se abre en Google Maps").
+- "Confirmar por WhatsApp" puede ir en dos líneas equilibradas (Tierra,
+  Gala y Borgoña, con mayúsculas espaciadas, no cabían en una a 320-430 px
+  y el texto se salía del botón). No achicar la letra para forzar una línea.
+- Visor: la foto empieza debajo de "Cerrar" y ambos respetan la zona segura
+  del teléfono.
+  Enlaces secundarios (Google Calendar, WhatsApp del RSVP) ≥ 44 px de alto.
+- RSVP: opciones con borde visible, "Toca una opción en cada paso" y
+  "Solo falta presionar Enviar" bajo el botón.
+- Barra flotante: se oculta sobre el formulario; < 375 px solo el botón.
+- Visor: botón "Cerrar" con texto, sin anterior/siguiente; Escape cierra y
+  el foco vuelve a la foto.
+- Fechas romanas (Gala) siempre acompañadas de la fecha normal.
+- Nada se corta ni se desborda a 320 px (revisar al tocar diseño).
+
+### Teléfono primero (revisión 2026-10-08, no revertir)
+Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
+- **La portada cabe en la primera pantalla** con "Desliza hacia abajo"
+  visible. En Tierra, Gala, Riviera y Borgoña el ancho de la foto de
+  portada en teléfono sale del alto de la pantalla
+  (`w-[min(…,max(…,calc((100svh-Xrem)*ratio)))]`): la proporción sigue
+  siendo la de `meta.ts`, solo cambia el tamaño. Olivo usa foto a pantalla
+  completa. Medido en los 7 diseños a 320×600, 360×740, 390×844 y
+  430×932: "Desliza hacia abajo" entero y en una línea (a 320 px el texto
+  usa menos espaciado).
+- **Teléfonos bajos (variante `short:`** en `globals.css`: alto ≤ 640 px y
+  ancho < 1024 px; 320×568, o un teléfono con la barra del navegador
+  abierta): las portadas se recomponen en vez de encogerse. "Desliza hacia
+  abajo" pasa a una fila (flecha al lado del texto, mismo tamaño) y cada
+  diseño ajusta lo suyo: Gala y Riviera, márgenes; Borgoña, la fecha en una
+  línea; Tierra deja la foto pasar el borde (invita a bajar) y sube la
+  flecha a la mitad de la foto (`ScrollCue stacked`). Medido a 320×568: el
+  indicador queda a 20-60 px del borde en los 7 diseños.
+- **Nombres:** en teléfono, uno por línea ("Nombre / & Nombre") en portadas
+  y pies (también Gala desde 2026-10-08 (5); Olivo deja el "&" solo); en
+  escritorio, en una línea o con el "&" aparte.
+- **Cortina (`Reveal variant="curtain"`):** el `clip-path` va en un hijo
+  (`.reveal-curtain`), nunca en el elemento observado. Chrome no avisa la
+  intersección de un elemento recortado por completo y las fotos de
+  Tierra y Borgoña **no aparecían nunca** (estaba en producción).
+- **Botones de lugar:** mismo ancho, ≥ 52 px de alto, uno debajo del otro
+  o en dos columnas según el ancho.
+- **Barra flotante:** también se oculta sobre el `<footer>` (tapaba los
+  nombres del cierre).
+- **"← Diseños" (demos):** se esconde al bajar y vuelve al subir.
+- Botón "Confirmar por WhatsApp": el ícono no se encoge (`shrink-0`) y el
+  texto baja a 17 px por debajo de 360 px.
+- Animaciones de aparición más cortas en teléfono (0.8 s, 16 px).
+- Cómo revisar: Claude in Chrome trabaja en una pestaña oculta (las
+  animaciones no avanzan y las capturas fallan). Funciona mejor Chrome
+  headless con emulación móvil por CDP, capturando la página por
+  pantallas. El script es temporal, no está en el repo.
+
+## Marca del estudio (logos)
+
+`public/logos/` (originales, sin modificar; PNG con transparencia, hechos
+para **fondo oscuro**: letras blancas con brillo azul):
+| Archivo | Tamaño | Forma | Uso |
+|---|---|---|---|
+| `farley-systems-and-icon-logo.png` | 1983×793 (contenido ≈ 3,2:1) | Horizontal: ícono + nombre | **Pie del catálogo**, sobre franja oscura, "Creado por", 56–64 px de alto |
+| `farley-systems-logo.png` | 1983×793 (contenido ≈ 5:1) | Solo nombre | No se usa (repite al anterior) |
+| `farley-icon.png` | 1254×1254 (contenido ≈ 1,3:1) | Ícono "F" | No se usa |
+
+Decisiones:
+- **Un solo lugar:** el pie del catálogo. Prioridad del catálogo: diseños,
+  calidad, navegación y, al final, marca.
+- **Ni en las invitaciones ni en las demos:** son de los novios. El estilo
+  tecnológico azul choca con las paletas de los diseños, y los logos necesitan
+  fondo oscuro. Si se quiere un crédito en invitaciones de clientes,
+  decidirlo antes, porque es un acuerdo comercial (PENDIENTE DE DEFINICIÓN
+  CON FOTOLAB).
+- **No como ícono de pestaña:** el ícono del catálogo es el "&" del
+  catálogo. A 32 px la "F" con degradados y brillo pierde detalle.
+- Mostrarlos con `next/image` (los PNG pesan 250–650 KB; Next los optimiza).
+
+### Ancla `#confirmar`
+La usan la barra flotante y el reproductor para ocultarse sobre el
+formulario. Cada diseño la pone en su sección de RSVP. No renombrarla.
+
+## Panel de invitados (no incluido)
+
+La boda original tenía un panel privado con Neon Postgres. Se quitó porque
+contenía datos reales y exige base de datos y autenticación por cliente.
+Si un cliente lo pide (extra, pendiente de definición), reutilizar **solo
+el código** del proyecto original (`app/panel-*/`, `lib/guests.ts`,
+`lib/admin-*.ts`, `lib/db.ts`, `proxy.ts`,
+`components/AdminGateTrigger.tsx`, `scripts/init-guests-db.mjs`).
+**Nunca** su `.env.local`, su base de datos ni la lista de invitados.
+Generalizar la columna `side` a dos valores genéricos. Por cliente: base
+Neon nueva, `ADMIN_PASSWORD` y `ADMIN_SESSION_SECRET` nuevos en Vercel.
+Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
+`<form>`, `id` fijo en `<DndContext>`, cada acción verifica la sesión.
+
+## Limitaciones conocidas
+
+- Bodas, quinceaños y cumpleaños, en español (el nombre del evento es
+  configurable: `event.name`/`article`; los textos de interfaz están en
+  español). Baby showers u otros eventos se harían como personalizados
+  (el catálogo los ofrece; no hay diseño propio todavía).
+- Microtextos de interfaz fijos en los componentes ("Cómo llegar",
+  "Desliza hacia abajo", textos del RSVP…).
+- Antes/durante/después se calcula en el navegador: el HTML estático
+  siempre sale como "antes" y se corrige al cargar.
+- `site.url` se conoce después de crear el proyecto en Vercel (dos despliegues).
+- Sin tests automatizados (la validación es `npm run check`).
+- El catálogo precarga las fuentes de todos los diseños (22 archivos; las
+  necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
+- Las imágenes de demostración son abstractas: las demos no muestran
+  fotos reales.
+
+## Riesgos conocidos
+
+- **Historial Git antiguo (archivado fuera del proyecto):** 41 commits de
+  la boda original (lista real de invitados, fotos personales, canción,
+  teléfonos, URL de producción) más el primer commit del catálogo. Se
+  conserva solo para recuperación, en una carpeta privada fuera de este
+  proyecto. **Nunca** copiarlo de vuelta, subirlo ni usarlo como remoto.
+  El repositorio actual empieza en un commit inicial limpio (2026-10-08).
+- Antes del primer push a GitHub: crear el repositorio como **privado**,
+  revisar `git ls-files` (sin `.env*`, `.vercel/`, `_anterior/`) y que
+  `git log` tenga solo el historial nuevo.
+- Fotos del cliente con orientación distinta al marco: `npm run check` avisa.
+- Música sin licencia aportada por el cliente.
+- `experimental.cssChunking` es experimental en Next 16: revisar al actualizar Next.
+
+## Pendientes
+
+- Decisiones comerciales con Fotolab (ver arriba).
+- Borrar `_anterior/` (ignorada por git; no está en el repositorio).
+- Publicar en GitHub cuando el dueño lo decida (hoy sin remoto).
+- Fotos reales de demostración con licencia (o propias) para que el
+  catálogo muestre fotografía real.
+- Probar audio y WhatsApp en un teléfono real con la primera invitación.
+- Si se ofrecerán otros eventos (XV años, bautizos), revisar textos fijos.

@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+/* `short:` = teléfono bajo (320×568, iPhone SE antiguo; o teléfono con la
+   barra del navegador abierta). Lo usan las portadas para recomponerse y
+   que "Desliza hacia abajo" quede en la primera pantalla con aire. */
+@custom-variant short (@media (max-height: 640px) and (max-width: 1023px));
+
+/* Tokens compartidos por los cinco diseños. Los VALORES no se definen aquí:
+   cada diseño aplica su paleta (meta.ts + `colors` del config) como
+   variables --c-* en su contenedor, y sus tipografías como --f-*.
+   Así `bg-primary` o `font-display` significan algo distinto en cada diseño
+   sin repetir clases ni escribir colores en los componentes. */
+@theme inline {
+  --color-paper: var(--c-background);
+  --color-surface: var(--c-surface);
+  --color-ink: var(--c-text);
+  --color-muted: var(--c-text-muted);
+  --color-primary: var(--c-primary);
+  --color-on-primary: var(--c-on-primary);
+  --color-secondary: var(--c-secondary);
+  --color-accent: var(--c-accent);
+  --color-on-accent: var(--c-on-accent);
+  --color-line: var(--c-line);
+  --font-display: var(--f-display);
+  --font-body: var(--f-body);
+  /* Tercera tipografía opcional (caligrafía de Aurora). */
+  --font-script: var(--f-script);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--c-secondary, #c8b48a) 45%, transparent);
+}
+
+/* ─── Aparición al desplazarse (Reveal.tsx) ───────────────────────────── */
+.reveal {
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.8s ease;
+}
+.reveal[data-variant="up"] {
+  opacity: 0;
+  transform: translateY(16px);
+}
+@media (min-width: 768px) {
+  .reveal[data-variant="up"] {
+    transform: translateY(24px);
+  }
+}
+.reveal[data-variant="fade"] {
+  opacity: 0;
+}
+.reveal[data-variant="scale"] {
+  opacity: 0;
+  transform: scale(0.97);
+}
+.reveal[data-variant="blur"] {
+  opacity: 0;
+  filter: blur(6px);
+}
+/* Cortina: la foto se descubre de abajo hacia arriba (Tierra, Borgoña).
+   El recorte va en un hijo (.reveal-curtain), NUNCA en el elemento
+   observado: Chrome no considera "visible" un elemento recortado por
+   completo con clip-path y la foto no aparecía nunca. */
+.reveal[data-variant="curtain"] > .reveal-curtain {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: inherit;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+/* Solo la cortina usa clip-path: en las demás recortaría lo que sobresale
+   (el sol de Riviera, fotos inclinadas, sombras). */
+.reveal[data-variant="curtain"].is-visible > .reveal-curtain {
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal[data-variant],
+  .reveal[data-variant="curtain"] > .reveal-curtain {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Divisor con dos líneas y un hueco (opcionalmente con texto en medio). */
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.ornament::before,
+.ornament::after {
+  content: "";
+  height: 1px;
+  width: 2.5rem;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+/* Flecha de "Desliza hacia abajo": rebote corto con pausa. */
+@keyframes scroll-cue-bounce {
+  0%, 55%, 100% { transform: translateY(0); }
+  25% { transform: translateY(7px); }
+}
+.scroll-cue-arrow {
+  animation: scroll-cue-bounce 2.2s ease-in-out infinite;
+}
+
+/* Brillo lento sobre el dorado (Gala). */
+@keyframes sheen {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.gold-sheen {
+  background-image: linear-gradient(100deg, var(--c-primary) 30%, color-mix(in srgb, var(--c-primary) 55%, white) 50%, var(--c-primary) 70%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 7s ease-in-out infinite alternate;
+}
+
+/* Sol de limón que gira muy lento (Riviera). */
+@keyframes slow-spin {
+  to { transform: rotate(360deg); }
+}
+.slow-spin {
+  animation: slow-spin 60s linear infinite;
+}
+
+/* Cielo de aurora: luces lila y rosa sobre el fondo (Aurora). */
+.aurora-glow {
+  background:
+    radial-gradient(60% 45% at 12% 8%, color-mix(in srgb, var(--c-secondary) 60%, transparent), transparent 70%),
+    radial-gradient(55% 45% at 92% 32%, color-mix(in srgb, var(--c-accent) 26%, transparent), transparent 70%),
+    radial-gradient(75% 50% at 50% 105%, color-mix(in srgb, var(--c-secondary) 50%, transparent), transparent 70%),
+    var(--c-background);
+}
+/* Números "XV" gigantes solo de contorno (Aurora). */
+.xv-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--c-primary) 20%, transparent);
+}
+
+/* Destellos que titilan (Aurora) y nubes que flotan (Nube). */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+.twinkle {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.float-soft {
+  animation: float-soft 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue-arrow,
+  .gold-sheen,
+  .slow-spin,
+  .twinkle,
+  .float-soft {
+    animation: none;
+  }
+}
+
+/* ─── Transición catálogo → diseño (View Transitions) ─────────────────── */
+/* La tarjeta del catálogo y la portada del diseño comparten nombre: el
+   navegador transforma una en la otra. Sin soporte, la navegación es
+   normal. */
+::view-transition-group(.cover-morph) {
+  animation-duration: 620ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.2, 1);
+}
+::view-transition-image-pair(.cover-morph) {
+  isolation: isolate;
+}
+::view-transition-old(.cover-morph),
+::view-transition-new(.cover-morph) {
+  animation-duration: 620ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.2, 1);
+  height: 100%;
+  object-fit: cover;
+}
+::view-transition-old(root) {
+  animation: 260ms ease both vt-fade-out;
+}
+::view-transition-new(root) {
+  animation: 420ms ease 160ms both vt-fade-in;
+}
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

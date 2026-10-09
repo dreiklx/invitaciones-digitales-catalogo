@@ -1,0 +1,6 @@
+import { DM_Sans, Gloock } from "next/font/google";
+
+const display = Gloock({ variable: "--f-display", subsets: ["latin"], weight: "400" });
+const body = DM_Sans({ variable: "--f-body", subsets: ["latin"] });
+
+export const fontClasses = `${display.variable} ${body.variable}`;

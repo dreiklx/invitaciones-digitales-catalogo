@@ -1,0 +1,46 @@
+// npm run nueva -- <diseño>
+// Empieza una invitación nueva: copia la demo del diseño elegido a
+// config/invitation.ts para editarla. Después `npm run check` señala los
+// datos que siguen siendo los de la demo.
+
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+
+const ids = ["olivo", "tierra", "gala", "riviera", "borgona", "aurora", "nube"];
+const id = process.argv[2];
+
+if (!ids.includes(id)) {
+  console.error(`Uso: npm run nueva -- <diseño>\nDiseños: ${ids.join(", ")}`);
+  process.exit(1);
+}
+
+const root = process.cwd();
+const target = path.join(root, "config", "invitation.ts");
+const current = await readFile(target, "utf8");
+if (!/export const invitation: Invitation \| null = null;/.test(current) && !process.argv.includes("--forzar")) {
+  console.error("config/invitation.ts ya tiene una invitación. Para reemplazarla: npm run nueva -- " + id + " --forzar");
+  process.exit(1);
+}
+
+let source = await readFile(path.join(root, "templates", id, "demo.ts"), "utf8");
+
+source = source
+  // Encabezado
+  .replace(
+    /^\/\/ Demo del diseño[\s\S]*?\n\n/,
+    `// INVITACIÓN DEL CLIENTE — diseño "${id}". Guía: docs/templates/ y README.md.\n` +
+      "// Reemplazar todo lo que es de la demo (nombres, fecha, lugares, número de\n" +
+      "// WhatsApp, padres, fotos en public/images/…). `npm run check` señala lo pendiente.\n" +
+      "// Para volver al catálogo: `export const invitation: Invitation | null = null;`\n\n"
+  )
+  // La URL de la demo depende del catálogo; la del cliente es propia.
+  .replace(/import \{ catalog \} from "@\/config\/catalog";\n/, "")
+  .replace(/url: `\$\{catalog\.url\}\/plantillas\/[a-z]+`,/, 'url: "https://REEMPLAZAR.vercel.app",')
+  .replace(/import type \{ InvitationOf \} from "@\/lib\/invitation\/types";/, 'import type { Invitation } from "@/lib/invitation/types";')
+  .replace(/export const demo: InvitationOf<"[a-z]+"> =/, "export const invitation: Invitation | null =")
+  // Fotos: del catálogo a public/images/ del cliente.
+  .replaceAll(`/plantillas/${id}/`, "/images/");
+
+await writeFile(target, source);
+console.log(`config/invitation.ts creado a partir del diseño "${id}".`);
+console.log("Siguiente: editar los datos, poner las fotos en public/images/ (nombres en el archivo) y correr `npm run check`.");
