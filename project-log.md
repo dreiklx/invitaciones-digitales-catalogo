@@ -4,6 +4,17 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-08 (9) — Repositorio privado en GitHub
+
+- Repositorio **privado** https://github.com/dreiklx/invitaciones-digitales-catalogo
+  creado con GitHub CLI; remoto `origin`, rama `main` con seguimiento de
+  `origin/main`. Push del commit inicial `25a10c7` (sin `--force`); GitHub
+  tiene un solo commit y 181 archivos, sin `.env.local`, `.vercel/`,
+  `_anterior/`, `node_modules/` ni `.next/`.
+- El historial antiguo de la boda sigue solo en local, fuera del proyecto.
+- Vercel sin cambios: el catálogo se sigue desplegando con la CLI, sin
+  conexión a GitHub (sin despliegues automáticos por push).
+
 ## 2026-10-08 (8) — Repositorio Git nuevo y limpio
 
 - El `.git` anterior (42 commits: la boda original + el commit del

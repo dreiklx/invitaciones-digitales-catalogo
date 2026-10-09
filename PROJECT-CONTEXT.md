@@ -34,17 +34,21 @@ escaparate.
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
 - Logo del estudio solo en el pie del catálogo (ver "Marca del estudio").
-- **Git:** repositorio **nuevo y limpio** desde 2026-10-08: rama `main`,
-  un solo commit inicial con el estado actual (catálogo y siete diseños).
-  **Sin remoto configurado; todavía no se publicó en GitHub.** El historial
-  antiguo (con datos de la boda) no está en este repositorio: se archivó
-  fuera de la carpeta del proyecto, en una carpeta privada del dueño, solo
-  para recuperación. `.env.local` y `.vercel/` (vínculo local con el
-  proyecto de Vercel del catálogo) existen solo en la máquina del dueño y
-  están ignorados por git.
+- **Git y GitHub:** repositorio **privado**
+  https://github.com/dreiklx/invitaciones-digitales-catalogo, remoto
+  `origin`, rama principal `main`. El historial nuevo empieza en el commit
+  inicial `25a10c7e15b91fc67209cc677968b070c872ad83` (2026-10-08). El
+  historial antiguo (con datos privados de la boda) no está en este
+  repositorio: se conserva fuera del proyecto, en una ubicación privada
+  local del dueño, solo para recuperación, y **nunca debe subirse a
+  GitHub**. `.env.local`, `.vercel/`, `_anterior/`, `node_modules/` y
+  `.next/` quedan fuera del repositorio (`.gitignore`).
 - Archivos de la arquitectura anterior movidos a `_anterior/` (ignorada
   por git, TypeScript, ESLint y Vercel), pendientes de que el dueño los borre.
-- Despliegue del catálogo: ver la entrada más reciente de `project-log.md`.
+- **Despliegue del catálogo:** https://invitaciones-digitales-catalogo.vercel.app
+  (proyecto de Vercel `invitaciones-digitales-catalogo`). Se despliega con
+  la CLI (`vercel deploy --prod`); **no** está conectado a GitHub, así que
+  un push no despliega nada.
 
 ## Stack
 
@@ -338,9 +342,9 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
   conserva solo para recuperación, en una carpeta privada fuera de este
   proyecto. **Nunca** copiarlo de vuelta, subirlo ni usarlo como remoto.
   El repositorio actual empieza en un commit inicial limpio (2026-10-08).
-- Antes del primer push a GitHub: crear el repositorio como **privado**,
-  revisar `git ls-files` (sin `.env*`, `.vercel/`, `_anterior/`) y que
-  `git log` tenga solo el historial nuevo.
+- Antes de cada push: revisar que no entren `.env*`, `.vercel/` ni
+  `_anterior/`, ni datos de clientes (los datos de una invitación real van
+  en su propia copia del proyecto, no en este repositorio).
 - Fotos del cliente con orientación distinta al marco: `npm run check` avisa.
 - Música sin licencia aportada por el cliente.
 - `experimental.cssChunking` es experimental en Next 16: revisar al actualizar Next.
@@ -349,8 +353,7 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 
 - Decisiones comerciales con Fotolab (ver arriba).
 - Borrar `_anterior/` (ignorada por git; no está en el repositorio).
-- Publicar en GitHub cuando el dueño lo decida (hoy sin remoto).
 - Fotos reales de demostración con licencia (o propias) para que el
   catálogo muestre fotografía real.
 - Probar audio y WhatsApp en un teléfono real con la primera invitación.
-- Si se ofrecerán otros eventos (XV años, bautizos), revisar textos fijos.
+- Si se ofrecerán otros eventos (baby showers, bautizos), revisar textos fijos.
