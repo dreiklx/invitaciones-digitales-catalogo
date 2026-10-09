@@ -112,7 +112,12 @@ export const demo: InvitationOf<"nube"> = {
 
   footer: { message: "¡Te espero!" },
 
-  music: null,
+  music: {
+    src: "/audio/demo/cajita-musical-cuna.mp3",
+    title: "Canción de cuna",
+    artist: "Johannes Brahms · cajita musical",
+    credit: "Grabación de dominio público (pdsounds.org, vía Wikimedia Commons)",
+  },
 
   photos: {
     portada: { src: "/plantillas/nube/portada.jpg", alt: "Mateo", position: "50% 40%" },

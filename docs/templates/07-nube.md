@@ -83,6 +83,13 @@ Los círculos recortan las esquinas: la carita al centro.
 - `.float-soft` en `app/globals.css` (las nubes y los globos se detienen
   con "reducir movimiento").
 
+## Música y cita
+- **Reproductor `globo`:** globo durazno con su hilo que flota al sonar;
+  en escritorio, píldora con el título en Fredoka.
+- **Demo:** Canción de cuna de Brahms en cajita musical (pdsounds.org,
+  dominio público).
+- **Citas:** frases de la familia; sin versículos matrimoniales.
+
 ## Uso
 `npm run nueva -- nube` → editar `config/invitation.ts` → fotos → `npm run check`.
 

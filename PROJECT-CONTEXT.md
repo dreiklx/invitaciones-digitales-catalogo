@@ -29,7 +29,8 @@ escaparate.
 
 - Siete diseños completos (5 de boda, 1 de quinceaños, 1 de cumpleaños
   infantil), un catálogo en `/` agrupado por tipo de evento, con transición hacia cada
-  demo, validación `npm run check`, demos con imágenes abstractas generadas.
+  demo, validación `npm run check`, demos con imágenes abstractas generadas
+  (Olivo, con las fotos de una sesión de pareja aportadas por el dueño).
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
@@ -51,6 +52,11 @@ escaparate.
   push a otra rama crea un despliegue de vista previa. No hace falta
   `vercel --prod`. El build corre `npm run check` (prebuild) y la
   verificación de tipos de `next build`; si fallan, no se publica.
+  **Pendiente:** Vercel bloquea esos despliegues (`TEAM_ACCESS_REQUIRED`)
+  porque los commits salen con un autor de GitHub que no está vinculado a
+  la cuenta de Vercel (plan Hobby). Hasta que el dueño vincule su cuenta
+  de GitHub en Vercel (Account Settings → Authentication), un push no
+  publica nada y producción sigue con el último despliegue por CLI.
 
 ## Stack
 
@@ -101,7 +107,8 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   foto (`PhotoSlots`), su paleta, sus tipografías y sus componentes. Los
   componentes reciben la invitación ya resuelta (`ResolvedInvitation`) por
   props; ninguno lee el config ni formatea fechas por su cuenta.
-- **Lógica compartida, aspecto propio.** Portada (por el audio), música,
+- **Lógica compartida, aspecto propio.** Portada, música (con siete
+  presentaciones en `templates/shared/players.tsx`),
   RSVP, visor, copiar y barra flotante se comparten y cada diseño los
   estiliza con clases. La cuenta regresiva comparte el hook
   (`useCountdown`) pero cada diseño dibuja la suya. No se forzó compartir
@@ -203,26 +210,43 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 ### Portada "Abrir invitación" (`templates/shared/Gate.tsx`)
 - Pantalla completa antes de todo; bloquea la página con `inert` y
   `overflow: hidden` hasta tocar el botón.
-- **Existe por el audio**: Chrome y Brave bloquean `play()` sin interacción
-  previa (confirmado en producción). Ese toque real es lo único que
-  desbloquea el sonido. Se muestra aunque no haya música.
-- **No llama a `audio.play()`**: el clic llega al listener de "primera
-  interacción" de `MusicPlayer.tsx`.
+- **Inicia la música**: su `onClick` llama a `startMusicFromGesture()`
+  (`templates/shared/music-start.ts`) de forma síncrona, ANTES de cambiar
+  de estado. Safari en iPhone solo permite `audio.play()` dentro del
+  gesto: si la llamada pasa por un estado, un efecto o un `setTimeout`, se
+  pierde el permiso. Sin música no hay nada registrado y solo abre.
 - Salida: fundido + escala 700 ms, se desmonta; respeta reducir movimiento.
 
-### Música (`templates/shared/MusicPlayer.tsx`)
-1. Un solo intento de autoplay al montar.
-2. Un único listener de primera interacción (`click` + `keydown`) que se
-   retira para siempre.
-3. Si la interacción fue sobre el reproductor, no hace nada; si no, y
-   nunca sonó, reintenta `play()` una vez.
-4. El botón solo hace play/pause.
-- **No reintroducir** trucos de `muted`, ciclos `pause()→play()`, refs de
-  supresión ni listeners de `pointerdown`/`touchstart`/`mousedown`.
-- Estado visual solo desde eventos nativos del `<audio>` + timeout 4 s.
-- < `sm` solo el círculo; < `lg` se oculta sobre `#confirmar`.
-- Claude in Chrome no reproduce audio real: la prueba definitiva es un
-  teléfono real.
+### Música (`templates/shared/MusicPlayer.tsx` + `players.tsx`)
+- **Empieza al tocar "Abrir invitación"** y solo así (decisión del dueño,
+  2026-10-09): nada de autoplay al cargar ni de "primer toque en cualquier
+  parte". El reproductor registra su `play()` en `music-start.ts`; la
+  portada lo llama dentro del clic. Después, el reproductor pausa y
+  reanuda (no reinicia).
+- Si el navegador rechaza ese `play()` (`NotAllowedError`), el estado es
+  `blocked` y el reproductor muestra "Toca para escuchar"; cualquier otro
+  fallo es `error` ("No disponible").
+- `preload="none"`: el archivo no se descarga hasta ese toque.
+- **Una sola lógica, siete presentaciones**: `players.tsx` define la forma
+  de cada diseño (`rama`, `ficha`, `deco`, `sello`, `etiqueta`,
+  `destello`, `globo`); el diseño trae la suya en `meta.musicPlayer` y
+  `music.player` la cambia.
+- Estado visual solo desde eventos nativos del `<audio>` (`playing`,
+  `pause`, `waiting`, `error`) + timeout de 12 s. Nunca un "Sonando"
+  optimista. **No reintroducir** trucos de `muted`, ciclos
+  `pause()→play()` ni listeners globales de primera interacción.
+- Teléfono: solo la forma (≥ 48 px). Mientras se ve la portada (justo al
+  abrir, cuando empieza a sonar) va **arriba a la derecha**: abajo tapaba
+  fecha, nombres o "Desliza hacia abajo" en 320×568. Al bajar pasa abajo a
+  la derecha, sobre la barra de confirmar. < `lg` se oculta sobre
+  `#confirmar` y sobre los créditos del pie (`MusicCredit`). Escritorio:
+  forma + título + estado, abajo a la derecha.
+- Créditos de la pista (obra, intérprete, licencia) en el pie de cada
+  diseño (`MusicCredit`), siempre que haya música.
+- Las animaciones del reproductor solo corren mientras suena y se detienen
+  con "reducir movimiento".
+- La prueba definitiva del sonido es un teléfono real (las pruebas
+  automáticas solo confirman que el audio avanza).
 
 ### Usabilidad para personas mayores (60-70+), en todos los diseños
 - "Desliza hacia abajo" con palabras + flecha (`ScrollCue`); tocarla avanza.
@@ -240,6 +264,33 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   el foco vuelve a la foto.
 - Fechas romanas (Gala) siempre acompañadas de la fecha normal.
 - Nada se corta ni se desborda a 320 px (revisar al tocar diseño).
+
+### Sin desplazamiento horizontal (2026-10-09, no revertir)
+- `body { overflow-x: clip }` es solo una red de seguridad: Safari < 16 y
+  algunos navegadores Android no conocen `clip`, y ahí cualquier elemento
+  más ancho que la pantalla deja mover la página de lado. Las causas se
+  corrigen en su origen.
+- Causas encontradas (con datos de clientes reales, no con las demos):
+  textos de una sola línea (`whitespace-nowrap`) que con la **letra del
+  sistema agrandada** (Android, personas mayores) se salían: "Agregar a mi
+  calendario" (7 diseños), "Ver mesa de regalos" (Gala), "Desliza hacia
+  abajo", y el botón de la barra "Confirmar asistencia" (quedaba cortado);
+  y en Borgoña los **nombres largos** ("& Bartolomeo", sin poder partirse)
+  ensanchaban la página o se cortaban en el pie.
+- Solución: esos textos pueden pasar a dos líneas (`text-center`,
+  `text-balance`, `max-w-full`, `min-w-0`); Borgoña baja un escalón la
+  letra de los nombres cuando uno pasa de 10 caracteres (`longNames`, con
+  tamaño solo en `vw`) y une "&" al nombre con un espacio fijo; las cifras
+  de la cuenta regresiva de Gala llevan tope en `vw` (`min(rem, vw)`), así
+  la letra agrandada no las saca de la fila.
+- Regla: un texto que no puede partirse (`whitespace-nowrap`, nombres
+  gigantes) necesita un tamaño que no crezca con la letra del sistema
+  (`vw`) o poder pasar a dos líneas.
+- Cómo medir: con `body{overflow-x:visible}` inyectado (si no, el `clip`
+  oculta el problema), recorriendo la página, con la música sonando y el
+  visor abierto, y con `html{font-size:125%}` para simular la letra
+  agrandada. Comparar con `screen.width`, no con `innerWidth` (en
+  emulación móvil el viewport se ensancha con el contenido).
 
 ### Teléfono primero (revisión 2026-10-08, no revertir)
 Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
@@ -333,8 +384,13 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 - Sin tests automatizados (la validación es `npm run check`).
 - El catálogo precarga las fuentes de todos los diseños (22 archivos; las
   necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
-- Las imágenes de demostración son abstractas: las demos no muestran
-  fotos reales.
+- Las imágenes de demostración son abstractas salvo en Olivo, que usa las
+  fotos de una sesión de pareja (Don Ramón y Doña Florinda caracterizados)
+  aportadas por el dueño; la demo se llama "Ramón & Florinda". Esos
+  nombres viven solo en `templates/olivo/demo.ts`: `npm run nueva` deja
+  `couple` y los `alt` en "REEMPLAZAR" en cualquier diseño. **Antes de publicarlas en el catálogo:**
+  confirmar que hay derecho a usar esas imágenes (personajes de una serie
+  de TV y el parecido de personas reales) en un sitio comercial.
 
 ## Riesgos conocidos
 
@@ -348,7 +404,14 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
   `_anterior/`, ni datos de clientes (los datos de una invitación real van
   en su propia copia del proyecto, no en este repositorio).
 - Fotos del cliente con orientación distinta al marco: `npm run check` avisa.
-- Música sin licencia aportada por el cliente.
+- Música sin licencia aportada por el cliente. La canción de la boda
+  original ("La Bondad de Dios", instrumental) **no** tiene licencia para
+  uso web (investigado entonces): no usarla en demos ni en el catálogo.
+- Las pistas de demostración son de dominio público o CC (ver README,
+  "Música"); la de Kevin MacLeod (CC BY 3.0) exige mostrar la atribución.
+- Versículos: las demos usan la Reina-Valera 1909 (dominio público). La
+  Reina-Valera 1960, NVI, NTV, etc. tienen derechos: usarlas solo con su
+  aviso de copyright y si su permiso cubre el uso.
 - `experimental.cssChunking` es experimental en Next 16: revisar al actualizar Next.
 
 ## Pendientes

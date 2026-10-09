@@ -4,7 +4,7 @@
 
 import type { CSSProperties } from "react";
 import { templateMetas } from "@/templates/registry";
-import type { Invitation, InvitationContent, Location, Palette, Photo, TemplateId, TemplateMeta } from "./types";
+import type { Invitation, InvitationContent, Location, Palette, Photo, Quote, TemplateId, TemplateMeta } from "./types";
 import { formatEventDates, formatLongDate, formatTime, zonedTimeToUtc, type EventDates } from "./time";
 import { formatPhone, type RsvpContext } from "./whatsapp";
 
@@ -178,6 +178,11 @@ function initial(name: string): string {
 }
 
 // 20270417T220000Z
+// Fuente de una cita o versículo: "Colosenses 3:14 · Reina-Valera 1909".
+export function quoteCitation(quote: Quote): string {
+  return [quote.reference, quote.translation].filter(Boolean).join(" · ");
+}
+
 export function calendarStamp(date: Date): string {
   return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 }

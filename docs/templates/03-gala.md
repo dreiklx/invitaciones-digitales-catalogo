@@ -61,6 +61,16 @@ Todas se muestran en **blanco y negro** (filtro CSS); los archivos pueden ser a 
 - En el visor, la foto se ve **a color**: el blanco y negro solo se aplica
   en la página.
 
+## Música y cita
+- **Reproductor `deco`:** rombo negro con doble filete dorado (art déco);
+  al sonar, un rombo exterior late y "Música" brilla en dorado. En
+  escritorio, marco dorado con "MÚSICA", título en cursiva y estado.
+- **Demo:** Clair de lune (Debussy · Laurens Goedhart, dominio público).
+- **Versículo:** bajo el abanico, texto en cursiva entre comillas latinas,
+  la referencia entre filetes dorados y la traducción debajo. Demo:
+  Mateo 19:6 (Reina-Valera 1909); la cita de cierre (Keats) sigue siendo
+  literaria.
+
 ## Uso
 `npm run nueva -- gala` → editar `config/invitation.ts` → fotos → `npm run check`.
 

@@ -79,6 +79,14 @@ En el óvalo se pierden las esquinas: el rostro debe ir centrado.
 - `.aurora-glow`, `.xv-outline` y `.twinkle` en `app/globals.css` (los
   destellos se detienen con "reducir movimiento").
 
+## Música y cita
+- **Reproductor `destello`:** cristal lila translúcido con dos destellos
+  que titilan al sonar y un halo rosa; el título en Figtree (los números
+  de Italiana se leen mal).
+- **Demo:** Vals op. 69 n.º 1 (Chopin, Musopen, CC0): un vals para la
+  noche de los quince.
+- **Citas:** frases de la quinceañera; sin versículos matrimoniales.
+
 ## Uso
 `npm run nueva -- aurora` → editar `config/invitation.ts` → fotos → `npm run check`.
 

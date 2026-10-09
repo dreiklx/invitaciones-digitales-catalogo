@@ -4,6 +4,109 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-09 (4) — Olivo es "Ramón & Florinda" y flujo de trabajo permanente
+
+### Qué se hizo
+- Demo de Olivo: la pareja pasa a **Ramón & Florinda** (los de las fotos)
+  en `couple` y en los 9 textos alternativos; portada, título, vista
+  previa al compartir y calendario salen de ahí. Padres, lugares y textos
+  siguen siendo ficticios. Las demás demos no cambian.
+- `npm run nueva`: ya no hereda nombres de pareja ni `alt` de la demo
+  (quedan en "REEMPLAZAR") y nombra las fotos por espacio
+  (`/images/galeria-1.jpg`), aunque la demo use otros nombres de archivo.
+  `validate.ts`: error si un `alt` de cliente nombra a la persona de la
+  demo.
+- CLAUDE.md y AGENTS.md: regla permanente de flujo (leer contexto y
+  estado real → trabajar de principio a fin → actualizar `.md` → revisar
+  diff → commit y push a `origin/main` en la misma tarea; no afirmar
+  despliegues sin comprobarlos).
+
+### Verificación
+- `npm run nueva -- olivo` en una copia: `couple` y `alt` en
+  "REEMPLAZAR", fotos en `/images/<espacio>.jpg`; `npm run check` los
+  marca. `config/invitation.ts` restaurado a `null`.
+
+## 2026-10-09 (3) — Sin desplazamiento horizontal, fotos reales en Olivo y música al abrir
+
+### Qué se hizo
+- **Desplazamiento horizontal:** las auditorías anteriores no lo veían
+  porque `body{overflow-x:clip}` lo ocultaba en Chrome y se comparaba con
+  `innerWidth`. Midiendo sin el `clip`, contra `screen.width`, con letra
+  al 125 % y nombres largos: textos `whitespace-nowrap` que se salían
+  (calendario ×7, regalos de Gala, "Desliza hacia abajo", botón de la
+  barra de confirmar) y nombres largos en Borgoña. Corregido en el origen
+  (detalle en PROJECT-CONTEXT, "Sin desplazamiento horizontal").
+- **Olivo con fotos reales:** 7 fotos de "fotos plantilla olivo" (copias
+  web de 156-179 KB; originales intactos), asignadas como una sesión; el
+  espacio `regalos` pasa a 4:5. Se borraron las 9 imágenes abstractas de
+  Olivo (ya no se usaban). `placeholders.ts` salta las carpetas `fotos/`.
+- **Música al abrir:** "Abrir invitación" inicia la música de su diseño
+  dentro del mismo clic (`music-start.ts`); el reproductor de cada diseño
+  (sin cambios de forma) pasa a "Sonando" y pausa/reanuda. Estado
+  `blocked` si el navegador lo rechaza.
+- El reproductor, en teléfono, va arriba a la derecha mientras se ve la
+  portada (abajo tapaba texto en 320×568 ahora que suena desde el inicio).
+  Borgoña lleva un filete rosa en teléfono (se perdía vino sobre vino).
+- Cuenta regresiva de Gala y nombres largos de Borgoña con tope en `vw`.
+
+### Verificación
+- Música, con clics reales (CDP Input) y la política de autoplay normal
+  de Chrome, en los 7: antes de abrir no suena ni se descarga; al abrir,
+  el audio avanza (~3 s) y el reproductor dice "Pausar"; sigue al
+  desplazarse; la pausa congela el tiempo; reanuda sin reiniciar; un solo
+  `<audio>`. Con un clic sin gesto real: queda "Escuchar música" y arranca
+  al tocar el reproductor.
+- Desplazamiento: catálogo y 7 diseños a 320×568, 320×600, 360×740,
+  390×844, 430×932 y 1440, con música activa, recorriendo la página y con
+  el visor abierto: sin elementos fuera de la pantalla.
+
+### Pendiente
+- Derechos de imagen de las fotos de Olivo (personajes de TV) antes de
+  publicarlas en el catálogo.
+- Teléfono físico: música al abrir en iPhone (Safari) y Android.
+
+## 2026-10-09 (2) — Música con reproductor propio por diseño y versículos
+
+### Qué se hizo
+- **Música sin reproducción automática:** `MusicPlayer.tsx` reescrito: suena
+  solo al tocar el reproductor, `preload="none"`, estado desde eventos
+  nativos. Reemplaza la regla heredada de autoplay (pedido del dueño).
+- **Siete reproductores** en `templates/shared/players.tsx` (una lógica,
+  siete formas): Olivo `rama`, Tierra `ficha`, Gala `deco`, Riviera
+  `sello`, Borgoña `etiqueta`, Aurora `destello`, Nube `globo`. Default en
+  `meta.musicPlayer`; `music.player` lo cambia. `music` suma `artist`,
+  `credit` y `player`; los créditos van al pie (`MusicCredit`). En teléfono
+  el reproductor se oculta sobre el RSVP y sobre los créditos.
+- **Canción de la boda original:** se consultó solo de lectura el
+  historial privado: "La Bondad de Dios" (instrumental) no tiene licencia
+  para web (investigación de entonces). **No se usó.**
+- **Pistas de demostración** con licencia verificada en Wikimedia Commons
+  (`public/audio/demo/`, ~26 MB): Pachelbel/MacLeod (CC BY 3.0), Satie y
+  Debussy (dominio público), Chopin (CC0), Brahms en cajita musical
+  (dominio público). Tabla en README, "Música".
+- **Versículos:** `Quote` suma `kind: "verse"`, `translation` y `align`;
+  `quoteCitation()` en `resolve.ts`. Olivo (Colosenses 3:14), Tierra
+  (Cantares 8:7) y Gala (Mateo 19:6), en Reina-Valera 1909 (dominio
+  público, verificada); Olivo, Tierra y Gala tienen composición propia
+  para versículos. Riviera, Borgoña, Aurora y Nube siguen con frases.
+- `npm run check` avisa: música sin `credit`, pista de demo en una
+  invitación de cliente, versículo sin referencia o traducción.
+
+### Verificación
+- `check`, `typecheck`, `lint`, `build`. Auditoría (desborde, botones
+  < 44 px, imágenes rotas) de los 7 a 320/360/390/430/1440: sin problemas.
+- En Chrome automatizado: nada se descarga antes del toque; al tocar, el
+  audio avanza (~3 s) y el botón pasa a "Pausar" en los 7. Capturas de los
+  reproductores en reposo y sonando, en teléfono y escritorio.
+- Modo cliente (Gala con `music`, `openingQuote` y `closingQuote` en
+  `null`): sin reproductor, sin créditos, sin sección de cita, sin huecos.
+
+### Pendiente (teléfono físico)
+- Escuchar el audio de verdad (volumen, calidad, bucle) y la pausa en iOS
+  y Android.
+- En teléfono el reproductor flotante pasa por encima de contenido al
+  desplazarse (como antes); se oculta sobre el RSVP y los créditos.
+
 ## 2026-10-09 — Despliegue automático desde GitHub
 
 - El proyecto de Vercel existente `invitaciones-digitales-catalogo` se
@@ -11,8 +114,10 @@ original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
   (`vercel git connect`). Rama de producción: `main`; las demás ramas
   crean vistas previas. Sin cambios de dominio, variables ni comandos de
   build (Next.js, raíz `.`, `npm run build` con `check` como prebuild).
-- La prueba del flujo automático es el push de este mismo commit de
-  documentación (sin `vercel --prod`).
+- La prueba del flujo automático fue el push de este mismo commit de
+  documentación (sin `vercel --prod`): Vercel creó el despliegue desde
+  GitHub pero lo **bloqueó** (`TEAM_ACCESS_REQUIRED`: el autor de los
+  commits no está vinculado a la cuenta de Vercel). Pendiente del dueño.
 
 ## 2026-10-08 (9) — Repositorio privado en GitHub
 

@@ -1,13 +1,14 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ViewTransition, type ReactNode } from "react";
+import { startMusicFromGesture } from "./music-start";
 
 // Portada "Abrir invitación". Cada diseño dibuja su propia portada (`cover`)
 // y este componente pone la lógica común:
 // - Bloquea la página (`inert` + overflow hidden) hasta que se toca el botón.
-// - EXISTE POR EL AUDIO: los navegadores bloquean play() sin un gesto real.
-//   Este componente NO llama a audio.play(): el clic llega al listener de
-//   "primera interacción" de MusicPlayer.tsx (ver PROJECT-CONTEXT.md).
+// - Su botón INICIA LA MÚSICA: llama a startMusicFromGesture() de forma
+//   síncrona dentro del clic (los navegadores solo permiten play() dentro
+//   del gesto real). Sin música no hace nada más que abrir.
 // - Salida: fade + scale 700ms y se desmonta; respeta prefers-reduced-motion.
 // - `transitionName`: la tarjeta del catálogo con el mismo nombre se
 //   transforma en esta portada al navegar (View Transitions).
@@ -46,6 +47,8 @@ export default function Gate({
 
   const open = () => {
     if (phase !== "gate") return;
+    // Primero la música, en este mismo clic; después el cambio de estado.
+    startMusicFromGesture();
     setPhase("closing");
     window.setTimeout(() => setPhase("closed"), EXIT_MS);
   };

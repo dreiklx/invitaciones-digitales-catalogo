@@ -22,11 +22,12 @@ export const meta: TemplateMeta<"olivo"> = {
     line: "#dbd0b6",
   },
   fonts: { display: "Playfair Display", body: "Jost" },
+  musicPlayer: "rama",
   photoSlots: {
     portada: { ratio: [2, 3], where: "Portada a pantalla completa (en escritorio se recorta a lo ancho)", position: "50% 30%" },
     historia: { ratio: [3, 2], where: "Foto de la pareja después de la frase de apertura", position: "50% 40%" },
     cuentaRegresiva: { ratio: [2, 3], where: "Junto a la cuenta regresiva", position: "50% 30%" },
-    regalos: { ratio: [2, 3], where: "Sección de regalos", position: "50% 30%" },
+    regalos: { ratio: [4, 5], where: "Sección de regalos", position: "50% 30%" },
     galeria1: { ratio: [3, 2], where: "Galería, arriba a la izquierda (la más grande)", position: "50% 40%" },
     galeria2: { ratio: [4, 5], where: "Galería, arriba a la derecha", position: "50% 35%" },
     galeria3: { ratio: [4, 5], where: "Galería, abajo a la izquierda", position: "50% 35%" },

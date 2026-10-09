@@ -68,6 +68,16 @@ Pedir al cliente: 4 verticales, 2 cuadradas (o verticales con el sujeto centrado
   interno (ver "Teléfono primero" en `PROJECT-CONTEXT.md`).
 - El retrato junto al RSVP solo se muestra en escritorio.
 
+## Música y cita
+- **Reproductor `ficha`:** ficha de revista de esquinas rectas con filete
+  de arcilla arriba, ▶/❚❚ y tres barras de ecualizador que se mueven al
+  sonar; en escritorio, "Pista · estado", título en cursiva e intérprete.
+- **Demo:** Gymnopédie n.º 1 (Satie · Robin Alciatore, dominio público).
+- **Versículo:** epígrafe de capítulo: la referencia y la traducción
+  arriba sobre un filete, el texto grande en cursiva entre comillas
+  latinas de color. Demo: Cantares 8:7 (Reina-Valera 1909). Las citas
+  normales conservan la gran comilla de revista.
+
 ## Uso
 `npm run nueva -- tierra` → editar `config/invitation.ts` → fotos → `npm run check`.
 

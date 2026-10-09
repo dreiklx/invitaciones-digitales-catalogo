@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { ResolvedInvitation } from "@/lib/invitation/resolve";
+import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
@@ -10,6 +10,7 @@ import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
 import StickyRsvp from "../shared/StickyRsvp";
 import MusicPlayer from "../shared/MusicPlayer";
+import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
@@ -64,6 +65,11 @@ const rsvpStyles: RsvpStyles = {
 
 export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
   const { content: c, photos, names, dates, meta } = inv;
+  // Nombres largos ("Maximiliano") no caben a la escala gigante en 320 px:
+  // bajan un escalón en vez de ensanchar la página o cortarse. El tamaño va
+  // solo en vw (sin mínimo en rem) para que tampoco crezca con la letra
+  // agrandada del teléfono.
+  const longNames = Math.max(names.one.length, names.two.length + 2) > 10;
   const ratio = (key: string) => (meta.photoSlots as Record<string, PhotoSlotSpec>)[key].ratio;
   const gallery = [photos.galeria1, photos.galeria2, photos.galeria3];
 
@@ -73,9 +79,9 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
         <span>{c.welcome.eyebrow}</span>
         <span>{dates.dotted}</span>
       </div>
-      <h1 className="font-display text-[clamp(3.6rem,18.5vw,13rem)] italic leading-[0.82] text-secondary">
+      <h1 className={`font-display ${longNames ? "text-[min(13.5vw,10rem)]" : "text-[clamp(3.6rem,18.5vw,13rem)]"} italic leading-[0.82] text-secondary`}>
         {names.one}
-        <span className="block whitespace-nowrap pl-[10%]">&amp; {names.two}</span>
+        <span className="block pl-[10%]">&amp;&nbsp;{names.two}</span>
       </h1>
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <p className="max-w-xs text-sm text-on-primary/80">{dates.weekdayLong}</p>
@@ -104,9 +110,9 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
             <Frame photo={photos.portada} ratio={ratio("portada")} sizes="(min-width: 1024px) 50vw, 68vw" priority />
           </Reveal>
           <Reveal delay={100} className="relative z-10 -mt-6 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:self-center lg:px-12">
-            <h1 className="font-display text-[clamp(3.6rem,18.5vw,11rem)] italic leading-[0.82] text-secondary [text-shadow:0_2px_18px_rgba(0,0,0,0.25)]">
+            <h1 className={`font-display ${longNames ? "text-[min(13.5vw,8.5rem)]" : "text-[clamp(3.6rem,18.5vw,11rem)]"} italic leading-[0.82] text-secondary [text-shadow:0_2px_18px_rgba(0,0,0,0.25)]`}>
               {names.one}
-              <span className="block whitespace-nowrap pl-[10%]">&amp; {names.two}</span>
+              <span className="block pl-[10%]">&amp;&nbsp;{names.two}</span>
             </h1>
           </Reveal>
           <div className="mt-auto pt-5 lg:col-start-1 lg:row-start-3 lg:px-12 lg:pb-14">
@@ -120,7 +126,7 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
           <section className="px-6 py-20 sm:px-12 sm:py-28">
             <Reveal className="mx-auto max-w-5xl">
               <p className="font-display text-[clamp(2rem,6vw,4.5rem)] italic leading-[1.05] text-primary">{c.openingQuote.text}</p>
-              {c.openingQuote.reference && <p className="mt-6 text-xs font-semibold uppercase tracking-[0.25em] text-muted">— {c.openingQuote.reference}</p>}
+              {c.openingQuote.reference && <p className="mt-6 text-xs font-semibold uppercase tracking-[0.25em] text-muted">— {quoteCitation(c.openingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -150,7 +156,7 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
                 <p className="font-display text-3xl leading-tight sm:text-4xl">{dates.weekdayLong}</p>
                 <p className="mt-1 text-lg text-muted">{dates.time}</p>
                 <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
-                  <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 whitespace-nowrap border-2 border-primary px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-primary transition min-[360px]:px-5 min-[360px]:text-sm min-[360px]:tracking-[0.12em] hover:bg-primary hover:text-on-primary">
+                  <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 border-2 border-primary px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-primary transition min-[360px]:px-5 min-[360px]:text-sm min-[360px]:tracking-[0.12em] hover:bg-primary hover:text-on-primary max-w-full text-center [&_svg]:shrink-0">
                     <CalendarIcon size={18} />
                     Agregar a mi calendario
                   </a>
@@ -247,7 +253,7 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
                 {c.story.quote && (
                   <p className="mt-8 font-display text-2xl italic text-primary">
                     {c.story.quote.text}
-                    {c.story.quote.reference && <span className="mt-2 block font-body text-xs font-semibold not-italic uppercase tracking-[0.25em] text-muted">— {c.story.quote.reference}</span>}
+                    {c.story.quote.reference && <span className="mt-2 block font-body text-xs font-semibold not-italic uppercase tracking-[0.25em] text-muted">— {quoteCitation(c.story.quote)}</span>}
                   </p>
                 )}
               </Reveal>
@@ -343,7 +349,7 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
           <section className="px-6 py-20 sm:px-12">
             <Reveal className="mx-auto max-w-5xl">
               <p className="font-display text-[clamp(2rem,6vw,4rem)] italic leading-[1.05] text-primary">{c.closingQuote.text}</p>
-              {c.closingQuote.reference && <p className="mt-6 text-xs font-semibold uppercase tracking-[0.25em] text-muted">— {c.closingQuote.reference}</p>}
+              {c.closingQuote.reference && <p className="mt-6 text-xs font-semibold uppercase tracking-[0.25em] text-muted">— {quoteCitation(c.closingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -351,14 +357,15 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
         <footer className="overflow-hidden bg-primary px-6 pb-12 pt-20 text-on-primary sm:px-12">
           <div className="mx-auto max-w-6xl">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-secondary">{c.footer.message}</p>
-            <p className="mt-6 font-display text-[clamp(3.4rem,16.5vw,12rem)] italic leading-[0.85] text-secondary">
+            <p className={`mt-6 font-display ${longNames ? "text-[min(12.5vw,9rem)]" : "text-[clamp(3.4rem,16.5vw,12rem)]"} italic leading-[0.85] text-secondary`}>
               {names.one}
-              <span className="block whitespace-nowrap pl-[10%]">&amp; {names.two}</span>
+              <span className="block pl-[10%]">&amp;&nbsp;{names.two}</span>
             </p>
             <div className="mt-12 flex flex-wrap justify-between gap-4 border-t border-on-primary/25 pt-5 text-sm text-on-primary/80">
               <span>{dates.weekdayLong}</span>
               <span>{dates.dotted}</span>
             </div>
+            <MusicCredit music={c.music} className="!mx-0 mt-8 text-on-primary/60" />
           </div>
         </footer>
 
@@ -367,7 +374,7 @@ export default function BorgonaTemplate({ inv }: { inv: ResolvedInvitation }) {
             <StickyRsvp date={dates.compact} time={dates.time} barClassName="bg-primary/95 backdrop-blur" textClassName="text-on-primary/90" buttonClassName="bg-secondary font-bold text-primary" />
           </BeforeEvent>
         )}
-        {c.music && <MusicPlayer song={c.music} classes={{ button: "bg-primary text-on-primary hover:bg-accent", icon: "bg-secondary text-primary", status: "text-on-primary/70" }} />}
+        {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>
   );

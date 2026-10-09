@@ -63,6 +63,14 @@ padres → galería → regalos → frase de cierre → pie vino con nombres gig
 - La cuenta regresiva muestra horas, minutos y segundos en tres columnas
   iguales.
 
+## Música y cita
+- **Reproductor `etiqueta`:** bloque vino de esquinas rectas con ▶/❚❚ y un
+  filete rosa que se alarga al sonar; en escritorio, "Música" en cursiva
+  grande + título en versalitas y barras de ecualizador.
+- **Demo:** Clair de lune (Debussy · Laurens Goedhart, dominio público).
+- **Citas:** frases de la pareja (sin versículo en la demo). Un versículo
+  se muestra con su referencia y traducción.
+
 ## Uso
 `npm run nueva -- borgona` → editar `config/invitation.ts` → fotos → `npm run check`.
 

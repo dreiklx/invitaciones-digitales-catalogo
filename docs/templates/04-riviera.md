@@ -63,6 +63,14 @@ En arcos y círculos se pierden las esquinas: el sujeto debe ir al centro.
 - La cuenta regresiva usa sellos en 2×2 y pasa a 4 en línea desde 640 px.
 - Postales de lugar con borde más fino y botones a todo lo ancho.
 
+## Música y cita
+- **Reproductor `sello`:** sello postal redondo con borde perforado que
+  gira despacio al sonar y un punto limón; en escritorio, píldora con el
+  título en la letra del diseño.
+- **Demo:** Gymnopédie n.º 1 (Satie · Robin Alciatore, dominio público).
+- **Citas:** frases de la pareja (sin versículo en la demo). Un versículo
+  se muestra con su referencia y traducción.
+
 ## Uso
 `npm run nueva -- riviera` → editar `config/invitation.ts` → fotos → `npm run check`.
 

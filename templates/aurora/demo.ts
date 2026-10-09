@@ -123,7 +123,12 @@ export const demo: InvitationOf<"aurora"> = {
 
   footer: { message: "Te espero para celebrar" },
 
-  music: null,
+  music: {
+    src: "/audio/demo/chopin-vals-op69-1.mp3",
+    title: "Vals op. 69 n.º 1",
+    artist: "Frédéric Chopin",
+    credit: "Grabación de Musopen, dedicada al dominio público (CC0, vía Wikimedia Commons)",
+  },
 
   photos: {
     portada: { src: "/plantillas/aurora/portada.jpg", alt: "Mariana", position: "50% 30%" },

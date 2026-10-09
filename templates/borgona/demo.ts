@@ -101,7 +101,12 @@ export const demo: InvitationOf<"borgona"> = {
 
   footer: { message: "Nos vemos ahí" },
 
-  music: null,
+  music: {
+    src: "/audio/demo/debussy-clair-de-lune.mp3",
+    title: "Clair de lune",
+    artist: "Claude Debussy · Laurens Goedhart",
+    credit: "Grabación de dominio público (vía Wikimedia Commons)",
+  },
 
   photos: {
     portada: { src: "/plantillas/borgona/portada.jpg", alt: "Sofía y Gabriel", position: "50% 30%" },

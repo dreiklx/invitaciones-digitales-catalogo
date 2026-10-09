@@ -23,6 +23,7 @@ export const meta: TemplateMeta<"nube"> = {
     line: "#ebe0d0",
   },
   fonts: { display: "Fredoka", body: "Nunito" },
+  musicPlayer: "globo",
   photoSlots: {
     portada: { ratio: [1, 1], where: "Portada, en un círculo con la edad", position: "50% 40%" },
     historia: { ratio: [4, 5], where: "Junto al mensaje", position: "50% 35%" },

@@ -59,7 +59,10 @@ npm run dev            # http://localhost:3000
    npm run nueva -- riviera     # olivo | tierra | gala | riviera | borgona | aurora | nube
    ```
    Copia la demo de ese diseño a `config/invitation.ts`, con las fotos
-   apuntando a `public/images/`.
+   apuntando a `public/images/<espacio>.jpg` (`galeria1` → `galeria-1.jpg`).
+   Los nombres de la pareja y los textos alternativos de las fotos quedan
+   en "REEMPLAZAR" (nunca se heredan de la demo: la de Olivo es Ramón y
+   Florinda).
 4. **Editar `config/invitation.ts`**: nombres (`couple` o `honoree`), `date`/`time`, lugares
    (enlaces "Compartir" de Google Maps, Waze opcional), textos, padres,
    aviso, vestimenta, regalos, RSVP (WhatsApp, fecha límite), colores
@@ -115,10 +118,70 @@ mensaje que llegaría.
 
 ## Música
 
-Archivo en `public/audio/` (mp3, idealmente < 5 MB) y
-`music: { title: "…", src: "/audio/archivo.mp3" }`. Suena al tocar "Abrir
-invitación" (los navegadores bloquean el sonido automático). Solo música
-que el cliente tenga derecho a publicar. Sin música: `music: null`.
+Opcional. **Empieza al tocar "Abrir invitación"** (ese toque es el permiso
+que piden los navegadores) y después el reproductor la pausa y la reanuda.
+Antes de ese toque no suena ni se descarga nada. Si el navegador no la deja
+sonar, el reproductor queda en "Toca para escuchar".
+
+```ts
+music: {
+  src: "/audio/nuestra-cancion.mp3", // archivo en public/audio/ (mp3, idealmente < 5 MB)
+  title: "Clair de lune",
+  artist: "Claude Debussy · Laurens Goedhart", // opcional
+  credit: "Grabación de dominio público",      // licencia o atribución (se muestra en el pie)
+  player: "deco",                               // opcional: otro estilo de reproductor
+},
+```
+
+- **Sin música:** `music: null` (no hay reproductor ni créditos).
+- **Estilo del reproductor:** cada diseño trae el suyo (`musicPlayer` en
+  su `meta.ts`): Olivo `rama`, Tierra `ficha`, Gala `deco`, Riviera
+  `sello`, Borgoña `etiqueta`, Aurora `destello`, Nube `globo`. `player`
+  usa otro; toma los colores y letras del diseño.
+- **Licencia, antes de publicar:** solo audio que el cliente pueda usar en
+  una web. Comprar una canción o tenerla en Spotify/YouTube **no** da ese
+  derecho; una canción comercial necesita licencia de sincronización. Lo
+  seguro: dominio público, CC0, CC BY (con `credit`) o música con
+  licencia comprada para web. Guardar en `credit` lo que pida la licencia.
+- **Pistas de demostración** (`public/audio/demo/`, verificadas en
+  Wikimedia Commons, 2026-10-09):
+
+| Archivo | Obra · intérprete | Licencia | Demo |
+|---|---|---|---|
+| `pachelbel-canon-macleod.mp3` | Pachelbel, Canon en re · Kevin MacLeod | CC BY 3.0 (atribución obligatoria) | Olivo |
+| `satie-gymnopedie-1.mp3` | Satie, Gymnopédie n.º 1 · Robin Alciatore (Musopen) | Dominio público | Tierra, Riviera |
+| `debussy-clair-de-lune.mp3` | Debussy, Clair de lune · Laurens Goedhart | Dominio público | Gala, Borgoña |
+| `chopin-vals-op69-1.mp3` | Chopin, Vals op. 69 n.º 1 (Musopen) | CC0 | Aurora |
+| `cajita-musical-cuna.mp3` | Brahms, Canción de cuna (cajita musical, pdsounds.org) | Dominio público | Nube |
+
+  Un cliente puede quedarse con una de estas (`npm run check` lo avisa
+  para confirmarlo) manteniendo su `credit`.
+
+## Citas y versículos
+
+`openingQuote`, `story.quote` y `closingQuote` aceptan una cita, un
+versículo o `null` (la sección no aparece):
+
+```ts
+openingQuote: {
+  kind: "verse",                     // "quote" (por defecto) o "verse"
+  text: "Así que, no son ya más dos, sino una carne: por tanto, lo que Dios juntó, no lo aparte el hombre.",
+  reference: "Mateo 19:6",
+  translation: "Reina-Valera 1909",  // se muestra junto a la referencia
+  align: "center",                   // opcional: "center" o "start"
+},
+```
+
+- Cada diseño presenta el versículo a su manera (Olivo, Gala y Tierra
+  tienen una composición propia para `"verse"`); cambiar el texto no exige
+  tocar componentes.
+- **Traducción:** usar el texto exacto de una de dominio público
+  (**Reina-Valera 1909**) o de una cuya licencia permita este uso (la
+  Reina-Valera 1960, NVI o NTV tienen derechos y piden su aviso de
+  copyright). `npm run check` avisa si a un versículo le falta la
+  referencia o la traducción.
+- Demos: Olivo, Colosenses 3:14; Tierra, Cantares 8:7; Gala, Mateo 19:6
+  (Reina-Valera 1909). Riviera, Borgoña, Aurora y Nube usan frases.
 
 ## Datos a pedir al cliente (todo de una vez)
 
@@ -135,9 +198,12 @@ que el cliente tenga derecho a publicar. Sin música: `music: null`.
 9. Vestimenta y colores a evitar.
 10. Regalos: método, número/cuenta, enlace de mesa de regalos, o "no incluir".
 11. WhatsApp que recibe las confirmaciones, fecha límite, "¿de parte de quién?".
-12. Música con permiso de uso, o sin música.
+12. Música con permiso de uso para web (y su licencia o atribución), o
+    sin música.
 13. Aurora y Nube: programa del evento (hora y momento: vals, pastel…), o
     "no incluir".
+14. Cita, versículo (con referencia y traducción) o nada, para la apertura
+    y el cierre.
 
 ## Antes de entregar
 
@@ -147,7 +213,8 @@ que el cliente tenga derecho a publicar. Sin música: `music: null`.
 - [ ] Confirmación probada: llega a WhatsApp el mensaje con los nombres.
 - [ ] "Cómo llegar" abre el lugar correcto; el calendario tiene fecha, hora y lugares correctos.
 - [ ] `site.url` con la URL final; al pegar el enlace en WhatsApp aparece la tarjeta.
-- [ ] Teléfono real: "Abrir invitación" y confirmar que suena la música.
+- [ ] Teléfono real: tocar "Abrir invitación" y confirmar que suena la
+      música; pausarla y reanudarla desde el reproductor.
 
 ## Despliegue (Vercel)
 
@@ -156,7 +223,9 @@ proyecto (`invitaciones-digitales-catalogo`,
 https://invitaciones-digitales-catalogo.vercel.app). El catálogo está
 conectado a https://github.com/dreiklx/invitaciones-digitales-catalogo
 (privado): `git push origin main` despliega a producción y las demás ramas
-crean vistas previas. Nunca copiar ni reutilizar `.vercel/` (enlazaría y
+crean vistas previas (**pendiente**: hoy Vercel bloquea esos despliegues
+hasta vincular la cuenta de GitHub del autor de los commits; ver
+PROJECT-CONTEXT). Nunca copiar ni reutilizar `.vercel/` (enlazaría y
 sobrescribiría el proyecto de otro).
 
 ```bash
@@ -185,8 +254,8 @@ de un enlace: compartirlo solo después del despliegue final.
 ## Qué no tocar en una invitación de diseño existente
 
 `templates/`, `app/`, `lib/`, `components/` son el diseño y la lógica
-compartidos. Reglas que no se deben revertir (portada por el audio,
-máquina de estados de la música, usabilidad para personas mayores,
+compartidos. Reglas que no se deben revertir (portada, música sin
+reproducción automática, usabilidad para personas mayores,
 "teléfono primero"): `PROJECT-CONTEXT.md`.
 
 Las invitaciones de clientes no llevan el logo del estudio. Los logos de

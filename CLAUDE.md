@@ -38,7 +38,22 @@ Lee primero, en este orden:
   usabilidad para personas mayores.
 - Tras cambios relevantes: `npm run check`, `npm run typecheck`,
   `npm run lint`, `npm run build`; revisión visual cuando aplique.
-- No hacer commits, push ni despliegues salvo que se pida.
+- Cerrar cada tarea con commit y push normal a `origin/main` (salvo que
+  el dueño diga lo contrario o haya un riesgo o bloqueo real). Nunca
+  despliegues manuales con Vercel CLI para saltar el bloqueo de la
+  integración. Detalle: "Flujo de trabajo de cada tarea" en AGENTS.md.
+
+# Flujo de cada tarea (regla permanente)
+
+- Al empezar: leer el contexto y comprobar el estado real del repo; el
+  código y los `.md` mandan sobre el historial de chat.
+- Durante: trabajar de principio a fin sin pedir aprobación en cada paso;
+  preguntar solo ante bloqueos reales (autenticación, autorización o una
+  decisión que no se pueda deducir).
+- Al terminar, en la misma tarea: probar → actualizar los `.md` → revisar
+  diff y seguridad → commit descriptivo → push a `origin/main` → comprobar
+  que el repo quede limpio. No afirmar pruebas ni despliegues no
+  comprobados.
 
 # Documentación viva
 

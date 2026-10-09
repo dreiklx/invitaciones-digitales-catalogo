@@ -22,6 +22,7 @@ export const meta: TemplateMeta<"gala"> = {
     line: "#3b3832",
   },
   fonts: { display: "Bodoni Moda", body: "Tenor Sans" },
+  musicPlayer: "deco",
   photoSlots: {
     portada: { ratio: [3, 4], where: "Portada, retrato enmarcado en dorado", position: "50% 30%" },
     historia: { ratio: [16, 9], where: "Fotografía panorámica de la historia", position: "50% 40%" },

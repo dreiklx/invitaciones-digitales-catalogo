@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import type { ResolvedInvitation } from "@/lib/invitation/resolve";
-import type { Photo, PhotoSlotSpec } from "@/lib/invitation/types";
+import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
+import type { Photo, PhotoSlotSpec, Quote } from "@/lib/invitation/types";
 import { toRoman } from "@/lib/invitation/time";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
@@ -11,6 +11,7 @@ import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
 import StickyRsvp from "../shared/StickyRsvp";
 import MusicPlayer from "../shared/MusicPlayer";
+import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
@@ -64,6 +65,34 @@ function Monogram({ initials, size = "md" }: { initials: [string, string]; size?
 }
 
 // Doble marco dorado.
+// Cita o versículo bajo el abanico. Un versículo va entre comillas latinas,
+// con la referencia entre filetes dorados y la traducción debajo.
+function GalaQuote({ quote }: { quote: Quote }) {
+  const verse = quote.kind === "verse";
+  const start = quote.align === "start";
+  return (
+    <section className={`px-6 py-20 sm:py-24 ${start ? "text-left" : "text-center"}`}>
+      <Reveal className="mx-auto max-w-2xl">
+        <Fan className={`h-8 w-16 text-primary/80 ${start ? "" : "mx-auto"}`} />
+        <p className={`mt-8 font-display italic text-ink ${verse ? "text-[1.65rem] leading-[1.45] sm:text-[2.1rem]" : "text-2xl leading-relaxed sm:text-3xl"}`}>
+          {verse ? <>&laquo;{quote.text}&raquo;</> : <>&ldquo;{quote.text}&rdquo;</>}
+        </p>
+        {quote.reference && verse && (
+          <>
+            <div className={`mt-8 flex items-center gap-4 ${start ? "" : "justify-center"}`}>
+              <span className="h-px w-10 bg-gradient-to-r from-transparent to-primary" />
+              <span className="whitespace-nowrap text-xs uppercase tracking-[0.35em] text-primary">{quote.reference}</span>
+              <span className="h-px w-10 bg-gradient-to-l from-transparent to-primary" />
+            </div>
+            {quote.translation && <p className="mt-2 text-xs tracking-[0.15em] text-muted">{quote.translation}</p>}
+          </>
+        )}
+        {quote.reference && !verse && <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">{quoteCitation(quote)}</p>}
+      </Reveal>
+    </section>
+  );
+}
+
 function Gilded({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div className={`relative border border-primary/70 p-2 sm:p-2.5 ${className}`}>
@@ -173,15 +202,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
           <ScrollCue className="mx-auto mt-5 text-secondary sm:mt-10" circleClassName="border-primary/60" />
         </section>
 
-        {c.openingQuote && (
-          <section className="px-6 py-20 text-center sm:py-24">
-            <Reveal className="mx-auto max-w-2xl">
-              <Fan className="mx-auto h-8 w-16 text-primary/80" />
-              <p className="mt-8 font-display text-2xl italic leading-relaxed text-ink sm:text-3xl">&ldquo;{c.openingQuote.text}&rdquo;</p>
-              {c.openingQuote.reference && <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">{c.openingQuote.reference}</p>}
-            </Reveal>
-          </section>
-        )}
+        {c.openingQuote && <GalaQuote quote={c.openingQuote} />}
 
         {/* Cuenta regresiva y programa */}
         <section id="ceremonia" className="bg-surface px-6 py-20 sm:py-28">
@@ -193,7 +214,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
               <Countdown startISO={inv.startISO} endISO={inv.endISO} todayMessage={c.countdown.todayMessage} afterMessage={c.countdown.afterMessage} />
             </Reveal>
             <Reveal delay={200} className="mt-12 flex flex-col items-center gap-2">
-              <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 whitespace-nowrap border border-primary/70 px-4 py-3 text-xs uppercase tracking-[0.1em] text-ink transition hover:bg-primary hover:text-on-primary min-[360px]:px-7 min-[360px]:tracking-[0.25em]">
+              <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 border border-primary/70 px-4 py-3 text-xs uppercase tracking-[0.1em] text-ink transition hover:bg-primary hover:text-on-primary min-[360px]:px-7 min-[360px]:tracking-[0.25em] max-w-full text-center [&_svg]:shrink-0">
                 <CalendarIcon size={18} />
                 Agregar a mi calendario
               </a>
@@ -297,7 +318,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
               {c.story.quote && (
                 <p className="mt-6 text-sm text-muted">
                   &ldquo;{c.story.quote.text}&rdquo;
-                  {c.story.quote.reference && <span className="mt-2 block text-xs uppercase tracking-[0.3em] text-primary">{c.story.quote.reference}</span>}
+                  {c.story.quote.reference && <span className="mt-2 block text-xs uppercase tracking-[0.3em] text-primary">{quoteCitation(c.story.quote)}</span>}
                 </p>
               )}
             </Reveal>
@@ -382,7 +403,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
                 </div>
               )}
               {c.gifts.link && (
-                <a href={c.gifts.link.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-[52px] items-center justify-center whitespace-nowrap border border-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-ink transition hover:bg-primary hover:text-on-primary min-[360px]:px-8 min-[360px]:tracking-[0.3em]">
+                <a href={c.gifts.link.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-[52px] items-center justify-center border border-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-ink transition hover:bg-primary hover:text-on-primary min-[360px]:px-8 min-[360px]:tracking-[0.3em] max-w-full text-center [&_svg]:shrink-0">
                   {c.gifts.link.label}
                 </a>
               )}
@@ -415,7 +436,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
           <section className="px-6 py-16 text-center">
             <Reveal className="mx-auto max-w-2xl">
               <p className="font-display text-2xl italic leading-relaxed text-ink sm:text-3xl">&ldquo;{c.closingQuote.text}&rdquo;</p>
-              {c.closingQuote.reference && <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">{c.closingQuote.reference}</p>}
+              {c.closingQuote.reference && <p className="mt-6 text-xs uppercase tracking-[0.35em] text-primary">{quoteCitation(c.closingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -429,6 +450,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
             </p>
             <p className="mt-4 whitespace-nowrap text-xs uppercase tracking-[0.3em] text-muted min-[360px]:tracking-[0.45em]">{roman}</p>
             <Fan className="mt-10 h-8 w-16 text-primary/70" />
+            <MusicCredit music={c.music} className="mt-10 text-muted" />
           </Reveal>
         </footer>
 
@@ -437,7 +459,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
             <StickyRsvp date={dates.compact} time={dates.time} barClassName="border border-primary/40 bg-paper/95 backdrop-blur" textClassName="font-display text-ink/90" buttonClassName="bg-primary text-on-primary tracking-[0.15em]" />
           </BeforeEvent>
         )}
-        {c.music && <MusicPlayer song={c.music} classes={{ button: "border border-primary/50 bg-paper text-ink", icon: "bg-primary text-on-primary", status: "text-muted" }} />}
+        {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>
   );

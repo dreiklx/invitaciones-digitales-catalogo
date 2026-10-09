@@ -22,6 +22,7 @@ export const meta: TemplateMeta<"riviera"> = {
     line: "#c8d3e5",
   },
   fonts: { display: "Gloock", body: "DM Sans" },
+  musicPlayer: "sello",
   photoSlots: {
     portada: { ratio: [3, 4], where: "Portada, dentro del arco", position: "50% 30%" },
     historia: { ratio: [4, 5], where: "Historia, dentro del arco", position: "50% 35%" },

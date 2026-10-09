@@ -22,6 +22,7 @@ export const meta: TemplateMeta<"borgona"> = {
     line: "#ddc6c0",
   },
   fonts: { display: "Instrument Serif", body: "Hanken Grotesk" },
+  musicPlayer: "etiqueta",
   photoSlots: {
     portada: { ratio: [4, 5], where: "Portada, al lado de los nombres", position: "50% 30%" },
     historia: { ratio: [1, 1], where: "Historia, foto cuadrada", position: "50% 40%" },

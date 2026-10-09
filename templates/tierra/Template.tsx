@@ -1,5 +1,5 @@
-import type { ResolvedInvitation } from "@/lib/invitation/resolve";
-import type { PhotoSlotSpec } from "@/lib/invitation/types";
+import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
+import type { PhotoSlotSpec, Quote } from "@/lib/invitation/types";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
@@ -9,6 +9,7 @@ import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
 import StickyRsvp from "../shared/StickyRsvp";
 import MusicPlayer from "../shared/MusicPlayer";
+import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
@@ -33,13 +34,33 @@ function Chapter({ number, eyebrow, title, light = false }: { number?: string; e
   );
 }
 
-function PullQuote({ text, reference }: { text: string; reference?: string }) {
+// Cita: gran comilla de revista. Versículo: epígrafe con la referencia y la
+// traducción arriba, como la entradilla de un capítulo.
+function PullQuote({ quote }: { quote: Quote }) {
+  const center = quote.align === "center";
+  if (quote.kind === "verse") {
+    return (
+      <section className="px-6 py-20 sm:px-10 sm:py-28">
+        <Reveal className={`mx-auto max-w-4xl ${center ? "text-center" : ""}`}>
+          <div className={`flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-ink/25 pt-3 text-[11px] uppercase tracking-[0.25em] sm:text-xs ${center ? "justify-center" : "justify-between"}`}>
+            <span className="text-accent">{quote.reference}</span>
+            {quote.translation && <span className="font-display text-sm normal-case italic tracking-normal text-muted">{quote.translation}</span>}
+          </div>
+          <p className="mt-8 font-display text-[2rem] font-light italic leading-[1.15] [font-variation-settings:'opsz'_144,'SOFT'_100] sm:mt-10 sm:text-5xl">
+            <span className="text-secondary">&laquo;</span>
+            {quote.text}
+            <span className="text-secondary">&raquo;</span>
+          </p>
+        </Reveal>
+      </section>
+    );
+  }
   return (
     <section className="px-6 py-20 sm:px-10 sm:py-28">
-      <Reveal className="mx-auto max-w-4xl">
+      <Reveal className={`mx-auto max-w-4xl ${center ? "text-center" : ""}`}>
         <span aria-hidden="true" className="block font-display text-[7rem] leading-[0.6] text-secondary">&ldquo;</span>
-        <p className="mt-2 font-display text-3xl font-light italic leading-[1.15] [font-variation-settings:'opsz'_144,'SOFT'_100] sm:text-5xl">{text}</p>
-        {reference && <p className="mt-6 text-xs uppercase tracking-[0.3em] text-accent">— {reference}</p>}
+        <p className="mt-2 font-display text-3xl font-light italic leading-[1.15] [font-variation-settings:'opsz'_144,'SOFT'_100] sm:text-5xl">{quote.text}</p>
+        {quote.reference && <p className="mt-6 text-xs uppercase tracking-[0.3em] text-accent">— {quoteCitation(quote)}</p>}
       </Reveal>
     </section>
   );
@@ -106,7 +127,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
     <Shell inv={inv} fontClasses={fontClasses} backClassName="bg-paper/85 text-ink border border-ink/15">
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Portada de revista */}
-        <section className="px-6 pb-16 pt-14 sm:px-10 sm:pt-24 lg:pb-24">
+        <section className="px-6 pb-16 pt-[4.5rem] sm:px-10 sm:pt-24 lg:pb-24">
           <div className="mx-auto max-w-6xl">
             <div className="flex items-baseline justify-between border-b border-ink/25 pb-3 text-[11px] uppercase tracking-[0.25em] text-muted sm:text-xs">
               <span>{c.hero.eyebrow}</span>
@@ -143,7 +164,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
           </div>
         </section>
 
-        {c.openingQuote && <PullQuote {...c.openingQuote} />}
+        {c.openingQuote && <PullQuote quote={c.openingQuote} />}
 
         {c.story && (
           <section id="historia" className="px-6 pb-20 sm:px-10 sm:pb-28">
@@ -166,7 +187,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
                   <Reveal delay={180}>
                     <p className="mt-8 border-l-2 border-secondary pl-5 font-display text-2xl italic leading-snug text-primary">
                       {c.story.quote.text}
-                      {c.story.quote.reference && <span className="mt-2 block font-body text-xs not-italic uppercase tracking-[0.25em] text-muted">{c.story.quote.reference}</span>}
+                      {c.story.quote.reference && <span className="mt-2 block font-body text-xs not-italic uppercase tracking-[0.25em] text-muted">{quoteCitation(c.story.quote)}</span>}
                     </p>
                   </Reveal>
                 )}
@@ -212,7 +233,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
                 </p>
                 <p className="mt-6 text-sm text-on-primary/80">{dates.time}</p>
                 <div className="mt-6 flex flex-col items-start gap-2">
-                  <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 whitespace-nowrap border border-on-primary/50 px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.04em] min-[360px]:px-5 min-[360px]:text-sm min-[360px]:tracking-[0.12em] transition hover:bg-on-primary hover:text-primary">
+                  <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 border border-on-primary/50 px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.04em] min-[360px]:px-5 min-[360px]:text-sm min-[360px]:tracking-[0.12em] transition hover:bg-on-primary hover:text-primary max-w-full text-center [&_svg]:shrink-0">
                     <CalendarIcon size={18} />
                     Agregar a mi calendario
                   </a>
@@ -406,7 +427,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
           </BeforeEvent>
         )}
 
-        {c.closingQuote && <PullQuote {...c.closingQuote} />}
+        {c.closingQuote && <PullQuote quote={c.closingQuote} />}
 
         <Reveal variant="curtain" className="px-6 sm:px-10">
           <div className="mx-auto max-w-6xl">
@@ -424,6 +445,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
               </span>
             </p>
             <p className="mt-8 border-t border-on-primary/25 pt-4 font-display text-lg italic">{dates.long}</p>
+            <MusicCredit music={c.music} className="!mx-0 mt-10 text-on-primary/60" />
           </div>
         </footer>
 
@@ -432,7 +454,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
             <StickyRsvp date={dates.compact} time={dates.time} barClassName="bg-primary/95 backdrop-blur" textClassName="font-display text-on-primary/90" buttonClassName="bg-accent text-on-accent" />
           </BeforeEvent>
         )}
-        {c.music && <MusicPlayer song={c.music} classes={{ button: "bg-primary text-on-primary hover:bg-ink", icon: "bg-accent text-on-accent", status: "text-on-primary/70" }} />}
+        {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>
   );

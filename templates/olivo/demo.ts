@@ -1,4 +1,4 @@
-// Demo del diseño 01 · Olivo (pareja ficticia). También es el punto de
+// Demo del diseño 01 · Olivo (Ramón y Florinda, con las fotos de su sesión). También es el punto de
 // partida de una invitación nueva: `npm run nueva -- olivo` copia este
 // archivo a config/invitation.ts. Guía: docs/templates/01-olivo.md.
 
@@ -14,7 +14,7 @@ export const demo: InvitationOf<"olivo"> = {
     timeZone: "America/Costa_Rica",
   },
   event: { name: "boda", article: "la" },
-  couple: { partnerOne: "Valeria", partnerTwo: "Andrés" },
+  couple: { partnerOne: "Ramón", partnerTwo: "Florinda" },
   date: "2027-04-17",
   time: "16:00",
   durationHours: 6,
@@ -26,8 +26,10 @@ export const demo: InvitationOf<"olivo"> = {
   hero: { eyebrow: "Nos casamos" },
 
   openingQuote: {
-    text: "El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección.",
-    reference: "Antoine de Saint-Exupéry",
+    kind: "verse",
+    text: "Y sobre todas estas cosas vestíos de caridad, la cual es el vínculo de la perfección.",
+    reference: "Colosenses 3:14",
+    translation: "Reina-Valera 1909",
   },
 
   story: {
@@ -111,17 +113,24 @@ export const demo: InvitationOf<"olivo"> = {
 
   footer: { message: "Con todo nuestro amor" },
 
-  music: null,
+  music: {
+    src: "/audio/demo/pachelbel-canon-macleod.mp3",
+    title: "Canon en re mayor",
+    artist: "Johann Pachelbel · Kevin MacLeod",
+    credit: "Kevin MacLeod (incompetech.com), licencia CC BY 3.0 (creativecommons.org/licenses/by/3.0)",
+  },
 
   photos: {
-    portada: { src: "/plantillas/olivo/portada.jpg", alt: "Valeria y Andrés", position: "50% 30%" },
-    historia: { src: "/plantillas/olivo/historia.jpg", alt: "Valeria y Andrés", position: "50% 40%" },
-    cuentaRegresiva: { src: "/plantillas/olivo/cuenta-regresiva.jpg", alt: "Valeria y Andrés", position: "50% 30%" },
-    regalos: { src: "/plantillas/olivo/regalos.jpg", alt: "Valeria y Andrés", position: "50% 30%" },
-    galeria1: { src: "/plantillas/olivo/galeria-1.jpg", alt: "Valeria y Andrés", position: "50% 40%" },
-    galeria2: { src: "/plantillas/olivo/galeria-2.jpg", alt: "Valeria y Andrés", position: "50% 35%" },
-    galeria3: { src: "/plantillas/olivo/galeria-3.jpg", alt: "Valeria y Andrés", position: "50% 35%" },
-    galeria4: { src: "/plantillas/olivo/galeria-4.jpg", alt: "Valeria y Andrés", position: "50% 45%" },
-    cierre: { src: "/plantillas/olivo/cierre.jpg", alt: "Valeria y Andrés", position: "50% 30%" },
+    // Sesión de pareja real (public/plantillas/olivo/fotos/), contada en
+    // orden: abrazo → propuesta → el anillo → la galería → el cierre.
+    portada: { src: "/plantillas/olivo/fotos/abrazo.jpg", alt: "Ramón y Florinda abrazados en el patio", position: "54% 10%" },
+    historia: { src: "/plantillas/olivo/fotos/propuesta.jpg", alt: "Ramón, de rodillas, le propone matrimonio a Florinda", position: "50% 45%" },
+    cuentaRegresiva: { src: "/plantillas/olivo/fotos/anillo-vertical.jpg", alt: "Florinda enseña el anillo junto a Ramón", position: "50% 28%" },
+    regalos: { src: "/plantillas/olivo/fotos/rosa.jpg", alt: "Ramón le lanza una rosa a Florinda", position: "50% 40%" },
+    galeria1: { src: "/plantillas/olivo/fotos/sentados.jpg", alt: "Ramón y Florinda sentados en el patio, felices", position: "50% 35%" },
+    galeria2: { src: "/plantillas/olivo/fotos/patio.jpg", alt: "Ramón le ofrece una rosa a Florinda", position: "50% 30%" },
+    galeria3: { src: "/plantillas/olivo/fotos/abrazo.jpg", alt: "Ramón y Florinda abrazados", position: "50% 22%" },
+    galeria4: { src: "/plantillas/olivo/fotos/anillo-horizontal.jpg", alt: "Florinda enseña el anillo y Ramón celebra", position: "50% 35%" },
+    cierre: { src: "/plantillas/olivo/fotos/anillo-vertical.jpg", alt: "Ramón y Florinda con el anillo de compromiso", position: "50% 25%" },
   },
 };

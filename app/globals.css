@@ -184,12 +184,44 @@ body {
   animation: float-soft 7s ease-in-out infinite;
 }
 
+/* Reproductor de música (templates/shared/players.tsx): solo se mueve
+   mientras suena. */
+@keyframes player-sway {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+.player-sway {
+  transform-origin: 85% 85%;
+  animation: player-sway 3.2s ease-in-out infinite;
+}
+@keyframes player-bar {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+.player-bar {
+  animation: player-bar 0.9s ease-in-out infinite;
+}
+@keyframes player-pulse {
+  0% { opacity: 0.7; scale: 0.8; }
+  100% { opacity: 0; scale: 1.2; }
+}
+.player-pulse {
+  animation: player-pulse 2.4s ease-out infinite;
+}
+.player-spin {
+  animation: slow-spin 14s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll-cue-arrow,
   .gold-sheen,
   .slow-spin,
   .twinkle,
-  .float-soft {
+  .float-soft,
+  .player-sway,
+  .player-bar,
+  .player-pulse,
+  .player-spin {
     animation: none;
   }
 }

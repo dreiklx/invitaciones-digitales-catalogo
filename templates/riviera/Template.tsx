@@ -1,4 +1,4 @@
-import type { ResolvedInvitation } from "@/lib/invitation/resolve";
+import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
@@ -9,6 +9,7 @@ import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
 import StickyRsvp from "../shared/StickyRsvp";
 import MusicPlayer from "../shared/MusicPlayer";
+import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
@@ -114,7 +115,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
           <section className="px-6 pb-20 text-center">
             <Reveal className="mx-auto max-w-2xl">
               <p className="font-display text-2xl leading-snug text-ink sm:text-4xl">&ldquo;{c.openingQuote.text}&rdquo;</p>
-              {c.openingQuote.reference && <p className="mt-5 text-xs font-medium uppercase tracking-[0.3em] text-primary">{c.openingQuote.reference}</p>}
+              {c.openingQuote.reference && <p className="mt-5 text-xs font-medium uppercase tracking-[0.3em] text-primary">{quoteCitation(c.openingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -134,7 +135,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
                 <span className="block whitespace-nowrap text-primary">{dates.time}</span>
               </p>
               <div className="mt-5 flex flex-col items-center gap-2">
-                <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-5 py-3 text-base font-semibold text-on-primary shadow-md shadow-primary/20 transition hover:brightness-110 min-[360px]:px-7">
+                <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-primary px-5 py-3 text-base font-semibold text-on-primary shadow-md shadow-primary/20 transition hover:brightness-110 min-[360px]:px-7 max-w-full text-center [&_svg]:shrink-0">
                   <CalendarIcon />
                   Agregar a mi calendario
                 </a>
@@ -188,7 +189,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
                 {c.story.quote && (
                   <p className="mt-6 text-base italic text-muted">
                     &ldquo;{c.story.quote.text}&rdquo;
-                    {c.story.quote.reference && <span className="mt-2 block text-xs font-medium not-italic uppercase tracking-[0.3em] text-primary">{c.story.quote.reference}</span>}
+                    {c.story.quote.reference && <span className="mt-2 block text-xs font-medium not-italic uppercase tracking-[0.3em] text-primary">{quoteCitation(c.story.quote)}</span>}
                   </p>
                 )}
               </Reveal>
@@ -362,7 +363,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
             <Reveal className="mx-auto max-w-2xl">
               <Wave className="mx-auto h-3 w-24 text-primary/50" />
               <p className="mt-6 font-display text-2xl leading-snug text-ink sm:text-3xl">&ldquo;{c.closingQuote.text}&rdquo;</p>
-              {c.closingQuote.reference && <p className="mt-5 text-xs font-medium uppercase tracking-[0.3em] text-primary">{c.closingQuote.reference}</p>}
+              {c.closingQuote.reference && <p className="mt-5 text-xs font-medium uppercase tracking-[0.3em] text-primary">{quoteCitation(c.closingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -376,6 +377,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
               <span className="block sm:inline">{names.one}</span> <span className="block sm:inline">&amp; {names.two}</span>
             </p>
             <p className="mt-4 text-sm tracking-[0.25em] text-on-primary/80">{dates.display}</p>
+            <MusicCredit music={c.music} className="mt-10 text-on-primary/65" />
           </div>
         </footer>
 
@@ -384,7 +386,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
             <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-primary/95 backdrop-blur" textClassName="text-on-primary/90" buttonClassName="rounded-full bg-secondary font-bold text-ink" />
           </BeforeEvent>
         )}
-        {c.music && <MusicPlayer song={c.music} classes={{ button: "bg-primary text-on-primary hover:brightness-110", icon: "bg-secondary text-ink", status: "text-on-primary/75" }} />}
+        {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>
   );

@@ -109,6 +109,8 @@ async function main() {
     const slots = templateMetas[id].photoSlots as Record<string, PhotoSlotSpec>;
     const photos = demos[id].photos as Record<string, { src: string }>;
     for (const [slot, spec] of Object.entries(slots)) {
+      // Fotos reales de una demo (p. ej. Olivo): nunca se reemplazan.
+      if (photos[slot].src.includes("/fotos/")) continue;
       const out = path.join(process.cwd(), "public", photos[slot].src);
       await mkdir(path.dirname(out), { recursive: true });
       const { svg, width, height } = art(id, slot, spec);

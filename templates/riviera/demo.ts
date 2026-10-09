@@ -106,7 +106,12 @@ export const demo: InvitationOf<"riviera"> = {
 
   footer: { message: "Te esperamos frente al mar" },
 
-  music: null,
+  music: {
+    src: "/audio/demo/satie-gymnopedie-1.mp3",
+    title: "Gymnopédie n.º 1",
+    artist: "Erik Satie · Robin Alciatore",
+    credit: "Grabación de dominio público (Musopen, vía Wikimedia Commons)",
+  },
 
   photos: {
     portada: { src: "/plantillas/riviera/portada.jpg", alt: "Lucía y Martín", position: "50% 30%" },

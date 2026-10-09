@@ -1,4 +1,4 @@
-import type { ResolvedInvitation } from "@/lib/invitation/resolve";
+import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
 import { toRoman } from "@/lib/invitation/time";
 import Gate, { GateButton } from "../shared/Gate";
@@ -10,6 +10,7 @@ import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
 import StickyRsvp from "../shared/StickyRsvp";
 import MusicPlayer from "../shared/MusicPlayer";
+import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
@@ -121,7 +122,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
             <Reveal className="mx-auto max-w-2xl">
               <SparkleRule className="text-secondary" />
               <p className="mt-8 font-display text-3xl leading-snug text-ink sm:text-5xl">&ldquo;{c.openingQuote.text}&rdquo;</p>
-              {c.openingQuote.reference && <p className="mt-6 text-xs font-semibold uppercase tracking-[0.35em] text-accent">{c.openingQuote.reference}</p>}
+              {c.openingQuote.reference && <p className="mt-6 text-xs font-semibold uppercase tracking-[0.35em] text-accent">{quoteCitation(c.openingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -140,7 +141,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
                 {c.story.quote && (
                   <div className="mt-6">
                     <p className="text-base leading-relaxed text-muted sm:text-lg">{c.story.quote.text}</p>
-                    {c.story.quote.reference && <p className="mt-2 font-script text-4xl text-primary">{c.story.quote.reference}</p>}
+                    {c.story.quote.reference && <p className="mt-2 font-script text-4xl text-primary">{quoteCitation(c.story.quote)}</p>}
                   </div>
                 )}
               </Reveal>
@@ -181,7 +182,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
                 {dates.weekdayLong}
                 <span className="block whitespace-nowrap text-secondary">{dates.time}</span>
               </p>
-              <a href={inv.links.calendar} className="mt-3 inline-flex min-h-[52px] items-center gap-2.5 whitespace-nowrap rounded-full bg-on-primary px-5 py-3 text-base font-semibold text-primary shadow-lg shadow-black/15 transition hover:bg-secondary min-[360px]:px-7">
+              <a href={inv.links.calendar} className="mt-3 inline-flex min-h-[52px] items-center gap-2.5 rounded-full bg-on-primary px-5 py-3 text-base font-semibold text-primary shadow-lg shadow-black/15 transition hover:bg-secondary min-[360px]:px-7 max-w-full text-center [&_svg]:shrink-0">
                 <CalendarIcon />
                 Agregar a mi calendario
               </a>
@@ -401,7 +402,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
           <section className="px-6 pt-20 text-center sm:pt-28">
             <Reveal className="mx-auto max-w-2xl">
               <p className="font-display text-3xl leading-snug text-ink sm:text-4xl">&ldquo;{c.closingQuote.text}&rdquo;</p>
-              {c.closingQuote.reference && <p className="mt-5 text-xs font-semibold uppercase tracking-[0.35em] text-accent">{c.closingQuote.reference}</p>}
+              {c.closingQuote.reference && <p className="mt-5 text-xs font-semibold uppercase tracking-[0.35em] text-accent">{quoteCitation(c.closingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -423,6 +424,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
             <p className="mt-4 px-2 font-script text-[clamp(3.5rem,17vw,7rem)] leading-[1.15]">{names.one}</p>
             <p className="mt-2 text-xs uppercase tracking-[0.35em] text-on-primary/80">{ageText}</p>
             <p className="mt-2 whitespace-nowrap text-sm font-medium tracking-[0.3em] text-on-primary/90 sm:text-base">{dates.display}</p>
+            <MusicCredit music={c.music} className="mt-10 text-on-primary/65" />
           </div>
         </footer>
 
@@ -431,7 +433,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
             <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-primary/95 backdrop-blur" textClassName="text-on-primary/90" buttonClassName="rounded-full bg-accent font-bold text-on-accent" />
           </BeforeEvent>
         )}
-        {c.music && <MusicPlayer song={c.music} classes={{ button: "bg-primary text-on-primary hover:bg-accent", icon: "bg-accent text-on-accent", status: "text-on-primary/70" }} />}
+        {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>
   );

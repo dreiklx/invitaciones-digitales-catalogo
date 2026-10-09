@@ -1,6 +1,6 @@
 import Image from "next/image";
-import type { ResolvedInvitation, ResolvedLocation } from "@/lib/invitation/resolve";
-import type { PhotoSlotSpec } from "@/lib/invitation/types";
+import { quoteCitation, type ResolvedInvitation, type ResolvedLocation } from "@/lib/invitation/resolve";
+import type { PhotoSlotSpec, Quote } from "@/lib/invitation/types";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
@@ -10,6 +10,7 @@ import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
 import StickyRsvp from "../shared/StickyRsvp";
 import MusicPlayer from "../shared/MusicPlayer";
+import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
@@ -45,15 +46,22 @@ function Heading({ eyebrow, title, light = false }: { eyebrow: string; title: st
   );
 }
 
-function QuoteBlock({ text, reference }: { text: string; reference?: string }) {
+// Cita o versículo entre filetes botánicos. Un versículo va entre
+// comillas latinas, con la referencia y debajo la traducción.
+function QuoteBlock({ quote }: { quote: Quote }) {
+  const verse = quote.kind === "verse";
+  const start = quote.align === "start";
   return (
     <section className="bg-paper px-6 py-16 sm:py-20">
       <Reveal>
-        <div className="mx-auto max-w-2xl text-center">
-          <div className="ornament mx-auto w-full max-w-[140px] text-secondary" />
-          <p className="mt-6 font-display text-2xl italic leading-snug text-primary sm:text-3xl">&ldquo;{text}&rdquo;</p>
-          {reference && <p className="mt-4 text-xs uppercase tracking-[0.3em] text-accent sm:text-sm">{reference}</p>}
-          <div className="ornament mx-auto mt-6 w-full max-w-[140px] text-secondary" />
+        <div className={`mx-auto max-w-2xl ${start ? "text-left" : "text-center"}`}>
+          <div className={`ornament w-full max-w-[140px] text-secondary ${start ? "" : "mx-auto"}`} />
+          <p className={`mt-6 font-display italic text-primary ${verse ? "text-[1.7rem] leading-[1.35] sm:text-[2.1rem]" : "text-2xl leading-snug sm:text-3xl"}`}>
+            {verse ? <>&laquo;{quote.text}&raquo;</> : <>&ldquo;{quote.text}&rdquo;</>}
+          </p>
+          {quote.reference && <p className="mt-5 text-xs font-medium uppercase tracking-[0.3em] text-accent sm:text-sm">{verse ? quote.reference : quoteCitation(quote)}</p>}
+          {verse && quote.translation && <p className="mt-1.5 text-xs text-muted">{quote.translation}</p>}
+          <div className={`ornament mt-6 w-full max-w-[140px] text-secondary ${start ? "" : "mx-auto"}`} />
         </div>
       </Reveal>
     </section>
@@ -169,7 +177,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
           </div>
         </section>
 
-        {c.openingQuote && <QuoteBlock {...c.openingQuote} />}
+        {c.openingQuote && <QuoteBlock quote={c.openingQuote} />}
 
         {c.story && (
           <section id="historia" className="bg-surface px-6 py-16 sm:py-20">
@@ -186,7 +194,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
                 <Reveal delay={160}>
                   <p className="mx-auto mt-4 max-w-md text-center font-display text-base italic text-muted sm:text-lg">
                     &ldquo;{c.story.quote.text}&rdquo;
-                    {c.story.quote.reference && <span className="mt-1.5 block font-body text-xs not-italic uppercase tracking-[0.25em] text-accent">{c.story.quote.reference}</span>}
+                    {c.story.quote.reference && <span className="mt-1.5 block font-body text-xs not-italic uppercase tracking-[0.25em] text-accent">{quoteCitation(c.story.quote)}</span>}
                   </p>
                 </Reveal>
               )}
@@ -235,7 +243,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
                   {dates.weekdayLong} · {dates.time}
                 </p>
                 <div className="mt-4 flex flex-col items-center gap-2 lg:items-start">
-                  <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 whitespace-nowrap rounded-full border-2 border-on-primary/40 px-4 py-3 text-base font-bold text-on-primary transition hover:border-on-primary hover:bg-on-primary/10 min-[360px]:px-6">
+                  <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 rounded-full border-2 border-on-primary/40 px-4 py-3 text-base font-bold text-on-primary transition hover:border-on-primary hover:bg-on-primary/10 min-[360px]:px-6 max-w-full text-center [&_svg]:shrink-0">
                     <CalendarIcon />
                     Agregar a mi calendario
                   </a>
@@ -402,7 +410,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
           </section>
         )}
 
-        {c.closingQuote && <QuoteBlock {...c.closingQuote} />}
+        {c.closingQuote && <QuoteBlock quote={c.closingQuote} />}
 
         <footer className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-ink px-6 py-24 text-center">
           <Image src={photos.cierre.src} alt={photos.cierre.alt} fill sizes="100vw" className="object-cover opacity-30" style={{ objectPosition: photos.cierre.position }} />
@@ -414,6 +422,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
             <div className="ornament mt-6 w-full max-w-xs text-secondary">
               <span className="whitespace-nowrap text-xs uppercase tracking-[0.25em] text-paper/80">{dates.numeric}</span>
             </div>
+            <MusicCredit music={c.music} className="mt-10 text-paper/60" />
           </div>
         </footer>
 
@@ -422,7 +431,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
             <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-ink/95 backdrop-blur" textClassName="font-display text-paper/90" buttonClassName="rounded-full bg-accent font-bold text-on-accent" />
           </BeforeEvent>
         )}
-        {c.music && <MusicPlayer song={c.music} classes={{ button: "bg-ink text-paper hover:bg-primary", icon: "bg-accent text-on-accent", status: "text-paper/70" }} />}
+        {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>
   );

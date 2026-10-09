@@ -35,7 +35,7 @@ export default function ScrollCue({ className = "", circleClassName = "", stacke
       <span className={`scroll-cue-arrow flex h-11 w-11 items-center justify-center rounded-full border-2 ${circleClassName}`}>
         <ArrowDownIcon />
       </span>
-      <span className="whitespace-nowrap text-sm font-semibold uppercase tracking-[0.14em] min-[360px]:tracking-[0.22em]">Desliza hacia abajo</span>
+      <span className={`text-balance text-center text-sm font-semibold uppercase tracking-[0.14em] min-[360px]:tracking-[0.22em] ${stacked ? "" : "short:tracking-[0.1em]!"}`}>Desliza hacia abajo</span>
     </button>
   );
 }

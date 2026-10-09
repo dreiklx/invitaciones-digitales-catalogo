@@ -134,6 +134,24 @@ export function validateInvitation(inv: Invitation, options: ValidateOptions): I
   // Música
   if (inv.music) {
     if (!inv.music.src.startsWith("/") || !options.fileExists(inv.music.src)) error(`music.src: no existe public${inv.music.src}.`);
+    if (!inv.music.title.trim()) error("music.title está vacío.");
+    if (!inv.music.credit?.trim()) warn("music.credit está vacío: anotar la licencia o atribución (obligatoria con CC BY; ver README, Música).");
+    if (options.kind === "cliente" && inv.music.src.startsWith("/audio/demo/"))
+      warn("music usa una pista de demostración: confirmar que la quieren (su licencia lo permite) o cambiarla.");
+  }
+
+  // Citas y versículos
+  const quotes: [string, typeof inv.openingQuote | undefined][] = [
+    ["openingQuote", inv.openingQuote],
+    ["story.quote", inv.story?.quote],
+    ["closingQuote", inv.closingQuote],
+  ];
+  for (const [path, quote] of quotes) {
+    if (!quote) continue;
+    if (!quote.text.trim()) error(`${path}.text está vacío.`);
+    if (quote.kind === "verse" && !quote.reference?.trim()) error(`${path}: un versículo necesita reference (p. ej. "Colosenses 3:14").`);
+    if (quote.kind === "verse" && !quote.translation?.trim())
+      warn(`${path}: falta translation; usar una traducción de dominio público (p. ej. "Reina-Valera 1909") o con permiso.`);
   }
 
   // Datos iguales a la demo del diseño (copiados con `npm run nueva`).
@@ -141,6 +159,12 @@ export function validateInvitation(inv: Invitation, options: ValidateOptions): I
     const d = options.demo;
     if ("couple" in inv && "couple" in d && inv.couple.partnerOne === d.couple.partnerOne && inv.couple.partnerTwo === d.couple.partnerTwo)
       error("couple: siguen los nombres de la demo.");
+    const demoPeople = "couple" in d ? [d.couple.partnerOne, d.couple.partnerTwo] : [d.honoree.name];
+    const ownPeople = "couple" in inv ? [inv.couple.partnerOne, inv.couple.partnerTwo] : [inv.honoree.name];
+    for (const [slot, photo] of Object.entries(inv.photos ?? {})) {
+      if (photo && demoPeople.some((n) => !ownPeople.includes(n) && photo.alt.includes(n)))
+        error(`photos.${slot}.alt nombra a la pareja o persona de la demo.`);
+    }
     if ("honoree" in inv && "honoree" in d && inv.honoree.name === d.honoree.name) error("honoree.name sigue siendo el de la demo.");
     if (inv.site.url === d.site.url) error("site.url sigue siendo la URL de la demo.");
     if (inv.rsvp && d.rsvp && inv.rsvp.whatsappNumber === d.rsvp.whatsappNumber) error("rsvp.whatsappNumber sigue siendo el de la demo.");

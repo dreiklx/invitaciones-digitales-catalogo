@@ -1,4 +1,4 @@
-import type { ResolvedInvitation } from "@/lib/invitation/resolve";
+import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
@@ -9,6 +9,7 @@ import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
 import StickyRsvp from "../shared/StickyRsvp";
 import MusicPlayer from "../shared/MusicPlayer";
+import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
@@ -106,7 +107,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Cielo con la foto en un círculo y la edad. En teléfono el tamaño
             de la foto sale del alto de la pantalla para que todo quepa. */}
-        <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-primary/30 px-6 pb-14 pt-16 text-center sm:pb-20 sm:pt-20">
+        <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-primary/30 px-6 pb-14 pt-20 text-center sm:pb-20 sm:pt-20">
           <Cloud className="float-soft absolute left-[4%] top-[9%] w-24 text-paper sm:w-36" />
           <Cloud className="float-soft absolute right-[5%] top-[28%] w-16 text-paper sm:w-24" style={{ animationDelay: "2.5s" }} />
           <Cloud className="float-soft absolute bottom-[22%] left-[8%] hidden w-20 text-paper sm:block" style={{ animationDelay: "4s" }} />
@@ -134,7 +135,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
             <Reveal className="mx-auto max-w-2xl">
               <Balloon className="mx-auto w-7 text-accent/70" />
               <p className="mt-6 font-display text-3xl font-medium leading-snug text-ink sm:text-4xl">{c.openingQuote.text}</p>
-              {c.openingQuote.reference && <p className="mt-4 text-sm font-bold uppercase tracking-[0.2em] text-muted">{c.openingQuote.reference}</p>}
+              {c.openingQuote.reference && <p className="mt-4 text-sm font-bold uppercase tracking-[0.2em] text-muted">{quoteCitation(c.openingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -149,7 +150,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
                 {c.story.quote && (
                   <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
                     {c.story.quote.text}
-                    {c.story.quote.reference && <span className="mt-1 block font-display text-lg font-semibold text-ink">— {c.story.quote.reference}</span>}
+                    {c.story.quote.reference && <span className="mt-1 block font-display text-lg font-semibold text-ink">— {quoteCitation(c.story.quote)}</span>}
                   </p>
                 )}
               </div>
@@ -189,7 +190,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
                 {dates.weekdayLong}
                 <span className="block whitespace-nowrap text-muted">{dates.time}</span>
               </p>
-              <a href={inv.links.calendar} className="mt-3 inline-flex min-h-[52px] items-center gap-2.5 whitespace-nowrap rounded-full bg-ink px-5 py-3 font-display text-lg font-medium text-paper transition hover:bg-ink/85 min-[360px]:px-7">
+              <a href={inv.links.calendar} className="mt-3 inline-flex min-h-[52px] items-center gap-2.5 rounded-full bg-ink px-5 py-3 font-display text-lg font-medium text-paper transition hover:bg-ink/85 min-[360px]:px-7 max-w-full text-center [&_svg]:shrink-0">
                 <CalendarIcon />
                 Agregar a mi calendario
               </a>
@@ -414,7 +415,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
           <section className="px-6 py-16 text-center sm:py-20">
             <Reveal className="mx-auto max-w-2xl">
               <p className="font-display text-3xl font-medium leading-snug text-ink sm:text-4xl">{c.closingQuote.text}</p>
-              {c.closingQuote.reference && <p className="mt-4 text-sm font-bold uppercase tracking-[0.2em] text-muted">{c.closingQuote.reference}</p>}
+              {c.closingQuote.reference && <p className="mt-4 text-sm font-bold uppercase tracking-[0.2em] text-muted">{quoteCitation(c.closingQuote)}</p>}
             </Reveal>
           </section>
         )}
@@ -429,6 +430,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
               <p className="mt-3 font-display text-[clamp(3.25rem,16vw,6rem)] font-semibold leading-none text-ink">{names.one}</p>
               <p className="mt-3 font-display text-xl text-ink/80">Cumple {ageText}</p>
               <p className="mx-auto mt-4 w-fit whitespace-nowrap rounded-full bg-paper px-5 py-2 font-display text-base text-ink sm:text-lg">{dates.weekdayLong}</p>
+              <MusicCredit music={c.music} className="mt-8 text-ink/65" />
             </div>
           </div>
         </footer>
@@ -438,7 +440,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
             <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-ink/90 backdrop-blur" textClassName="font-display text-paper/90" buttonClassName="rounded-full bg-accent font-bold text-on-accent" />
           </BeforeEvent>
         )}
-        {c.music && <MusicPlayer song={c.music} classes={{ button: "bg-ink text-paper hover:bg-ink/85", icon: "bg-accent text-on-accent", status: "text-paper/70" }} />}
+        {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>
   );

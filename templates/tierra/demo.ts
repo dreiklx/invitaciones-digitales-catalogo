@@ -23,8 +23,10 @@ export const demo: InvitationOf<"tierra"> = {
   hero: { eyebrow: "Nos casamos" },
 
   openingQuote: {
-    text: "Donde tú vayas, iré yo; y donde tú vivas, viviré.",
-    reference: "Rut 1:16",
+    kind: "verse",
+    text: "Las muchas aguas no podrán apagar el amor, ni lo ahogarán los ríos.",
+    reference: "Cantares 8:7",
+    translation: "Reina-Valera 1909",
   },
 
   story: {
@@ -111,7 +113,12 @@ export const demo: InvitationOf<"tierra"> = {
 
   footer: { message: "Los esperamos" },
 
-  music: null,
+  music: {
+    src: "/audio/demo/satie-gymnopedie-1.mp3",
+    title: "Gymnopédie n.º 1",
+    artist: "Erik Satie · Robin Alciatore",
+    credit: "Grabación de dominio público (Musopen, vía Wikimedia Commons)",
+  },
 
   photos: {
     portada: { src: "/plantillas/tierra/portada.jpg", alt: "Camila y Diego", position: "50% 35%" },

@@ -22,6 +22,7 @@ export const meta: TemplateMeta<"tierra"> = {
     line: "#cfbca6",
   },
   fonts: { display: "Fraunces", body: "Instrument Sans" },
+  musicPlayer: "ficha",
   photoSlots: {
     portada: { ratio: [4, 5], where: "Portada, foto principal", position: "50% 35%" },
     historia: { ratio: [3, 4], where: "Capítulo I, junto a la historia", position: "50% 35%" },

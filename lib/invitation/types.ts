@@ -49,8 +49,17 @@ export type Photo = {
 
 export type Quote = {
   text: string;
-  // Autor, referencia bíblica o fuente. Opcional.
+  // Autor, referencia bíblica ("Colosenses 3:14") o fuente. Opcional.
   reference?: string;
+  // "verse" = pasaje bíblico: el diseño lo presenta como tal (sin comillas,
+  // con la referencia y la traducción). Por defecto "quote" (cita o frase).
+  kind?: "quote" | "verse";
+  // Traducción del versículo, se muestra junto a la referencia. Usar una de
+  // dominio público (p. ej. "Reina-Valera 1909") o una cuya licencia permita
+  // este uso (ver README, "Versículos").
+  translation?: string;
+  // Alineación del bloque; por defecto la del diseño.
+  align?: "center" | "start";
 };
 
 // Colores de un diseño. Cada diseño trae su paleta predeterminada (en su
@@ -257,11 +266,21 @@ export type InvitationContent = {
     message: string;
   };
 
-  // Música de fondo. `null` = sin reproductor.
+  // Música de fondo (opcional): suena solo cuando el invitado toca el
+  // reproductor. `null` = sin reproductor. Solo audio con licencia para uso
+  // en una web (ver README, "Música").
   music: {
-    title: string;
     // Archivo en public/audio/, p. ej. "/audio/cancion.mp3".
     src: string;
+    title: string;
+    // Compositor o intérprete.
+    artist?: string;
+    // Atribución o licencia que se muestra en el pie (obligatoria si la
+    // licencia la exige, p. ej. CC BY).
+    credit?: string;
+    // Estilo del reproductor; por defecto el del diseño (`musicPlayer` en
+    // su meta.ts).
+    player?: MusicPlayerStyle;
   } | null;
 };
 
@@ -285,6 +304,10 @@ export type PhotoSlotSpec = {
   position?: string;
 };
 
+// Presentaciones del reproductor de música (templates/shared/players.tsx).
+// Cada diseño trae la suya; `music.player` la reemplaza.
+export type MusicPlayerStyle = "rama" | "ficha" | "deco" | "sello" | "etiqueta" | "destello" | "globo";
+
 export type TemplateMeta<T extends TemplateId = TemplateId> = {
   id: T;
   number: string; // "01"
@@ -298,4 +321,6 @@ export type TemplateMeta<T extends TemplateId = TemplateId> = {
   // Familias de Google Fonts (también para la tarjeta al compartir).
   fonts: { display: string; body: string };
   photoSlots: Record<PhotoSlots[T], PhotoSlotSpec>;
+  // Reproductor de música del diseño.
+  musicPlayer: MusicPlayerStyle;
 };

@@ -23,8 +23,10 @@ export const demo: InvitationOf<"gala"> = {
   hero: { eyebrow: "Celebremos juntos" },
 
   openingQuote: {
-    text: "El amor es paciente, es bondadoso. Todo lo disculpa, todo lo cree, todo lo espera, todo lo soporta.",
-    reference: "1 Corintios 13",
+    kind: "verse",
+    text: "Así que, no son ya más dos, sino una carne: por tanto, lo que Dios juntó, no lo aparte el hombre.",
+    reference: "Mateo 19:6",
+    translation: "Reina-Valera 1909",
   },
 
   story: {
@@ -105,7 +107,12 @@ export const demo: InvitationOf<"gala"> = {
 
   footer: { message: "Les esperamos" },
 
-  music: null,
+  music: {
+    src: "/audio/demo/debussy-clair-de-lune.mp3",
+    title: "Clair de lune",
+    artist: "Claude Debussy · Laurens Goedhart",
+    credit: "Grabación de dominio público (vía Wikimedia Commons)",
+  },
 
   photos: {
     portada: { src: "/plantillas/gala/portada.jpg", alt: "Isabella y Sebastián", position: "50% 30%" },

@@ -38,7 +38,16 @@ source = source
   .replace(/url: `\$\{catalog\.url\}\/plantillas\/[a-z]+`,/, 'url: "https://REEMPLAZAR.vercel.app",')
   .replace(/import type \{ InvitationOf \} from "@\/lib\/invitation\/types";/, 'import type { Invitation } from "@/lib/invitation/types";')
   .replace(/export const demo: InvitationOf<"[a-z]+"> =/, "export const invitation: Invitation | null =")
-  // Fotos: del catálogo a public/images/ del cliente.
+  // Nombres de la pareja: nunca se heredan de la demo (Olivo usa una
+  // pareja concreta). `npm run check` exige reemplazarlos.
+  .replace(/couple: \{ partnerOne: "[^"]*", partnerTwo: "[^"]*" \}/, 'couple: { partnerOne: "REEMPLAZAR", partnerTwo: "REEMPLAZAR" }')
+  // Fotos: una por espacio en public/images/ del cliente (galeria1 →
+  // galeria-1.jpg), con su texto alternativo por escribir.
+  .replace(
+    /^(\s+)(\w+): \{ src: "\/plantillas\/[a-z]+\/[^"]+", alt: "[^"]*",/gm,
+    (_, indent, slot) =>
+      `${indent}${slot}: { src: "/images/${slot.replace(/([a-z])([A-Z0-9])/g, "$1-$2").toLowerCase()}.jpg", alt: "REEMPLAZAR: quién aparece y qué hacen",`
+  )
   .replaceAll(`/plantillas/${id}/`, "/images/");
 
 await writeFile(target, source);

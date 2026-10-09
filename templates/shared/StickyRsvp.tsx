@@ -57,13 +57,13 @@ export default function StickyRsvp({
       }`}
     >
       <div className={`mx-auto flex max-w-md items-center gap-3 p-1.5 shadow-2xl min-[375px]:pl-5 ${barClassName}`}>
-        <span className={`hidden flex-col text-sm leading-tight min-[375px]:flex ${textClassName}`}>
+        <span className={`hidden flex-shrink-0 flex-col text-sm leading-tight min-[375px]:flex ${textClassName}`}>
           <span className="whitespace-nowrap">{date}</span>
           <span className="whitespace-nowrap">{time}</span>
         </span>
         <a
           href="#confirmar"
-          className={`flex min-h-12 flex-1 items-center justify-center px-4 py-3 text-sm font-semibold uppercase tracking-wide min-[375px]:ml-auto min-[375px]:flex-none min-[375px]:px-5 ${buttonClassName}`}
+          className={`flex min-h-12 min-w-0 flex-1 items-center justify-center px-4 py-3 text-center text-sm font-semibold uppercase leading-tight tracking-wide min-[375px]:ml-auto min-[375px]:flex-initial min-[375px]:px-5 ${buttonClassName}`}
         >
           Confirmar asistencia
         </a>
