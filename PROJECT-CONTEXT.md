@@ -52,11 +52,20 @@ escaparate.
   push a otra rama crea un despliegue de vista previa. No hace falta
   `vercel --prod`. El build corre `npm run check` (prebuild) y la
   verificación de tipos de `next build`; si fallan, no se publica.
-  **Pendiente:** Vercel bloquea esos despliegues (`TEAM_ACCESS_REQUIRED`)
-  porque los commits salen con un autor de GitHub que no está vinculado a
-  la cuenta de Vercel (plan Hobby). Hasta que el dueño vincule su cuenta
-  de GitHub en Vercel (Account Settings → Authentication), un push no
-  publica nada y producción sigue con el último despliegue por CLI.
+- **Identidad de Git del repositorio (no cambiar):** en plan Hobby,
+  Vercel solo acepta despliegues de commits cuyo autor de GitHub sea la
+  cuenta vinculada al usuario de Vercel; si no, los bloquea
+  (`TEAM_ACCESS_REQUIRED`). La cuenta de Vercel tiene vinculada la cuenta
+  de GitHub **`dreiklx`** (Account Settings → Authentication), así que los
+  commits deben salir con un correo de `dreiklx`. El repositorio lo fija
+  en su configuración **local** (`.git/config`, no global):
+  `user.name = dreiklx` y `user.email` = la dirección *noreply* de
+  `dreiklx` (`<id>+dreiklx@users.noreply.github.com`). La configuración
+  global del equipo usa otro correo, que GitHub asocia a otra cuenta
+  (`dreik0`): los commits hechos con él hasta `198b96c` quedaron
+  bloqueados en Vercel y no se reescriben. En un clon nuevo hay que
+  volver a poner la identidad local antes del primer commit
+  (`git config user.email` debe mostrar la dirección noreply).
 
 ## Stack
 

@@ -41,7 +41,10 @@ Lee primero, en este orden:
 - Cerrar cada tarea con commit y push normal a `origin/main` (salvo que
   el dueño diga lo contrario o haya un riesgo o bloqueo real). Nunca
   despliegues manuales con Vercel CLI para saltar el bloqueo de la
-  integración. Detalle: "Flujo de trabajo de cada tarea" en AGENTS.md.
+  integración. Antes de cada commit, `git config user.email` debe ser la
+  dirección noreply de `dreiklx` (identidad local del repo; si no, Vercel
+  bloquea el despliegue). Detalle: "Flujo de trabajo de cada tarea" en
+  AGENTS.md.
 
 # Flujo de cada tarea (regla permanente)
 

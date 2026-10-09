@@ -223,10 +223,11 @@ proyecto (`invitaciones-digitales-catalogo`,
 https://invitaciones-digitales-catalogo.vercel.app). El catálogo está
 conectado a https://github.com/dreiklx/invitaciones-digitales-catalogo
 (privado): `git push origin main` despliega a producción y las demás ramas
-crean vistas previas (**pendiente**: hoy Vercel bloquea esos despliegues
-hasta vincular la cuenta de GitHub del autor de los commits; ver
-PROJECT-CONTEXT). Nunca copiar ni reutilizar `.vercel/` (enlazaría y
-sobrescribiría el proyecto de otro).
+crean vistas previas. Los commits deben salir con la identidad de Git
+local del repositorio (cuenta `dreiklx`); con otra, Vercel bloquea el
+despliegue (ver PROJECT-CONTEXT, "Identidad de Git del repositorio").
+Nunca copiar ni reutilizar `.vercel/` (enlazaría y sobrescribiría el
+proyecto de otro).
 
 ```bash
 npm i -g vercel

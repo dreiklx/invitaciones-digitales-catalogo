@@ -4,6 +4,21 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-09 (5) — Autorización de Vercel con GitHub
+
+- Causa del bloqueo `TEAM_ACCESS_REQUIRED`: los commits salían con el
+  correo global del equipo, que GitHub asocia a la cuenta `dreik0`; la
+  cuenta de Vercel (Hobby) no tenía ninguna cuenta de GitHub vinculada.
+- El dueño vinculó **`dreiklx`** a la cuenta de Vercel (inicio de sesión
+  con GitHub; verificado en Account Settings → Authentication). El
+  proyecto sigue conectado a `dreiklx/invitaciones-digitales-catalogo`,
+  producción `main`.
+- El repositorio fija su identidad de Git en `.git/config` (`dreiklx` +
+  su dirección noreply); la global no cambia y los commits antiguos no se
+  reescriben (siguen bloqueados en Vercel, sin efecto). Documentado en
+  PROJECT-CONTEXT, README, AGENTS.md y CLAUDE.md.
+- Prueba: el push de este commit de documentación.
+
 ## 2026-10-09 (4) — Olivo es "Ramón & Florinda" y flujo de trabajo permanente
 
 ### Qué se hizo

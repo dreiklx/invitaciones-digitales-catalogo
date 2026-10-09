@@ -48,10 +48,15 @@ Excepciones: el dueño pide expresamente no hacer commit/push, hay un
 riesgo de seguridad o un bloqueo real (se informa).
 
 ## Vercel
-- El push a `main` dispara un despliegue automático, que hoy queda
-  **bloqueado** por permisos de la cuenta que firma los commits (ver
-  PROJECT-CONTEXT, "Git, GitHub y despliegue"). No afirmar que un
-  despliegue funcionó sin comprobarlo; si queda bloqueado, informarlo.
+- El push a `main` dispara un despliegue automático. Solo funciona si el
+  autor del commit es la cuenta de GitHub vinculada a Vercel (`dreiklx`):
+  antes de cada commit, `git config user.email` debe mostrar la dirección
+  noreply de `dreiklx` fijada en `.git/config` (ver PROJECT-CONTEXT,
+  "Identidad de Git del repositorio"). No cambiar la identidad global ni
+  reescribir commits antiguos.
+- Tras el push, comprobar el estado del despliegue (estado del commit en
+  GitHub o la lista de despliegues de Vercel). No afirmar que funcionó sin
+  verlo en READY; si queda bloqueado, informar el error exacto.
 - No eludir el bloqueo (nada de `vercel deploy` manual ni cambiar el autor
   de los commits por cuenta propia) y no modificar la configuración de
   Vercel salvo que sea estrictamente necesario y esté autorizado.
