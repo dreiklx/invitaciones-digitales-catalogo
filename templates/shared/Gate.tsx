@@ -1,11 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ViewTransition, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, ViewTransition, type ReactNode } from "react";
 import { startMusicFromGesture } from "./music-start";
+import { lockPageScroll } from "./scroll-lock";
 
 // Portada "Abrir invitación". Cada diseño dibuja su propia portada (`cover`)
 // y este componente pone la lógica común:
-// - Bloquea la página (`inert` + overflow hidden) hasta que se toca el botón.
+// - Bloquea la página (`inert` + lockPageScroll, ver scroll-lock.ts) hasta que se toca el botón.
 // - Su botón INICIA LA MÚSICA: llama a startMusicFromGesture() de forma
 //   síncrona dentro del clic (los navegadores solo permiten play() dentro
 //   del gesto real). Sin música no hace nada más que abrir.
@@ -38,14 +39,11 @@ export default function Gate({
   children: ReactNode;
 }) {
   const [phase, setPhase] = useState<Phase>("gate");
+  const layerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (phase === "closed") return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
+    return lockPageScroll(layerRef.current);
   }, [phase]);
 
   const open = () => {
@@ -58,6 +56,7 @@ export default function Gate({
 
   const overlay = (
     <div
+      ref={layerRef}
       aria-hidden={phase === "closing"}
       className={`fixed inset-0 z-[70] overflow-hidden transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
         phase === "closing" ? "pointer-events-none opacity-0" : "opacity-100"

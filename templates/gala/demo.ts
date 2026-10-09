@@ -1,6 +1,9 @@
 // Demo del diseño 03 · Gala (pareja ficticia). También es el punto de
 // partida de una invitación nueva: `npm run nueva -- gala`.
 // Guía: docs/templates/03-gala.md.
+// Fotos: una sola sesión de boda de stock (Pexels, Li Chunyu; licencia de
+// Pexels) en public/plantillas/gala/fotos/, recortada a la proporción de
+// cada marco. Fuentes: photo-map.md.
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
@@ -115,11 +118,11 @@ export const demo: InvitationOf<"gala"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/gala/portada.jpg", alt: "Isabella y Sebastián", position: "50% 30%" },
-    historia: { src: "/plantillas/gala/historia.jpg", alt: "Isabella y Sebastián", position: "50% 40%" },
-    galeria1: { src: "/plantillas/gala/galeria-1.jpg", alt: "Isabella y Sebastián", position: "50% 35%" },
-    galeria2: { src: "/plantillas/gala/galeria-2.jpg", alt: "Isabella y Sebastián", position: "50% 35%" },
-    galeria3: { src: "/plantillas/gala/galeria-3.jpg", alt: "Isabella y Sebastián", position: "50% 35%" },
-    galeria4: { src: "/plantillas/gala/galeria-4.jpg", alt: "Isabella y Sebastián", position: "50% 35%" },
+    portada: { src: "/plantillas/gala/fotos/retrato-ramo.jpg", alt: "Sebastián besa la mejilla de Isabella bajo una lámpara de araña", position: "50% 35%" },
+    historia: { src: "/plantillas/gala/fotos/abrazo-petalos.jpg", alt: "Isabella y Sebastián se abrazan entre pétalos en el salón", position: "50% 45%" },
+    galeria1: { src: "/plantillas/gala/fotos/abrazo-risas.jpg", alt: "Isabella abraza a Sebastián riendo", position: "50% 30%" },
+    galeria2: { src: "/plantillas/gala/fotos/mirada-salon.jpg", alt: "Isabella mira atrás mientras camina de la mano de Sebastián", position: "50% 35%" },
+    galeria3: { src: "/plantillas/gala/fotos/baile-escalera.jpg", alt: "Isabella y Sebastián bailan junto a la escalera", position: "50% 45%" },
+    galeria4: { src: "/plantillas/gala/fotos/sofa-camara.jpg", alt: "Isabella y Sebastián miran juntos las fotos en el sofá", position: "50% 30%" },
   },
 };

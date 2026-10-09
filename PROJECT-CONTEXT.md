@@ -30,8 +30,8 @@ escaparate.
 - Siete diseños completos (5 de boda, 1 de quinceaños, 1 de cumpleaños
   infantil), un catálogo en `/` agrupado por tipo de evento, con transición hacia cada
   demo, validación `npm run check`, demos con imágenes abstractas generadas
-  salvo Olivo (fotos de una sesión aportadas por el dueño) y Tierra
-  (sesión de pareja de Pexels).
+  salvo Olivo (fotos de una sesión aportadas por el dueño), Tierra y Gala
+  (sesiones de pareja de Pexels).
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
@@ -169,8 +169,8 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   `<meta name="darkreader-lock">`). Las extensiones y el modo oscuro de
   Chrome invertían los diseños; se detectó en la revisión visual.
 - **Imágenes de demostración abstractas** generadas por script (escenas de
-  luz desenfocada por diseño), salvo Olivo y Tierra, que usan fotos reales
-  (ver photo-map.md). Tierra usa una sesión de stock de Pexels: su
+  luz desenfocada por diseño), salvo Olivo, Tierra y Gala, que usan fotos
+  reales (ver photo-map.md). Tierra y Gala usan sesiones de stock de Pexels: su
   licencia permite el uso comercial y en plantillas que se venden, sin
   atribución obligatoria; prohíbe mostrar a las personas de forma ofensiva
   o insinuar que respaldan el producto. En este entorno no hay generador
@@ -300,6 +300,34 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   pase de línea. **No volver a poner el `clip` en `body` o `html`.**
 - Las causas se corrigen en su origen; el envoltorio no debe esconder
   defectos (al medir, se desactiva).
+- **Escritorio (2026-10-09, sesión 7):** con barra de desplazamiento real
+  (15 px en Windows), clic y rueda horizontal en 1024-1920 px (y 640-1000
+  y 2560) **no hay ningún desbordamiento**, ni en `<html>` ni en elementos
+  interiores, en ningún estado. Lo que sí movía la página de lado:
+  1. **Salto de la barra:** la portada "Abrir invitación" y el visor de
+     fotos bloquean el desplazamiento (`overflow: hidden`); la barra
+     vertical desaparecía y el contenido se ensanchaba 15 px y se volvía
+     a estrechar al abrir/cerrar: todo lo centrado saltaba ~7,6 px
+     (medido en Chrome real). Solución: `html { scrollbar-gutter:
+     stable }` (hueco de la barra siempre reservado) y
+     `templates/shared/scroll-lock.ts` (usado por la portada y el visor),
+     que mientras dura el bloqueo pinta ese hueco con el fondo de la capa
+     (si no, se veía una franja de 15 px del color de la página). Ojo al medir:
+     Chrome sigue informando `documentElement.clientWidth` sin el hueco
+     mientras está bloqueado; el ancho real del contenido
+     (`body.getBoundingClientRect().width`) ya no cambia.
+  2. **Gesto horizontal del trackpad:** deslizaba la página entera
+     (navegación atrás/adelante o rebote elástico). Solución: `html {
+     overscroll-behavior-x: none }`. Efecto secundario aceptado: en
+     estas páginas el gesto de dos dedos no navega atrás (el botón y el
+     teclado sí).
+- Prueba de escritorio: Chrome sin ocultar barras, clics reales de
+  ratón, rueda vertical para recorrer y rueda **horizontal** (deltaX) en
+  5 puntos de cada pantalla, en carga, al abrir, durante el recorrido,
+  con el reproductor, el visor y el RSVP; comprobar `scrollX`, el
+  `scrollLeft` de todos los elementos, los elementos fuera del área útil
+  (comparar con `clientWidth`, no con `innerWidth`) y que el ancho de
+  `body` no cambie.
 - Causas encontradas (con datos de clientes reales, no con las demos):
   textos de una sola línea (`whitespace-nowrap`) que con la **letra del
   sistema agrandada** (Android, personas mayores) se salían: "Agregar a mi
@@ -423,10 +451,10 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 - Sin tests automatizados (la validación es `npm run check`).
 - El catálogo precarga las fuentes de todos los diseños (22 archivos; las
   necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
-- Tierra usa fotos de stock (Pexels): personas reales identificables;
+- Tierra y Gala usan fotos de stock (Pexels): personas reales identificables;
   no usarlas en contextos que sugieran que esa pareja respalda el negocio
   (licencia de Pexels).
-- Las imágenes de demostración son abstractas salvo en Olivo y Tierra. Olivo usa las
+- Las imágenes de demostración son abstractas salvo en Olivo, Tierra y Gala. Olivo usa las
   fotos de una sesión de pareja (Don Ramón y Doña Florinda caracterizados)
   aportadas por el dueño; la demo se llama "Ramón & Florinda". Esos
   nombres viven solo en `templates/olivo/demo.ts`: `npm run nueva` deja

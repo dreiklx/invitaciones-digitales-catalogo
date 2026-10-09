@@ -17,9 +17,9 @@ Aurora 7 · Nube 6.
 - Demos del catálogo: `public/plantillas/<diseño>/`. **Olivo** usa fotos
   reales de una sesión de pareja (`public/plantillas/olivo/fotos/`, copias
   web; los originales quedan fuera del proyecto): `npm run placeholders`
-  nunca toca una carpeta `fotos/`. **Tierra** usa una sesión de stock de
-  una misma pareja (`public/plantillas/tierra/fotos/`; tabla abajo). El
-  resto son imágenes
+  nunca toca una carpeta `fotos/`. **Tierra** y **Gala** usan cada una
+  una sesión de stock de una misma pareja (`public/plantillas/<diseño>/fotos/`;
+  tablas abajo). El resto son imágenes
   abstractas generadas (`npm run placeholders`, `scripts/placeholders.ts`):
   luz desenfocada con el ambiente de cada diseño y una etiqueta
   "Foto · Espacio · proporción". No son fotos reales ni de ningún cliente.
@@ -31,9 +31,9 @@ Aurora 7 · Nube 6.
   un marco vertical o al revés, y si mide menos de 1000 px.
 - Ajustar `position` (p. ej. `"50% 30%"`) a donde están los rostros,
   revisando primero en teléfono.
-- Las demos usan imágenes abstractas salvo Olivo y Tierra: el encuadre
-  con fotos reales está revisado en esos dos (280–1440 px); en los demás
-  diseños **no está validado**. Revisarlo con las fotos de cada cliente a 320 y 390 px. Las
+- Las demos usan imágenes abstractas salvo Olivo, Tierra y Gala: el
+  encuadre con fotos reales está revisado en esos tres (320–1440 px); en
+  los demás diseños **no está validado**. Revisarlo con las fotos de cada cliente a 320 y 390 px. Las
   proporciones y la orientación de cada espacio están en la guía de cada
   diseño (`docs/templates/`).
 - Arcos, óvalos y círculos (Riviera, Aurora, Nube) recortan esquinas: sujeto al centro.
@@ -60,3 +60,19 @@ a la proporción de cada marco y optimizadas (76–206 KB).
 | `lago.jpg` | `galeria3` 1:1 | Él la levanta junto al lago | pexels.com/photo/32195270 |
 | `horizonte.jpg` | `galeria4` 16:9 | Siluetas en el horizonte al atardecer | pexels.com/photo/32195290 |
 | `baile-atardecer.jpg` | `cierre` 3:2 | Se toman las manos al atardecer | pexels.com/photo/32195293 |
+
+## Fotos de la demo de Gala (stock)
+Sesión de boda de una misma pareja de Li Chunyu en Pexels (vestido de
+encaje, esmoquin con pajarita, salón clásico con lámparas de araña,
+apliques y pétalos), bajo la licencia de Pexels (mismas condiciones que
+Tierra). Archivos a color: Gala los muestra en **blanco y negro** con un
+filtro CSS. Recortadas a la proporción de cada marco (148–268 KB).
+
+| Archivo | Espacio | Escena | Original |
+|---|---|---|---|
+| `retrato-ramo.jpg` | `portada` 3:4 | Él le besa la mejilla; ramo y lámpara de araña | pexels.com/photo/39944197 |
+| `abrazo-petalos.jpg` | `historia` 16:9 | Abrazo entre pétalos, apliques a los lados | pexels.com/photo/39944195 |
+| `abrazo-risas.jpg` | `galeria1` 3:4 | Ella lo abraza riendo | pexels.com/photo/39944194 |
+| `mirada-salon.jpg` | `galeria2` 3:4 | Ella mira atrás, de la mano, bajo las lámparas | pexels.com/photo/39944196 |
+| `baile-escalera.jpg` | `galeria3` 3:4 | Bailan junto a la escalera, el velo al aire | pexels.com/photo/39944190 |
+| `sofa-camara.jpg` | `galeria4` 3:4 | Miran juntos las fotos en el sofá | pexels.com/photo/39944198 |

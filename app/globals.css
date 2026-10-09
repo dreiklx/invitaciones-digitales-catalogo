@@ -34,6 +34,15 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Escritorio: la portada "Abrir invitación" y el visor de fotos bloquean
+     el desplazamiento (overflow hidden) y la barra vertical desaparecía:
+     al abrir o cerrar, toda la página saltaba ~8 px de lado. Con el hueco
+     de la barra siempre reservado no se mueve nada. */
+  scrollbar-gutter: stable;
+  /* Trackpad: el gesto horizontal de dos dedos deslizaba la página entera
+     (navegación atrás/adelante o rebote elástico). En una invitación la
+     página solo se mueve en vertical. */
+  overscroll-behavior-x: none;
 }
 
 body {

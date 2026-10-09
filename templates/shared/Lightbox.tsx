@@ -4,6 +4,7 @@ import Image from "next/image";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Photo } from "@/lib/invitation/types";
 import { CloseIcon } from "./icons";
+import { lockPageScroll } from "./scroll-lock";
 
 // Visor de fotos de la galería. Cada diseño compone su galería como quiera
 // y envuelve cada foto en <LightboxItem index={i}>. Botón "Cerrar" con
@@ -26,6 +27,7 @@ export function LightboxProvider({
   const [active, setActive] = useState<number | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => {
     setActive(null);
@@ -37,11 +39,10 @@ export function LightboxProvider({
     closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const unlock = lockPageScroll(overlayRef.current);
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = previous;
+      unlock();
     };
   }, [active, close]);
 
@@ -56,7 +57,7 @@ export function LightboxProvider({
       {/* Teléfono: la foto empieza debajo de "Cerrar" (antes podía quedar
           tapada en pantallas bajas) y todo respeta la zona segura. */}
       {active !== null && (
-        <div className={`fixed inset-0 z-[60] flex items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[calc(max(1rem,env(safe-area-inset-top))+4rem)] sm:p-10 ${overlayClassName}`} onClick={close} role="dialog" aria-modal="true" aria-label={photos[active].alt}>
+        <div ref={overlayRef} className={`fixed inset-0 z-[60] flex items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[calc(max(1rem,env(safe-area-inset-top))+4rem)] sm:p-10 ${overlayClassName}`} onClick={close} role="dialog" aria-modal="true" aria-label={photos[active].alt}>
           <button
             ref={closeRef}
             type="button"

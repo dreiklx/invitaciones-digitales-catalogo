@@ -47,6 +47,16 @@ cierre → pie con monograma y fecha romana.
 
 Todas se muestran en **blanco y negro** (filtro CSS); los archivos pueden ser a color.
 
+**Demo con fotos reales** (`public/plantillas/gala/fotos/`, stock de
+Pexels; fuentes y licencia en `photo-map.md`): una sola sesión de boda de
+noche en un salón clásico con lámparas de araña, vestido de encaje y
+esmoquin, que en blanco y negro acompaña el dorado art déco. Portada =
+retrato con el ramo bajo la lámpara (formal); historia = abrazo entre
+pétalos con los apliques a los lados (panorámica "de cine"); galería =
+abrazo riendo, ella mira atrás bajo las lámparas, el baile junto a la
+escalera y los dos mirando las fotos en el sofá (espontáneas). Ya vienen
+recortadas a la proporción de cada marco.
+
 ## Rasgos propios
 - Monograma con las iniciales (`names.initials`) y brillo dorado lento (`gold-sheen`, respeta reducir movimiento).
 - Fecha en números romanos (`toRoman`) siempre acompañada de la fecha normal (para personas mayores).

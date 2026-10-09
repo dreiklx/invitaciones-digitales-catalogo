@@ -4,6 +4,41 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-09 (7) — Desplazamiento lateral en escritorio y fotos de Gala
+
+### Qué se hizo
+- **Escritorio, investigado en Chrome real y con barra visible:** no hay
+  ningún desbordamiento (ni con la red de seguridad quitada) en 640-2560
+  px. Lo que movía la página de lado:
+  - la barra vertical desaparecía al bloquear el desplazamiento (portada
+    "Abrir invitación", visor de fotos) y todo saltaba ~7,6 px al abrir y
+    cerrar → `html { scrollbar-gutter: stable }` + `scroll-lock.ts`, que
+    pinta el hueco reservado con el fondo de la capa;
+  - el gesto horizontal del trackpad deslizaba la página entera →
+    `html { overscroll-behavior-x: none }`.
+- **Gala con fotos reales:** 6 fotos de una sola sesión de boda de Pexels
+  (Li Chunyu, licencia de Pexels): salón clásico con lámparas de araña,
+  encaje y esmoquin; recortadas a 3:4 y 16:9 en
+  `public/plantillas/gala/fotos/`. Gala las muestra en blanco y negro. Se
+  borraron las 6 imágenes abstractas de Gala. Sin generador de imágenes.
+
+### Verificación
+- Escritorio (barra de 15 px, clics reales, rueda vertical y horizontal
+  en 5 puntos por pantalla, portada, música, reproductor, visor, RSVP):
+  catálogo + 7 diseños a 1024×768, 1280×720, 1366×768, 1440×900,
+  1600×900 y 1920×1080 → 48 casos sin desbordamiento, sin
+  desplazamiento lateral y sin salto (ancho de `body` constante); 16 más
+  sin la red de seguridad; antes, a 640-1000 y 2560, 64 casos sin
+  desbordamiento. En Chrome real (1536 px): antes la miniatura se movía
+  7,6 px al abrir el visor; ahora 0.
+- Regresión móvil (toques reales, sin red): 320×568, 390×844 y 360×740
+  al 125 %: 24 casos limpios. Música con pausa/reanudación en los 7.
+  `npm run nueva -- gala`: sin nombres ni fotos de la demo.
+
+### Pendiente
+- Confirmar en un Mac con trackpad (Safari y Chrome) que el gesto lateral
+  ya no desliza la página.
+
 ## 2026-10-09 (6) — Desplazamiento horizontal (causa real) y fotos de Tierra
 
 ### Qué se hizo
