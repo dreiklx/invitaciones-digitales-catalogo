@@ -10,6 +10,9 @@ import { startMusicFromGesture } from "./music-start";
 //   síncrona dentro del clic (los navegadores solo permiten play() dentro
 //   del gesto real). Sin música no hace nada más que abrir.
 // - Salida: fade + scale 700ms y se desmonta; respeta prefers-reduced-motion.
+//   El scale va en un hijo, NUNCA en la capa fija: escalada, la capa fija
+//   sobresalía 4-6 px por cada lado de la pantalla durante la animación y
+//   en Safari (iPhone) eso basta para que la página se mueva de lado.
 // - `transitionName`: la tarjeta del catálogo con el mismo nombre se
 //   transforma en esta portada al navegar (View Transitions).
 
@@ -56,11 +59,17 @@ export default function Gate({
   const overlay = (
     <div
       aria-hidden={phase === "closing"}
-      className={`fixed inset-0 z-[70] overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
-        phase === "closing" ? "pointer-events-none scale-[1.03] opacity-0" : "scale-100 opacity-100"
+      className={`fixed inset-0 z-[70] overflow-hidden transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+        phase === "closing" ? "pointer-events-none opacity-0" : "opacity-100"
       } ${className}`}
     >
-      {cover}
+      <div
+        className={`h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+          phase === "closing" ? "scale-[1.03]" : ""
+        }`}
+      >
+        {cover}
+      </div>
     </div>
   );
 

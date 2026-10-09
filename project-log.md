@@ -4,6 +4,46 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-09 (6) — Desplazamiento horizontal (causa real) y fotos de Tierra
+
+### Qué se hizo
+- **Desplazamiento horizontal, investigado de cero** (el dueño todavía
+  podía mover la página de lado en su teléfono):
+  - La red `body{overflow-x:clip}` no recortaba: el `overflow` de `<body>`
+    se traslada a la ventana, donde vale como `hidden`, e iOS Safari no lo
+    respeta frente al dedo. Ahora el `clip` está en un `<div>` envoltorio
+    (`app/layout.tsx`) y `body` lleva `overflow-wrap: break-word`.
+  - Causa concreta en los 7 diseños: la portada "Abrir invitación" se
+    escalaba (1,03) siendo una capa fija → 4-6 px fuera de la pantalla por
+    lado durante 0,7 s, justo al empezar. El scale pasa a un hijo dentro de
+    la capa (`Gate.tsx`), que recorta.
+  - Prueba nueva (detalle en PROJECT-CONTEXT, "Cómo medir"): gestos
+    táctiles reales, monitor por fotograma, red de seguridad desactivada.
+- **Tierra con fotos reales:** 8 fotos de una sola sesión de pareja de
+  Pexels (Alexander Mass / Reborn Filmes, licencia de Pexels), recortadas
+  a la proporción de cada marco en `public/plantillas/tierra/fotos/`. Se
+  borraron las 8 imágenes abstractas de Tierra. No hay generador de
+  imágenes en este entorno: no se generó ninguna.
+
+### Verificación
+- Matriz sin red de seguridad: catálogo y 7 diseños × 280×600, 320×568,
+  320×600, 360×740, 390×844, 430×932 y 1440×900 × letra normal y 125 %
+  (112 casos): abrir con toque real (la música sonó en los 98 casos de
+  invitación), bajar con el dedo hasta el final deslizando de lado,
+  pausar/reanudar, abrir y cerrar el visor, completar el RSVP. Ningún
+  elemento fuera de la pantalla, `scrollWidth` = ancho, ningún
+  deslizamiento lateral movió la página. Con la red puesta, 16 casos más
+  (320 y 390): igual.
+- Antes del arreglo, la misma prueba solo detectaba la portada escalada;
+  Chrome nunca llegó a mover la página de lado (no reproduce el
+  comportamiento táctil de iOS Safari).
+- Música con pausa y reanudación en los 7 (sin cambios).
+  `npm run nueva -- tierra`: sin nombres, fotos ni créditos de la demo.
+
+### Pendiente
+- Confirmar en un iPhone real (Safari) y en Android con letra grande que
+  la página ya no se mueve de lado.
+
 ## 2026-10-09 (5) — Autorización de Vercel con GitHub
 
 - Causa del bloqueo `TEAM_ACCESS_REQUIRED`: los commits salían con el

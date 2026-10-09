@@ -1,6 +1,9 @@
 // Demo del diseño 02 · Tierra (pareja ficticia). También es el punto de
 // partida de una invitación nueva: `npm run nueva -- tierra`.
 // Guía: docs/templates/02-tierra.md.
+// Fotos: una sola sesión de pareja de stock (Pexels, Alexander Mass /
+// Reborn Filmes; licencia de Pexels) en public/plantillas/tierra/fotos/,
+// recortada a la proporción de cada marco. Fuentes: photo-map.md.
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
@@ -121,13 +124,13 @@ export const demo: InvitationOf<"tierra"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/tierra/portada.jpg", alt: "Camila y Diego", position: "50% 35%" },
-    historia: { src: "/plantillas/tierra/historia.jpg", alt: "Camila y Diego", position: "50% 35%" },
-    retrato: { src: "/plantillas/tierra/retrato.jpg", alt: "Camila y Diego", position: "50% 30%" },
-    galeria1: { src: "/plantillas/tierra/galeria-1.jpg", alt: "Camila y Diego", position: "50% 35%" },
-    galeria2: { src: "/plantillas/tierra/galeria-2.jpg", alt: "Camila y Diego", position: "50% 40%" },
-    galeria3: { src: "/plantillas/tierra/galeria-3.jpg", alt: "Camila y Diego", position: "50% 40%" },
-    galeria4: { src: "/plantillas/tierra/galeria-4.jpg", alt: "Camila y Diego", position: "50% 45%" },
-    cierre: { src: "/plantillas/tierra/cierre.jpg", alt: "Camila y Diego", position: "50% 40%" },
+    portada: { src: "/plantillas/tierra/fotos/abrazo-flores.jpg", alt: "Camila y Diego abrazados entre flores silvestres", position: "50% 40%" },
+    historia: { src: "/plantillas/tierra/fotos/beso.jpg", alt: "Diego besa a Camila en el campo", position: "50% 45%" },
+    retrato: { src: "/plantillas/tierra/fotos/abrazo-atardecer.jpg", alt: "Camila y Diego se abrazan riendo al atardecer", position: "50% 35%" },
+    galeria1: { src: "/plantillas/tierra/fotos/caminata.jpg", alt: "Camila y Diego caminan de la mano por la colina", position: "50% 50%" },
+    galeria2: { src: "/plantillas/tierra/fotos/detalle-vestido.jpg", alt: "Detalle del vestido de Camila y sus manos unidas", position: "50% 40%" },
+    galeria3: { src: "/plantillas/tierra/fotos/lago.jpg", alt: "Diego levanta a Camila a la orilla del lago", position: "55% 50%" },
+    galeria4: { src: "/plantillas/tierra/fotos/horizonte.jpg", alt: "Camila y Diego en el horizonte al atardecer", position: "50% 60%" },
+    cierre: { src: "/plantillas/tierra/fotos/baile-atardecer.jpg", alt: "Camila y Diego toman sus manos al atardecer", position: "50% 50%" },
   },
 };

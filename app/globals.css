@@ -38,7 +38,9 @@ html {
 
 body {
   margin: 0;
-  overflow-x: clip;
+  /* Una palabra más ancha que la pantalla (nombre, correo, enlace) pasa a
+     la línea siguiente en vez de ensanchar la página. */
+  overflow-wrap: break-word;
 }
 
 ::selection {

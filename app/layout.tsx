@@ -41,7 +41,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* La extensión Dark Reader respeta esta etiqueta y no altera los colores. */}
         <meta name="darkreader-lock" />
       </head>
-      <body>{children}</body>
+      {/* overflow-x: clip en un contenedor y no en <body>: CSS traslada el
+          overflow de <body> a la ventana, donde iOS Safari no impide mover
+          la página de lado con el dedo. Es solo la red de seguridad; las
+          causas se corrigen en su origen (PROJECT-CONTEXT, "Sin
+          desplazamiento horizontal"). */}
+      <body>
+        <div className="overflow-x-clip">{children}</div>
+      </body>
     </html>
   );
 }

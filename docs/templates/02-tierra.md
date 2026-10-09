@@ -51,6 +51,17 @@ lugares en filas) → **Capítulo II** galería → **Capítulo III** detalles
 
 Pedir al cliente: 4 verticales, 2 cuadradas (o verticales con el sujeto centrado), 1 panorámica, 1 horizontal.
 
+**Demo con fotos reales** (`public/plantillas/tierra/fotos/`, stock de
+Pexels; fuentes y licencia en `photo-map.md`): una sola sesión de una
+pareja en campo seco, lago y atardecer, en beige, crema y caramelo, que
+acompaña la paleta. Recorrido: portada = abrazo entre flores secas
+(mirando a cámara); Capítulo I = el beso; galería = la caminata colina
+arriba (grande), el detalle del vestido y las manos, él la levanta junto
+al lago, y las siluetas en el horizonte (panorámica); cierre = las manos
+al atardecer; retrato del RSVP (escritorio) = abrazo riendo al atardecer.
+Las fotos ya vienen recortadas a la proporción de su marco, así que el
+`position` solo afina.
+
 ## Rasgos propios
 - Titulares con `font-variation-settings` de Fraunces (suavidad y óptica).
 - Revelado "cortina" en todas las fotos (`Reveal variant="curtain"`).

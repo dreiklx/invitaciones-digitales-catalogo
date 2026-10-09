@@ -30,7 +30,8 @@ escaparate.
 - Siete diseños completos (5 de boda, 1 de quinceaños, 1 de cumpleaños
   infantil), un catálogo en `/` agrupado por tipo de evento, con transición hacia cada
   demo, validación `npm run check`, demos con imágenes abstractas generadas
-  (Olivo, con las fotos de una sesión de pareja aportadas por el dueño).
+  salvo Olivo (fotos de una sesión aportadas por el dueño) y Tierra
+  (sesión de pareja de Pexels).
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
@@ -168,8 +169,12 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   `<meta name="darkreader-lock">`). Las extensiones y el modo oscuro de
   Chrome invertían los diseños; se detectó en la revisión visual.
 - **Imágenes de demostración abstractas** generadas por script (escenas de
-  luz desenfocada por diseño). No se usaron fotos de stock porque
-  descargarlas requiere decidir licencias (ver "Pendientes").
+  luz desenfocada por diseño), salvo Olivo y Tierra, que usan fotos reales
+  (ver photo-map.md). Tierra usa una sesión de stock de Pexels: su
+  licencia permite el uso comercial y en plantillas que se venden, sin
+  atribución obligatoria; prohíbe mostrar a las personas de forma ofensiva
+  o insinuar que respaldan el producto. En este entorno no hay generador
+  de imágenes; no se usaron imágenes generadas.
 
 ## Funcionalidades comunes (cuando el diseño las muestra)
 
@@ -275,10 +280,26 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - Nada se corta ni se desborda a 320 px (revisar al tocar diseño).
 
 ### Sin desplazamiento horizontal (2026-10-09, no revertir)
-- `body { overflow-x: clip }` es solo una red de seguridad: Safari < 16 y
-  algunos navegadores Android no conocen `clip`, y ahí cualquier elemento
-  más ancho que la pantalla deja mover la página de lado. Las causas se
-  corrigen en su origen.
+- **Por qué seguía pasando (2026-10-09, sesión 6):** la red de seguridad
+  `body { overflow-x: clip }` no recortaba nada. CSS traslada el `overflow`
+  de `<body>` a la ventana (si `<html>` no tiene uno propio), y en la
+  ventana `clip` equivale a `hidden`, que **iOS Safari no respeta frente al
+  gesto táctil**: cualquier cosa que sobresaliera, aunque fuera un
+  instante, dejaba mover la página de lado en el iPhone, mientras Chrome
+  de escritorio (y las auditorías) no lo mostraban.
+- Lo que sobresalía en los 7 diseños: la **portada "Abrir invitación"**
+  (`Gate.tsx`). Al abrir, la capa `fixed inset-0` se escalaba a 1,03
+  durante 0,7 s: 4-6 px fuera de la pantalla por cada lado. Ahora el
+  scale va en un hijo dentro de la capa fija (que recorta) y la capa solo
+  se desvanece. Mismo efecto visual.
+- Red de seguridad que sí funciona: `overflow-x: clip` en un `<div>`
+  envoltorio dentro de `<body>` (`app/layout.tsx`), que no se traslada a
+  la ventana y recorta de verdad (no rompe `position: sticky`, porque
+  `clip` no crea contenedor de desplazamiento). `body` lleva
+  `overflow-wrap: break-word` para que una palabra larga (nombre, correo)
+  pase de línea. **No volver a poner el `clip` en `body` o `html`.**
+- Las causas se corrigen en su origen; el envoltorio no debe esconder
+  defectos (al medir, se desactiva).
 - Causas encontradas (con datos de clientes reales, no con las demos):
   textos de una sola línea (`whitespace-nowrap`) que con la **letra del
   sistema agrandada** (Android, personas mayores) se salían: "Agregar a mi
@@ -295,11 +316,20 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - Regla: un texto que no puede partirse (`whitespace-nowrap`, nombres
   gigantes) necesita un tamaño que no crezca con la letra del sistema
   (`vw`) o poder pasar a dos líneas.
-- Cómo medir: con `body{overflow-x:visible}` inyectado (si no, el `clip`
-  oculta el problema), recorriendo la página, con la música sonando y el
-  visor abierto, y con `html{font-size:125%}` para simular la letra
-  agrandada. Comparar con `screen.width`, no con `innerWidth` (en
-  emulación móvil el viewport se ensancha con el contenido).
+- Cómo medir: Chrome en modo móvil con `screenWidth` fijado y **gestos
+  táctiles reales** (CDP `Input.synthesizeScrollGesture`), sin desactivar
+  animaciones y con el envoltorio sin `clip` (`body>.overflow-x-clip
+  {overflow-x:visible}`). Un monitor por `requestAnimationFrame` guarda
+  durante todo el recorrido el máximo de `documentElement.scrollWidth`,
+  `body.scrollWidth`, `innerWidth`, `visualViewport` y los elementos fuera
+  de la pantalla (también los fijos y los transitorios). Recorrido: abrir
+  la invitación (toque real, la música debe sonar), bajar con el dedo
+  hasta el final deslizando de lado cada pocas pantallas, pausar y
+  reanudar la música, abrir y cerrar el visor, completar el RSVP. Anchos
+  280 (teléfonos con letra grande: Chrome Android aplica el tamaño de
+  letra del sistema como zoom y la pantalla útil baja de 320), 320×568,
+  320×600, 360, 390, 430 y 1440, con letra normal y con
+  `html{font-size:125%}`.
 
 ### Teléfono primero (revisión 2026-10-08, no revertir)
 Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
@@ -393,7 +423,10 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 - Sin tests automatizados (la validación es `npm run check`).
 - El catálogo precarga las fuentes de todos los diseños (22 archivos; las
   necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
-- Las imágenes de demostración son abstractas salvo en Olivo, que usa las
+- Tierra usa fotos de stock (Pexels): personas reales identificables;
+  no usarlas en contextos que sugieran que esa pareja respalda el negocio
+  (licencia de Pexels).
+- Las imágenes de demostración son abstractas salvo en Olivo y Tierra. Olivo usa las
   fotos de una sesión de pareja (Don Ramón y Doña Florinda caracterizados)
   aportadas por el dueño; la demo se llama "Ramón & Florinda". Esos
   nombres viven solo en `templates/olivo/demo.ts`: `npm run nueva` deja
