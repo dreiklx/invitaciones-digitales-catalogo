@@ -38,7 +38,9 @@ Lee primero, en este orden:
 - Cambios visuales: revisar escritorio, 390 px y 320 px, y las reglas de
   usabilidad para personas mayores.
 - Tras cambios relevantes: `npm run check`, `npm run typecheck`,
-  `npm run lint`, `npm run build`; revisión visual cuando aplique.
+  `npm run lint`, `npm test`, `npm run build` y `npm run test:e2e` (o todo
+  junto: `npm run verify`); revisión visual cuando aplique. Si una prueba
+  falla, corregir la causa; no bajar la cobertura.
 - Cerrar cada tarea con commit y push normal a `origin/main` (salvo que
   el dueño diga lo contrario o haya un riesgo o bloqueo real). Nunca
   despliegues manuales con Vercel CLI para saltar el bloqueo de la

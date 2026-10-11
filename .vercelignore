@@ -2,3 +2,5 @@ img
 _anterior
 docs
 .env*
+tests
+playwright.config.ts

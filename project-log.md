@@ -4,6 +4,36 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-11 (noche) — Datos de demo en `nueva`, música más liviana, fecha de Tierra y pruebas
+
+### Qué se hizo
+- **`npm run nueva` reescrito** (`scripts/new-invitation.ts` +
+  `scripts/lib/new-invitation.ts`): transforma la demo como datos en vez
+  de editar su texto. Además de los nombres, deja en "REEMPLAZAR"
+  familiares, lugares, WhatsApp, regalos, URL, pie de la historia y frases
+  firmadas por la demo (la causa de "Renata" en Aguamarina), y reemplaza
+  cualquier texto que nombre a una persona o un lugar de la demo
+  (`demoMarkers`, `lib/invitation/names.ts`, que también usa `check`).
+- **Música:** 26,6 MB → 17,6 MB re-codificando en MP3 VBR con un umbral
+  medido por pista (tabla en README); la cajita de Nube quedó igual.
+- **Tierra:** "22 de mayo de 2027" en la cabecera de la portada inicial,
+  la portada y la miniatura (antes "22.05.27").
+- **Pruebas:** `npm test` (97 pruebas de configuración y generación),
+  `npm run test:e2e` (146 pruebas de Playwright con el Chrome instalado),
+  `npm run verify`. `@playwright/test` como dependencia de desarrollo.
+- Fotos sin cambios en los siete diseños.
+
+### Verificación
+- `check`, `typecheck`, `lint`, `build`, `npm test` y `npm run test:e2e`
+  sin errores. Se comprobó que las pruebas fallan ante errores reales:
+  generador sin limpiar citas o regalos (12 fallos), y un elemento más
+  ancho que la pantalla sin el recorte del layout (falla en 390 y 1366).
+- Revisión visual de Tierra (320, 390, 1440) y de su miniatura.
+- Dos builds locales fallaron por la red al bajar tipografías de Google
+  Fonts (problema previo, registrado en `docs/auditoria.md`, P9); al
+  repetir, pasaron.
+- Pendiente manual: escuchar las pistas en un teléfono real.
+
 ## 2026-10-11 (tarde) — Don Ramón y Doña Florinda, Aguamarina, fecha de Gala y auditoría
 
 ### Qué se hizo

@@ -64,6 +64,12 @@ Las fotos ya vienen recortadas a la proporción de su marco, así que el
 
 ## Rasgos propios
 - Titulares con `font-variation-settings` de Fraunces (suavidad y óptica).
+- La cabecera de la portada inicial, de la portada y de la miniatura del
+  catálogo lleva la fecha **completa** en cursiva ("22 de mayo de 2027",
+  `dates.long`, calculada desde `date` y `site.timeZone`). Hasta el
+  2026-10-11 iba en cifras con puntos ("22.05.27"), que se podía leer
+  como otra fecha. En pantallas angostas la fecha baja a una segunda
+  línea bajo el antetítulo (nunca se corta).
 - Revelado "cortina" en todas las fotos (`Reveal variant="curtain"`).
 - Lugares en formato tabla (etiqueta y hora | nombre y dirección | botones).
 - La cuenta regresiva usa abreviaturas en teléfono (min/seg) y palabras completas en escritorio.

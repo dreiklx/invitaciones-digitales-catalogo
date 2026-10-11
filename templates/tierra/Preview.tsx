@@ -6,9 +6,9 @@ export default function TierraPreview({ inv }: { inv: ResolvedInvitation }) {
   const { photos, names, dates, content } = inv;
   return (
     <div className="flex h-full w-full flex-col bg-paper px-[6cqw] pb-[6cqw] pt-[6cqw] text-ink">
-      <div className="flex items-baseline justify-between border-b border-ink/25 pb-[2cqw] text-[2.6cqw] uppercase tracking-[0.25em] text-muted">
+      <div className="flex items-baseline justify-between gap-[3cqw] border-b border-ink/25 pb-[2cqw] text-[2.6cqw] uppercase tracking-[0.25em] text-muted">
         <span>{content.hero.eyebrow}</span>
-        <span className="font-display text-[3cqw] normal-case italic tracking-normal">{dates.dotted}</span>
+        <span className="whitespace-nowrap font-display text-[3cqw] normal-case italic tracking-normal">{dates.long}</span>
       </div>
       <p className="mt-[5cqw] font-display text-[15cqw] font-light leading-[0.82] tracking-tight [font-variation-settings:'opsz'_144,'SOFT'_50]">
         {names.one}

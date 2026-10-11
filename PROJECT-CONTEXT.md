@@ -50,6 +50,11 @@ escaparate.
   Florinda, fotos aportadas por el dueño con derechos de imagen y de los
   personajes PENDIENTES DE AUTORIZACIÓN**; todas con un aviso visible de
   que son demostraciones (auditoría en photo-map.md).
+- **Pruebas automáticas** (2026-10-11): `npm test` (configuración de los
+  siete diseños y `npm run nueva`, sin navegador) y `npm run test:e2e`
+  (Playwright con el Chrome instalado: desplazamiento lateral en 8 anchos,
+  música real, fecha, calendario, galería, RSVP, regreso y catálogo);
+  `npm run verify` corre todo. Detalle en README, "Pruebas".
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
@@ -89,7 +94,9 @@ escaparate.
 ## Stack
 
 Next.js 16.3.8 (App Router, Turbopack) · React 19.2 · TypeScript 5 ·
-Tailwind CSS v4 · `sharp` (imágenes) · `tsx` (scripts) · Vercel. Todo se
+Tailwind CSS v4 · `sharp` (imágenes) · `tsx` (scripts y `npm test` con
+el corredor de Node) · Playwright (solo desarrollo: `npm run test:e2e`) ·
+Vercel. Todo se
 prerenderiza estático. Next 16 cambia APIs: leer `node_modules/next/dist/docs/`
 antes de usar APIs de Next (ver `AGENTS.md`).
 
@@ -106,6 +113,7 @@ lib/invitation/
   calendar.ts             ← archivo .ics
   share-image.tsx         ← tarjeta al compartir e ícono (next/og)
   validate.ts             ← reglas de `npm run check`
+  names.ts                ← tratamientos, palabra completa y `demoMarkers`
   active.ts, routes.tsx   ← qué se muestra en cada ruta según el modo
 templates/
   registry.ts             ← metas de los 7 diseños (solo datos; orden del catálogo)
@@ -121,7 +129,8 @@ app/
   layout.tsx, icon.tsx, apple-icon.tsx, opengraph-image.tsx, manifest.ts,
   calendario.ics/         ← metadatos y calendario de la invitación del cliente
 components/catalog/       ← página del catálogo
-scripts/                  ← check.ts, new-invitation.mjs, placeholders.ts, optimize-images.mjs
+scripts/                  ← check.ts, new-invitation.ts (+ lib/new-invitation.ts), placeholders.ts, optimize-images.mjs
+tests/unit/, tests/e2e/   ← `npm test` (Node) y `npm run test:e2e` (Playwright); playwright.config.ts
 docs/templates/           ← una guía por diseño
 public/plantillas/<diseño>/ ← imágenes de demostración · public/images/, public/audio/ ← cliente
 public/logos/             ← logos del estudio (originales, sin modificar)
@@ -162,12 +171,22 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   WhatsApp) e `inv.shower` trae `parentsText` y `babyName`. Ningún texto
   del diseño supone el sexo del bebé. `hero.title` (opcional, común) es la
   frase grande de la portada cuando no se muestra el nombre del bebé.
-- **Las demos no se filtran a los clientes:** `npm run nueva` deja en
-  "REEMPLAZAR" los nombres (`couple`, `honoree.name`, `shower.parents`, sin
-  `babyName`) y los textos alternativos de las fotos, y nombra las fotos
-  por espacio. `npm run check` da error si cualquier texto de una
-  invitación de cliente todavía nombra a la persona de la demo
-  (palabra completa).
+- **Las demos no se filtran a los clientes** (rehecho el 2026-10-11:
+  `nueva -- aguamarina` copiaba "Renata" como firma de dos frases).
+  `npm run nueva` ya no edita el texto de `demo.ts` con expresiones
+  regulares: importa la demo, la transforma
+  (`scripts/lib/new-invitation.ts`, función pura) y escribe el archivo.
+  Se conserva la estructura (secciones, rótulos, programa, vestimenta,
+  música, versículos y citas de autores conocidos); van a "REEMPLAZAR"
+  quién celebra (sin `babyName`), familiares, lugares, WhatsApp, cuenta y
+  enlace de regalos, `site.url`, `story.caption`, las frases firmadas por
+  alguien de la demo y los textos alternativos; las fotos apuntan a
+  `/images/<espacio>.jpg`. Red de seguridad: cualquier texto que nombre a
+  una persona o un lugar de la demo (`demoMarkers` en
+  `lib/invitation/names.ts`: quién celebra con y sin tratamiento,
+  familiares y lugares) se reemplaza, y `npm run check` da error si
+  aparece en una invitación de cliente. `tests/unit/nueva.test.ts` lo
+  comprueba con los siete diseños contra los datos de TODAS las demos.
 - **`schedule` (programa del evento)**: opcional en el contenido común;
   lo muestran Aurora (línea de tiempo), Aguamarina (línea con rombos) y Nube
   (tarjetas). Horas en
@@ -534,5 +553,7 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
   DE AUTORIZACIÓN.** Las demos con menores (Aurora, Aguamarina, Nube):
   reemplazar por sesiones con autorización antes de una campaña.
 - Auditoría completa y propuestas no implementadas: `docs/auditoria.md`.
-- Probar audio y WhatsApp en un teléfono real con la primera invitación.
+- Probar audio y WhatsApp en un teléfono real con la primera invitación
+  (las pruebas automáticas usan Chrome de escritorio con emulación) y
+  escuchar una vez las pistas comprimidas en un teléfono.
 - Si se ofrecerán otros eventos (baby showers, bautizos), revisar textos fijos.

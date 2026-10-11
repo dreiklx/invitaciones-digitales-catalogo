@@ -5,6 +5,7 @@
 import { templateMetas } from "@/templates/registry";
 import type { Invitation, PhotoSlotSpec } from "./types";
 import { isValidDate, isValidTime, isValidTimeZone, zonedTimeToUtc } from "./time";
+import { celebrants, containsWord, demoMarkers } from "./names";
 
 export type Issue = { level: "error" | "aviso"; message: string };
 
@@ -88,7 +89,9 @@ export function validateInvitation(inv: Invitation, options: ValidateOptions): I
   // RSVP
   if (inv.rsvp) {
     const r = inv.rsvp;
-    if (!/^\d{10,15}$/.test(r.whatsappNumber))
+    if (/REEMPLAZAR/i.test(r.whatsappNumber)) {
+      // Ya informado arriba ("todavía dice REEMPLAZAR").
+    } else if (!/^\d{10,15}$/.test(r.whatsappNumber))
       error(`rsvp.whatsappNumber "${r.whatsappNumber}": código de país + número, solo dígitos (p. ej. 50688887777).`);
     else if (r.whatsappNumber.startsWith("506") && r.whatsappNumber.length !== 11)
       error("rsvp.whatsappNumber: un número de Costa Rica tiene 506 + 8 dígitos.");
@@ -162,20 +165,21 @@ export function validateInvitation(inv: Invitation, options: ValidateOptions): I
     const d = options.demo;
     if ("couple" in inv && "couple" in d && inv.couple.partnerOne === d.couple.partnerOne && inv.couple.partnerTwo === d.couple.partnerTwo)
       error("couple: siguen los nombres de la demo.");
-    const people = (x: typeof inv) =>
-      "couple" in x ? [x.couple.partnerOne, x.couple.partnerTwo] : "shower" in x ? [...x.shower.parents, x.shower.babyName ?? ""].filter(Boolean) : [x.honoree.name];
-    const demoPeople = people(d);
-    const ownPeople = people(inv);
     if ("shower" in inv && "shower" in d && inv.shower.parents.some((p) => d.shower.parents.includes(p))) error("shower.parents: siguen los nombres de la demo.");
-    // Cualquier texto (frases, firmas, textos alternativos de las fotos…)
-    // que todavía nombre a la pareja o persona de la demo.
-    const leftovers = demoPeople.filter((n) => n && !ownPeople.includes(n));
-    if (leftovers.length) {
-      walkStrings(inv, (path, value) => {
-        const found = leftovers.find((name) => containsWord(value, name));
-        if (found) error(`${path} nombra a la persona de la demo ("${found}").`);
-      });
-    }
+    // Cualquier texto (frases, firmas de citas, textos alternativos de las
+    // fotos, avisos…) que todavía nombre a una persona o un lugar de la demo
+    // (lib/invitation/names.ts, `demoMarkers`).
+    // Un nombre que también es del cliente ("Ramón" en "Ramón Pérez") no
+    // cuenta como dato de la demo.
+    const own = [...celebrants(inv), ...(inv.family?.groups.flatMap((g) => g.names) ?? [])];
+    const markers = demoMarkers(d);
+    const people = markers.people.filter((n) => !own.some((o) => containsWord(o, n)));
+    walkStrings(inv, (path, value) => {
+      const person = people.find((name) => containsWord(value, name));
+      if (person) error(`${path} nombra a una persona de la demo ("${person}").`);
+      const place = markers.places.find((name) => containsWord(value, name));
+      if (place) error(`${path} menciona un lugar de la demo ("${place}").`);
+    });
     if ("honoree" in inv && "honoree" in d && inv.honoree.name === d.honoree.name) error("honoree.name sigue siendo el de la demo.");
     if (inv.site.url === d.site.url) error("site.url sigue siendo la URL de la demo.");
     if (inv.rsvp && d.rsvp && inv.rsvp.whatsappNumber === d.rsvp.whatsappNumber) error("rsvp.whatsappNumber sigue siendo el de la demo.");
@@ -201,18 +205,4 @@ function walkStrings(value: unknown, visit: (path: string, value: string) => voi
   else if (Array.isArray(value)) value.forEach((v, i) => walkStrings(v, visit, `${path}[${i}]`));
   else if (value && typeof value === "object")
     for (const [k, v] of Object.entries(value)) walkStrings(v, visit, path ? `${path}.${k}` : k);
-}
-
-// ¿`text` contiene `word` como palabra completa? ("Ana" no está en "Mariana").
-function containsWord(text: string, word: string): boolean {
-  const letter = /\p{L}/u;
-  let from = 0;
-  for (;;) {
-    const at = text.indexOf(word, from);
-    if (at < 0) return false;
-    const before = text[at - 1];
-    const after = text[at + word.length];
-    if ((!before || !letter.test(before)) && (!after || !letter.test(after))) return true;
-    from = at + 1;
-  }
 }

@@ -10,7 +10,10 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "check": "tsx scripts/check.ts",
-    "nueva": "node scripts/new-invitation.mjs",
+    "nueva": "tsx scripts/new-invitation.ts",
+    "test": "tsx --test \"tests/unit/**/*.test.ts\"",
+    "test:e2e": "playwright test",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e",
     "placeholders": "tsx scripts/placeholders.ts",
     "optimize-images": "node scripts/optimize-images.mjs"
   },
@@ -21,6 +24,7 @@
     "sharp": "^0.35.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

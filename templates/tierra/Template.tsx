@@ -20,7 +20,8 @@ import { fontClasses } from "./fonts";
 // 02 · Tierra — una revista impresa en papel cálido. Portada con titular
 // gigante, capítulos numerados, filetes finos, fotos que se descubren como
 // una cortina y una galería en doble página. Texto alineado a la izquierda,
-// jerarquía tipográfica fuerte, cero sombras.
+// jerarquía tipográfica fuerte, cero sombras. La fecha del encabezado va
+// completa ("22 de mayo de 2027", `dates.long`), no en cifras con puntos.
 
 function Chapter({ number, eyebrow, title, light = false }: { number?: string; eyebrow: string; title: string; light?: boolean }) {
   return (
@@ -101,9 +102,9 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
 
   const cover = (
     <div className="flex h-full flex-col bg-paper px-6 pb-8 pt-16 text-ink sm:px-12 sm:pb-12 sm:pt-12">
-      <div className="flex items-baseline justify-between border-b border-ink/25 pb-3 text-[11px] uppercase tracking-[0.25em] text-muted sm:text-xs">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink/25 pb-3 text-[11px] uppercase tracking-[0.25em] text-muted sm:text-xs">
         <span>{c.welcome.eyebrow}</span>
-        <span className="font-display text-sm normal-case italic tracking-normal">{dates.dotted}</span>
+        <span className="whitespace-nowrap font-display text-sm normal-case italic tracking-normal">{dates.long}</span>
       </div>
       <div className="flex flex-1 flex-col justify-center gap-6 py-6 sm:flex-row sm:items-center sm:gap-12">
         <h1 className="font-display text-[clamp(3.6rem,19vw,10rem)] font-light leading-[0.85] tracking-tight [font-variation-settings:'opsz'_144,'SOFT'_50] sm:flex-1">
@@ -129,9 +130,9 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
         {/* Portada de revista */}
         <section className="px-6 pb-16 pt-[4.5rem] sm:px-10 sm:pt-24 lg:pb-24">
           <div className="mx-auto max-w-6xl">
-            <div className="flex items-baseline justify-between border-b border-ink/25 pb-3 text-[11px] uppercase tracking-[0.25em] text-muted sm:text-xs">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink/25 pb-3 text-[11px] uppercase tracking-[0.25em] text-muted sm:text-xs">
               <span>{c.hero.eyebrow}</span>
-              <span className="font-display text-sm normal-case italic tracking-normal">{dates.dotted}</span>
+              <span className="whitespace-nowrap font-display text-sm normal-case italic tracking-normal">{dates.long}</span>
             </div>
             <div className="mt-5 grid grid-cols-1 gap-5 sm:mt-8 sm:gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-12">
               <Reveal className="lg:col-span-7">

@@ -29,7 +29,8 @@ Aplica a cualquier agente (Claude Code, Codex…). CLAUDE.md lo resume.
   comportamiento, arquitectura, instrucciones o limitaciones.
 
 ## Al terminar (en la MISMA tarea, sin que se pida aparte)
-1. Implementar, probar y corregir lo encontrado.
+1. Implementar, probar y corregir lo encontrado (`npm run verify`: lint,
+   tipos, `npm test`, build y `npm run test:e2e`; ver README, "Pruebas").
 2. Actualizar los `.md` pertinentes: evaluar como mínimo
    `PROJECT-CONTEXT.md`, `README.md`, `project-log.md`, las guías de
    `docs/templates/` afectadas, `photo-map.md` si hubo fotos, y

@@ -69,11 +69,18 @@ npm run dev            # http://localhost:3000
    ```bash
    npm run nueva -- aguamarina  # olivo | tierra | gala | aurora | aguamarina | riviera | nube
    ```
-   Copia la demo de ese diseño a `config/invitation.ts`, con las fotos
-   apuntando a `public/images/<espacio>.jpg` (`galeria1` → `galeria-1.jpg`).
-   Los nombres de la pareja y los textos alternativos de las fotos quedan
-   en "REEMPLAZAR" (nunca se heredan de la demo: la de Olivo es Don Ramón
-   y Doña Florinda).
+   Crea `config/invitation.ts` a partir de la demo del diseño **sin sus
+   datos**: conserva la estructura (secciones, rótulos, programa,
+   vestimenta, música, versículos y citas de autores conocidos) y deja en
+   "REEMPLAZAR" todo lo que es de las personas de la demo: quién celebra,
+   familiares, lugares, WhatsApp, cuenta o enlace de regalos, URL, el pie
+   de la historia y las frases firmadas por alguien de la demo. Las fotos
+   apuntan a `public/images/<espacio>.jpg` (`galeria1` → `galeria-1.jpg`)
+   con el texto alternativo por escribir. Además, cualquier texto que
+   todavía nombre a una persona o un lugar de la demo se reemplaza
+   (`demoMarkers` en `lib/invitation/names.ts`), y `npm run check` da
+   error si alguno aparece en una invitación. Una cita se oculta con
+   `openingQuote: null` / `closingQuote: null`.
 4. **Editar `config/invitation.ts`**: nombres (`couple` o `honoree`), `date`/`time`, lugares
    (enlaces "Compartir" de Google Maps, Waze opcional), textos, padres,
    aviso, vestimenta, regalos, RSVP (WhatsApp, fecha límite), colores
@@ -81,7 +88,8 @@ npm run dev            # http://localhost:3000
 5. **Fotos** en `public/images/` con los nombres del archivo, en la
    proporción que pide la guía del diseño. Luego `npm run optimize-images`.
 6. **Música** (opcional) en `public/audio/` + `music` en el config.
-7. `npm run check` — señala todo lo que falta o sigue siendo de la demo.
+7. `npm run check` — señala todo lo que falta ("REEMPLAZAR") o sigue
+   siendo de la demo.
 8. `npm run dev` y revisar en escritorio, 390 px y 320 px.
 9. `npm run typecheck && npm run lint && npm run build`.
 10. Proyecto de Vercel **nuevo** → desplegar → poner la URL final en
@@ -136,7 +144,7 @@ sonar, el reproductor queda en "Toca para escuchar".
 
 ```ts
 music: {
-  src: "/audio/nuestra-cancion.mp3", // archivo en public/audio/ (mp3, idealmente < 5 MB)
+  src: "/audio/nuestra-cancion.mp3", // archivo en public/audio/ (mp3, idealmente < 5 MB; ver "Peso")
   title: "Clair de lune",
   artist: "Claude Debussy · Laurens Goedhart", // opcional
   credit: "Grabación de dominio público",      // licencia o atribución (se muestra en el pie)
@@ -167,6 +175,26 @@ music: {
 
   Un cliente puede quedarse con una de estas (`npm run check` lo avisa
   para confirmarlo) manteniendo su `credit`.
+- **Peso** (2026-10-11): se descargan en el teléfono del invitado, así que
+  se volvieron a codificar en MP3 VBR (LAME) eligiendo, pista por pista,
+  el ajuste más liviano cuya diferencia con el original queda por debajo
+  de 10 dB de relación señal/diferencia en menos del 2 % de las bandas
+  audibles (comparación espectral por bandas críticas; mismo formato,
+  44,1 kHz estéreo, misma duración). Mismos archivos, licencias y créditos.
+
+  | Archivo | Antes | Después | Ajuste |
+  |---|---|---|---|
+  | `pachelbel-canon-macleod.mp3` | 8,18 MB (184 kbps) | 6,69 MB (150 kbps) | VBR V3 |
+  | `debussy-clair-de-lune.mp3` | 7,56 MB (199 kbps) | 4,36 MB (115 kbps) | VBR V4 |
+  | `chopin-vals-op69-1.mp3` | 5,27 MB (170 kbps) | 3,49 MB (112 kbps) | VBR V4 |
+  | `satie-gymnopedie-1.mp3` | 4,30 MB (187 kbps) | 1,76 MB (77 kbps) | VBR V5 |
+  | `cajita-musical-cuna.mp3` | 1,29 MB | 1,29 MB | sin cambios (ya liviana; V4 no cumplía el umbral) |
+  | **Total** | **26,6 MB** | **17,6 MB** (−34 %) | |
+
+  La comparación es objetiva (medida), no una prueba de escucha: conviene
+  escucharlas una vez en un teléfono. `npm test` falla si una pista pasa
+  de 7 MB. Con una canción de un cliente: MP3 a 128–160 kbps suele bastar
+  para música de fondo.
 
 ## Citas y versículos
 
@@ -263,6 +291,70 @@ de un enlace: compartirlo solo después del despliegue final.
 | `npm run build` | Build de producción (incluye `check`) |
 | `npm run optimize-images` | Comprime y endereza (EXIF) las fotos de `public/images/` |
 | `npm run placeholders` | Regenera las imágenes de demostración del catálogo |
+| `npm test` | Pruebas sin navegador (configuración y `nueva`), ~5 s |
+| `npm run test:e2e` | Pruebas en el navegador sobre el build (`npm run build` antes) |
+| `npm run verify` | Todo: lint, tipos, `npm test`, build (con `check`) y `test:e2e` |
+
+## Pruebas
+
+Son del **repositorio del catálogo** (`config/invitation.ts = null`). En
+la copia de un cliente basta `npm run check` y la revisión manual.
+
+**`npm test`** (Node + tsx, sin navegador; `tests/unit/`):
+- `config.test.ts`: `config/invitation.ts` en `null`; los siete ids
+  coinciden en registro, demos y meta; cada diseño tiene sus archivos y
+  sus tres rutas, y no sobran rutas; las redirecciones viejas llegan a un
+  diseño en un salto; cada demo pasa la validación, se resuelve con una
+  fecha válida y legible, y su calendario tiene la hora correcta; la
+  fecha no cambia con la zona horaria de la máquina; existen todas las
+  fotos y la música, y no sobran fotos; funciona con `music`, citas y
+  secciones opcionales en `null`; ninguna pista pasa de 7 MB y todas
+  tienen crédito.
+- `nueva.test.ts`: con los siete diseños, la invitación nueva no contiene
+  personas, lugares ni fotos de **ninguna** demo (tampoco en los
+  comentarios del archivo); conserva la estructura y las citas genéricas;
+  `check` solo pide completar los "REEMPLAZAR" y, completados, no da
+  errores; el archivo generado es TypeScript válido; el comando escribe
+  con `--salida` sin tocar `config/invitation.ts` ni las demos.
+
+**`npm run test:e2e`** (Playwright, `tests/e2e/`, 146 pruebas, ~10 min;
+necesita `npm run build` antes; levanta `next start` en el puerto 3210 o
+reutiliza uno abierto):
+- `responsive.spec.ts`: catálogo y siete diseños en 320, 360, 390, 430,
+  1024, 1366, 1440 y 1920 px (teléfono con toque; escritorio con barra de
+  desplazamiento visible), antes de abrir, al abrir y recorriendo toda la
+  página; también 320 px con la letra al 125 %. Falla si el documento o
+  el body son más anchos que la pantalla, si la página se puede desplazar
+  hacia los lados (incluida la rueda lateral en escritorio) o si un
+  teléfono agranda su ancho de diseño; el error lista los elementos que
+  sobresalen. Tolerancia: 1 px (redondeo).
+- `invitations.spec.ts` (cada diseño a 390 y 1366 px): la música no suena
+  ni se descarga antes de abrir; al abrir suena de verdad (el tiempo de
+  reproducción avanza, sin error de carga); el reproductor pausa (el
+  tiempo se detiene) y reanuda, y sigue sonando al recorrer la página;
+  la fecha larga y los nombres de la configuración aparecen; el
+  calendario `.ics` responde con la hora correcta y existe el enlace de
+  Google Calendar; la galería abre y cierra (Escape y "Cerrar") sin
+  desbordar; la confirmación valida el nombre, muestra el mensaje y
+  "No podrás asistir" también; "Diseños" vuelve al catálogo.
+- `catalog.spec.ts`: el catálogo enlaza los siete diseños, cada página y
+  su imagen para compartir responden, las rutas viejas redirigen (308) y
+  el logo enlaza a Instagram con `noopener`.
+
+**Navegador:** usa el Google Chrome instalado (no descarga nada). Sin
+Chrome: `npx playwright install chromium` y correr con
+`E2E_BROWSER=chromium`. El build de producción y Vercel no necesitan
+navegador (`tests/` y `playwright.config.ts` están en `.vercelignore`).
+
+**Si algo falla:** `npm test` muestra qué archivo o campo y por qué (p.
+ej. `photos.portada.alt = "…" contiene "<nombre>"`). Playwright muestra
+el paso, el ancho y las medidas (`docScrollWidth`, `clientWidth`,
+`panned`, elementos que sobresalen) y guarda captura y traza en
+`test-results/` (`npx playwright show-trace <archivo>`). Corregir la
+causa; no bajar la cobertura ni ocultar el desborde con CSS.
+**Sin cubrir aún:** la vista real de una invitación con `music: null` o
+sin citas (se prueba a nivel de datos, no en el navegador) y el audio en
+un teléfono físico.
 
 ## Qué no tocar en una invitación de diseño existente
 

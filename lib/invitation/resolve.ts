@@ -7,6 +7,7 @@ import { templateMetas } from "@/templates/registry";
 import type { Invitation, InvitationContent, Location, Palette, Photo, Quote, TemplateId, TemplateMeta } from "./types";
 import { formatEventDates, formatLongDate, formatTime, zonedTimeToUtc, type EventDates } from "./time";
 import { formatPhone, type RsvpContext } from "./whatsapp";
+import { withoutHonorific } from "./names";
 
 export type ResolvedLocation = Location & {
   // Hora formateada ("6:00 p. m."), si se conoce.
@@ -187,11 +188,7 @@ function capitalize(text: string): string {
 
 // Inicial del nombre para monogramas, sin el tratamiento ("Don Ramón" → "R").
 function initial(name: string): string {
-  return name
-    .trim()
-    .replace(/^(don|doña|dña\.?|sr\.?|sra\.?|srta\.?|dr\.?|dra\.?)\s+/i, "")
-    .charAt(0)
-    .toUpperCase();
+  return withoutHonorific(name).charAt(0).toUpperCase();
 }
 
 // 20270417T220000Z
