@@ -1,11 +1,8 @@
-import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 
-const display = Instrument_Serif({
-  variable: "--f-display",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-});
-const body = Hanken_Grotesk({ variable: "--f-body", subsets: ["latin"] });
+// Tipografías del diseño. En un módulo aparte para que solo se precarguen
+// en las páginas donde se usan (ver docs de next/font, "Using Multiple Fonts").
+const display = Cormorant_Garamond({ variable: "--f-display", subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"] });
+const body = Jost({ variable: "--f-body", subsets: ["latin"] });
 
 export const fontClasses = `${display.variable} ${body.variable}`;

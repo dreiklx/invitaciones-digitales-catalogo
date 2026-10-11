@@ -4,7 +4,7 @@ export const catalog = {
   // URL pública del catálogo (sin "/" al final). Actualizar si cambia el
   // proyecto de Vercel del catálogo.
   url: "https://invitaciones-digitales-catalogo.vercel.app",
-  title: "Invitaciones digitales — Bodas, quince años y bebés",
-  description: "Siete diseños de invitación digital para bodas, quince años, baby showers y primeros cumpleaños, listos para personalizar con nombres, fotos, fecha y colores.",
+  title: "Invitaciones digitales — Bodas, quinceaños y bebés",
+  description: "Siete diseños de invitación digital para bodas, quinceaños, baby showers y primeros cumpleaños, listos para personalizar con nombres, fotos, fecha y colores.",
   locale: "es-CR",
 };

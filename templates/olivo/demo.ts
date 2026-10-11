@@ -1,4 +1,6 @@
-// Demo del diseño 01 · Olivo (Ramón y Florinda, con las fotos de su sesión). También es el punto de
+// Demo del diseño 01 · Olivo (pareja ficticia: Elena y Tomás). Fotos: una
+// sola sesión de stock en un olivar (Pexels, Igor La Prado; licencia de
+// Pexels) en public/plantillas/olivo/fotos/. Fuentes: photo-map.md. También es el punto de
 // partida de una invitación nueva: `npm run nueva -- olivo` copia este
 // archivo a config/invitation.ts. Guía: docs/templates/01-olivo.md.
 
@@ -14,7 +16,7 @@ export const demo: InvitationOf<"olivo"> = {
     timeZone: "America/Costa_Rica",
   },
   event: { name: "boda", article: "la" },
-  couple: { partnerOne: "Ramón", partnerTwo: "Florinda" },
+  couple: { partnerOne: "Elena", partnerTwo: "Tomás" },
   date: "2027-04-17",
   time: "16:00",
   durationHours: 6,
@@ -121,14 +123,12 @@ export const demo: InvitationOf<"olivo"> = {
   },
 
   photos: {
-    // Sesión de pareja real (public/plantillas/olivo/fotos/): cada foto una
-    // sola vez, contada en orden (abrazo → propuesta → rosa → el anillo).
-    portada: { src: "/plantillas/olivo/fotos/abrazo.jpg", alt: "Ramón y Florinda abrazados en el patio", position: "54% 12%" },
-    historia: { src: "/plantillas/olivo/fotos/propuesta.jpg", alt: "Ramón, de rodillas, le propone matrimonio a Florinda", position: "50% 45%" },
-    retrato: { src: "/plantillas/olivo/fotos/rosa.jpg", alt: "Ramón le lanza una rosa a Florinda", position: "50% 40%" },
-    galeria1: { src: "/plantillas/olivo/fotos/anillo-vertical.jpg", alt: "Florinda enseña el anillo junto a Ramón", position: "50% 28%" },
-    galeria2: { src: "/plantillas/olivo/fotos/patio.jpg", alt: "Ramón le ofrece una rosa a Florinda", position: "50% 30%" },
-    galeria3: { src: "/plantillas/olivo/fotos/sentados.jpg", alt: "Ramón y Florinda sentados en el patio, felices", position: "50% 35%" },
-    galeria4: { src: "/plantillas/olivo/fotos/anillo-horizontal.jpg", alt: "Florinda enseña el anillo y Ramón celebra", position: "50% 35%" },
+    portada: { src: "/plantillas/olivo/fotos/en-el-pasto.jpg", alt: "Elena y Tomás recostados en el pasto, sonriendo", position: "40% 30%" },
+    historia: { src: "/plantillas/olivo/fotos/manos.jpg", alt: "Las manos de Elena y Tomás, con el anillo de compromiso", position: "50% 50%" },
+    retrato: { src: "/plantillas/olivo/fotos/retrato-novia.jpg", alt: "Retrato de Elena sonriendo", position: "50% 35%" },
+    galeria1: { src: "/plantillas/olivo/fotos/caminata-olivar.jpg", alt: "Elena y Tomás caminan por el olivar", position: "50% 50%" },
+    galeria2: { src: "/plantillas/olivo/fotos/abrazo-olivar.jpg", alt: "Tomás abraza a Elena entre los olivos", position: "50% 40%" },
+    galeria3: { src: "/plantillas/olivo/fotos/vestido-al-viento.jpg", alt: "El vestido de Elena al viento", position: "50% 40%" },
+    galeria4: { src: "/plantillas/olivo/fotos/en-brazos.jpg", alt: "Tomás lleva a Elena en brazos por el campo", position: "50% 40%" },
   },
 };

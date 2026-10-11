@@ -1,75 +1,91 @@
-# Plantilla 05 · Camelia (quince años)
+# Plantilla 05 · Camelia (quinceaños)
 
 **Id en el config:** `template: "camelia"` · **Demo:** `/plantillas/camelia` ·
 **Código:** `templates/camelia/` · **Datos de ejemplo:** `templates/camelia/demo.ts`
 
-## Concepto
-Quince años de gala, editorial y monumental (2026-10-10; ocupa el lugar
-del antiguo diseño de boda Borgoña, del que hereda los bloques de color a
-sangre y la ficha de información). Bloques vino frambuesa, el nombre de la
-quinceañera gigante en cursiva, un **medallón con los XV** (doble anillo
-rosa), destellos rosa muy discretos, la información en formato de ficha y
-el **programa de la noche**. Juvenil y festivo sin ser infantil; distinto
-de Aurora (lila, espejo ovalado y caligrafía) y de Gala.
+## Concepto: "Aguamarina" (rediseño del 2026-10-11)
+Un quinceaños de joyería: azul petróleo profundo, perla, bruma aguamarina
+y oro champán. Las fotos van en **marcos tallados como una esmeralda**
+(esquinas biseladas con doble filete champán), una **tiara de línea fina**
+corona la portada y el pie, el nombre va en **Cormorant cursiva** y los XV
+entre filetes con rombos. Composición simétrica y con aire en el
+teléfono; en escritorio, retrato y texto a dos columnas.
+
+**Por qué se rediseñó** (comparada con Aurora en el navegador): la versión
+anterior (vino frambuesa, nombre gigante en bloque, información en filas
+de ficha, fotos en fucsia contra una pared de piedra) se sentía pesada y
+plana. Aurora se ve más refinada por su simetría, su único marco
+protagonista con doble filete, la luz suave de fondo, la letra delicada y
+los adornos finos. La nueva Camelia toma esas **virtudes** (aire, un marco
+protagonista, detalles finos) con una **identidad propia**: paleta de
+joyería, marco tallado en vez de óvalo, tiara en vez de estrellas, letra
+romana cursiva en vez de caligrafía, fondos azul petróleo con halo
+aguamarina. No se parece a Aurora (lila), Gala (negro y dorado) ni Riviera
+(cobalto y limón).
 
 ## Paleta predeterminada (`templates/camelia/meta.ts`)
 | Token | Valor | Uso en este diseño |
 |---|---|---|
-| `background` | `#fbf5f2` | Marfil: fondo de la página |
-| `surface` | `#f4e3e3` | Rosa muy claro: cuenta regresiva, aviso, sobre mí, regalos |
-| `text` | `#2b1219` | Texto |
-| `textMuted` | `#74515a` | Texto secundario y rótulos |
-| `primary` | `#741a39` | Vino frambuesa: portada, programa, pie, botones |
-| `onPrimary` | `#fbf1f1` | Texto sobre el vino |
-| `secondary` | `#f2c4cf` | Rosa empolvado: el nombre sobre vino, medallón, destellos, botón de la barra |
-| `accent` | `#b0284f` | Frambuesa: antetítulos, campos obligatorios |
-| `onAccent` | `#fff7f8` | Texto sobre la frambuesa |
-| `line` | `#ead1d6` | Bordes |
+| `background` | `#f7f6f1` | Perla: fondo de la página |
+| `surface` | `#e6f0ed` | Bruma aguamarina: portada, programa, familia, galería |
+| `text` | `#15302f` | Texto |
+| `textMuted` | `#4f6967` | Texto secundario |
+| `primary` | `#13505a` | Azul petróleo: portada inicial, cuenta regresiva, pie, botones, nombre |
+| `onPrimary` | `#f7f6f1` | Texto sobre el azul petróleo |
+| `secondary` | `#d4b880` | Oro champán: filetes de los marcos, tiara, XV, destellos |
+| `accent` | `#2a8a84` | Aguamarina: antetítulos, halos de fondo |
+| `onAccent` | `#08201f` | Texto sobre la aguamarina |
+| `line` | `#cfe0dc` | Bordes |
 
 ## Tipografías
-Instrument Serif (nombre, titulares y cifras, en cursiva) + Hanken Grotesk (texto).
+Cormorant Garamond (nombre, titulares en cursiva y cifras) + Jost (texto).
 
 ## Estructura (orden)
-Portada "Abrir invitación" (vino, medallón XV y el nombre gigante) →
-**portada**: retrato a la derecha con el medallón sobre el borde y el
-nombre monumental → frase de apertura → **cuenta regresiva gigante** →
-ficha (fecha y calendario, misa, fiesta, vestimenta) → **programa de la
-noche** (`schedule`, sobre vino, horas en cursiva) → aviso → confirmación
-→ "Sobre mí" (foto en arco) → familia (padres, padrinos, corte de honor, en
-tres columnas) → galería → regalos → pie vino con el nombre y "Mis XV".
+Portada "Abrir invitación" (azul petróleo con halo, marco fino, tiara,
+nombre, XV, fecha y botón de filete champán) → portada: **retrato tallado**
++ tiara, "Mis XV años", nombre, XV, fecha y lugar → frase de apertura →
+**cuenta regresiva en gemas talladas** + calendario → "Dónde celebraremos"
+(tarjetas talladas por lugar) → **programa** (línea vertical con rombos) →
+"Sobre mí" (foto tallada) → familia y **corte de honor** (hasta tres
+columnas) → detalles (aviso en azul petróleo + vestimenta) → galería en dos
+columnas que se cruzan → confirmación en una tarjeta tallada → regalos →
+pie azul petróleo con tiara, nombre y XV.
 
-## Fotos (5) — proporción fija, igual en teléfono y escritorio
+## Fotos (6) — proporción fija, igual en teléfono y escritorio
 | Espacio | Proporción | Dónde | `position` sugerida |
 |---|---|---|---|
-| `portada` | 4:5 vertical | Portada, a la derecha del nombre | `50% 30%` |
-| `historia` | 1:1 cuadrada | "Sobre mí", recortada en arco | `50% 35%` |
-| `galeria1` | 3:4 vertical | Galería, izquierda | `50% 30%` |
-| `galeria2` | 3:4 vertical | Galería, derecha (desplazada) | `50% 30%` |
-| `galeria3` | 21:9 panorámica | Galería, cierre a todo el ancho | `50% 40%` |
+| `portada` | 4:5 vertical | Portada, marco tallado con doble filete | `50% 25%` |
+| `historia` | 4:5 vertical | Sobre mí, marco tallado | `50% 30%` |
+| `galeria1` | 3:4 vertical | Galería, izquierda arriba | `50% 30%` |
+| `galeria2` | 1:1 | Galería, derecha arriba | `50% 40%` |
+| `galeria3` | 1:1 | Galería, izquierda abajo | `50% 40%` |
+| `galeria4` | 3:4 vertical | Galería, derecha abajo | `50% 30%` |
 
-Pedir al cliente: 3 verticales, 1 cuadrada (o vertical con el rostro al
-centro) y 1 horizontal amplia (con amigas, el salón o el baile).
+Los marcos tallados recortan las esquinas: rostro lejos de los bordes.
+Pedir al cliente: 4 verticales (retratos de cuerpo entero y medio cuerpo)
+y 2 cuadradas (o verticales con el rostro al centro).
 
 **Demo — Renata** (`public/plantillas/camelia/fotos/`, una sola sesión de
-stock de Pexels; fuentes en `photo-map.md`): portada = retrato con tiara y
-vestido fucsia; sobre mí = en el jardín; galería = el vestido completo,
-frente a la pared de globos "Mis XV" y riendo con sus amigas (panorámica).
+Pexels de Juliano Astc: vestido aguamarina y vestido blanco en un salón de
+fiesta con lámparas de araña). Personas identificables (probablemente una
+menor): ver la auditoría en `photo-map.md`.
 
 ## Rasgos propios
-- El nombre usa todo el ancho: tamaño solo en `vw`; si pasa de 8 letras
-  baja un escalón (`longName`), así no ensancha la página ni con la letra
-  del sistema agrandada.
-- Medallón con la edad en romanos (`toRoman(honoree.age)`).
-- Programa en filas: hora en cursiva rosa | momento y descripción.
-- La familia admite tres grupos (padres, padrinos, corte de honor).
-- **Reproductor `broche`:** medallón vino con anillo rosa y un destello que
-  titila al sonar; en escritorio, "Música" en cursiva, título y estado.
+- `Gem` (marco tallado con `clip-path`; `gap` = aire entre los dos
+  filetes), `Tiara`, `Sparkle` y `XvRule` en `templates/camelia/ornaments.tsx`.
+- El nombre tiene tamaño solo en `vw` y baja un escalón si pasa de 8
+  letras: no ensancha la página ni con la letra del sistema agrandada.
+- Cuenta regresiva: cuatro gemas con filete champán; las cifras con tope
+  en `vw`.
+- **Reproductor `broche`:** gema tallada azul petróleo con filete champán y
+  un destello que titila al sonar; en escritorio, estado, título en
+  cursiva e intérprete.
 
 ## En el teléfono
-- Portada en una pantalla: el ancho del retrato sale del alto de la
-  pantalla y el nombre monta sobre el borde inferior de la foto; "Desliza
-  hacia abajo" visible.
-- La ficha pasa a una columna (rótulo arriba, datos abajo).
+- El ancho del retrato de la portada sale del alto de la pantalla: nombre,
+  XV, fecha y "Desliza hacia abajo" caben sin desplazar.
+- Programa: la hora a la izquierda de la línea (sin partirse), el momento
+  a la derecha.
 
 ## Música y cita
 - **Demo:** Clair de lune (Debussy · Laurens Goedhart, dominio público;

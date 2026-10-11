@@ -6,7 +6,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const ids = ["olivo", "tierra", "gala", "aurora", "camelia", "arrullo", "nube"];
+const ids = ["olivo", "tierra", "gala", "aurora", "camelia", "riviera", "nube"];
 const id = process.argv[2];
 
 if (!ids.includes(id)) {

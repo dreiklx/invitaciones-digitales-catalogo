@@ -136,21 +136,27 @@ function Deco(p: FaceProps) {
   );
 }
 
-// ─── 05 Camelia · "broche": medallón vino con anillo rosa y destello ─────
+// ─── 05 Camelia · "broche": gema tallada azul petróleo con filete champán ──
+const OCT = (cut: number) => `polygon(${cut}px 0, calc(100% - ${cut}px) 0, 100% ${cut}px, 100% calc(100% - ${cut}px), calc(100% - ${cut}px) 100%, ${cut}px 100%, 0 calc(100% - ${cut}px), 0 ${cut}px)`;
 function Broche(p: FaceProps) {
   const playing = p.state === "playing";
   return (
     <>
-      <span className="relative flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary text-on-primary shadow-[0_14px_30px_-12px_rgba(60,10,30,0.6)] ring-2 ring-secondary ring-offset-2 ring-offset-paper">
-        <Star className={`absolute -right-1 -top-1.5 h-4 w-4 text-secondary ${playing ? "twinkle" : ""}`} />
-        <Glyph state={p.state} />
-      </span>
-      <span className="hidden min-w-0 items-center gap-3 pl-1 pr-5 sm:flex">
-        <span className="font-display text-2xl italic leading-none text-primary">Música</span>
-        <span className="flex min-w-0 flex-col items-start border-l border-primary/25 pl-3 text-left leading-tight">
-          <span className="max-w-[11rem] truncate text-xs font-semibold uppercase tracking-[0.18em] text-ink">{p.title}</span>
-          <span className="mt-1 text-[11px] text-muted">{statusText[p.state]}</span>
+      <span className="relative flex-shrink-0">
+        {/* La sombra va en el envoltorio: clip-path la recortaría. */}
+        <span className="block drop-shadow-[0_12px_16px_rgba(19,80,90,0.35)]">
+          <span className="flex h-14 w-14 items-center justify-center bg-secondary" style={{ clipPath: OCT(15) }}>
+            <span className="flex h-[52px] w-[52px] items-center justify-center bg-primary text-on-primary" style={{ clipPath: OCT(14) }}>
+              <Glyph state={p.state} />
+            </span>
+          </span>
         </span>
+        <Star className={`absolute -right-1 -top-1.5 h-4 w-4 text-secondary ${playing ? "twinkle" : ""}`} />
+      </span>
+      <span className="hidden min-w-0 flex-col items-start pl-1 pr-5 text-left leading-tight sm:flex">
+        <span className="text-[10px] uppercase tracking-[0.3em] text-accent">{statusText[p.state]}</span>
+        <span className="mt-1 max-w-[13rem] truncate font-display text-lg font-medium italic text-primary">{p.title}</span>
+        {p.artist && <span className="max-w-[13rem] truncate text-xs text-muted">{p.artist}</span>}
       </span>
     </>
   );
@@ -174,12 +180,12 @@ function Destello(p: FaceProps) {
   );
 }
 
-// ─── 06 Arrullo · "sello": sello de papelería con borde de puntada ──────
+// ─── 06 Riviera · "sello": sello postal con borde perforado ──────────────
 function Sello(p: FaceProps) {
   const playing = p.state === "playing";
   return (
     <>
-      <span className="relative flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-full bg-paper shadow-[0_12px_28px_-12px_rgba(74,63,53,0.5)]">
+      <span className="relative flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-full bg-paper shadow-[0_12px_28px_-12px_rgba(20,38,79,0.6)]">
         <span aria-hidden="true" className={`absolute inset-[3px] rounded-full border-2 border-dashed border-primary/70 ${playing ? "player-spin" : ""}`} />
         <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-primary text-on-primary">
           <Glyph state={p.state} />
@@ -235,7 +241,7 @@ export const players: Record<MusicPlayerStyle, Variant> = {
   },
   broche: {
     position: STANDARD_POSITION,
-    button: "flex items-center gap-2 rounded-full sm:bg-paper sm:py-1 sm:pl-1 sm:shadow-lg sm:ring-1 sm:ring-primary/15",
+    button: "flex items-center gap-2 rounded-full sm:bg-paper/95 sm:py-1 sm:pl-1 sm:shadow-lg sm:ring-1 sm:ring-secondary/60 sm:backdrop-blur",
     Face: Broche,
   },
   destello: {

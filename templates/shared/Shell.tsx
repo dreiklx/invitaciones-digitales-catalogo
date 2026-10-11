@@ -3,7 +3,8 @@ import { paletteStyle, type ResolvedInvitation } from "@/lib/invitation/resolve"
 import BackToCatalog from "./BackToCatalog";
 
 // Contenedor de cada diseño: aplica sus tipografías y su paleta (variables
-// CSS) y, en las demos, el enlace para volver al catálogo.
+// CSS) y, en las demos, el enlace para volver al catálogo y el aviso de
+// que las fotos son de stock.
 export default function Shell({
   inv,
   fontClasses,
@@ -23,6 +24,16 @@ export default function Shell({
       <style>{`html,body{background:${inv.palette.background}}`}</style>
       {inv.isDemo && <BackToCatalog className={backClassName} />}
       {children}
+      {/* Demos del catálogo: las fotos son de stock y las personas no deben
+          parecer clientes ni recomendar el servicio (licencia de Pexels y
+          derechos de imagen; ver photo-map.md). Nunca aparece en una
+          invitación de cliente. */}
+      {inv.isDemo && (
+        <p data-music-credit className="bg-paper px-6 pb-28 pt-6 text-center text-xs leading-relaxed text-muted lg:pb-8">
+          Invitación de demostración: nombres, textos y datos ficticios. Las fotos son de stock con licencia de Pexels; las personas que aparecen no son
+          clientes ni recomiendan este servicio.
+        </p>
+      )}
     </div>
   );
 }

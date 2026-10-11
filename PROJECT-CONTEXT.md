@@ -7,8 +7,8 @@ duplicar esta información en otros `.md`; actualizar estos archivos.
 
 ## Propósito y origen
 
-Proyecto interno para producir invitaciones digitales (bodas, quince
-años y bebés) para un posible servicio. Nació como **copia** de la
+Proyecto interno para producir invitaciones digitales (bodas, quinceaños
+y bebés) para un posible servicio. Nació como **copia** de la
 invitación que el autor hizo para su propia boda (proyecto aparte, ya
 publicado):
 
@@ -21,6 +21,10 @@ publicado):
   baby shower; Nube, primer cumpleaños). Camelia y Arrullo ocupan los
   lugares de los antiguos diseños de boda Borgoña y Riviera; Olivo se
   rediseñó por completo.
+- **2026-10-11:** auditoría de fotos y derechos de imagen (Olivo cambió de
+  fotos y de pareja: Elena y Tomás); Camelia rediseñada ("Aguamarina");
+  **Riviera recuperada** del historial del catálogo como baby shower en
+  el lugar de Arrullo; la categoría se llama **Quinceaños** (una palabra).
 
 **No recuperar ni reintroducir datos de la boda original**, tampoco desde
 su historial Git antiguo (archivado fuera del proyecto; ver "Riesgos").
@@ -30,14 +34,15 @@ panel, cuentas ni pagos. Nosotros editamos un archivo de datos y
 desplegamos una copia del proyecto por cliente. El catálogo es solo un
 escaparate.
 
-## Estado (2026-10-10)
+## Estado (2026-10-11)
 
-- Siete diseños completos en tres categorías (3 bodas, 2 quince años,
-  2 bebés), un catálogo en `/` con una sección por categoría (título,
+- Siete diseños completos en tres categorías: Bodas (Olivo, Tierra,
+  Gala), Quinceaños (Aurora, Camelia) y Bebés (Riviera, baby shower; Nube,
+  primer cumpleaños), un catálogo en `/` con una sección por categoría (título,
   descripción, tipo de evento en cada tarjeta), transición hacia cada demo
-  y validación `npm run check`. **Todas las demos usan fotos reales**:
-  Olivo, las de una sesión aportada por el dueño; las otras seis, una
-  sesión coherente de stock de Pexels cada una (ver photo-map.md).
+  y validación `npm run check`. **Todas las demos usan una sesión
+  coherente de stock de Pexels** con nombres ficticios y un aviso visible
+  de que son demostraciones (auditoría completa en photo-map.md).
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
@@ -140,9 +145,10 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   pregunta "¿de parte de quién?" salvo que se den `referrerOptions`.
 - **`kind` en cada `meta.ts`** (`boda` · `quinceanos` · `baby-shower` ·
   `cumpleanos-infantil`): el catálogo arma sus tres categorías (Bodas =
-  `boda`; Quince años = `quinceanos`; Bebés = `baby-shower` +
+  `boda`; Quinceaños = `quinceanos`, nombre en una palabra por decisión
+  del dueño; Bebés = `baby-shower` +
   `cumpleanos-infantil`) y muestra el tipo de evento en cada tarjeta.
-- **Baby shower** (`ShowerTemplateId`, hoy solo Arrullo) exige `shower`:
+- **Baby shower** (`ShowerTemplateId`, hoy solo Riviera) exige `shower`:
   `parents` (uno o dos nombres) y `babyName` opcional (muchas familias no
   lo revelan). `resolve.ts` lo unifica: `names.one`/`two` son quienes
   invitan ("Baby shower de Natalia y Joaquín" en título, calendario y
@@ -190,15 +196,20 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
 - **Modo oscuro forzado bloqueado** (`color-scheme: only light` +
   `<meta name="darkreader-lock">`). Las extensiones y el modo oscuro de
   Chrome invertían los diseños; se detectó en la revisión visual.
-- **Fotos reales en las siete demos** (ver photo-map.md): Olivo, las de
-  una sesión aportada por el dueño; las demás, **una sola sesión coherente
-  de stock de Pexels por diseño** (la misma pareja, quinceañera, familia o
-  bebé en todas las fotos). La licencia de Pexels permite el uso comercial
-  y en plantillas que se venden, sin atribución obligatoria; prohíbe
-  mostrar a las personas de forma ofensiva o insinuar que respaldan el
-  producto. En este entorno no hay generador de imágenes: no se usó
-  ninguna imagen generada. `npm run placeholders` (imágenes abstractas)
-  queda para un diseño nuevo sin fotos y nunca toca una carpeta `fotos/`.
+- **Fotos de las siete demos** (ver photo-map.md, "Auditoría de fotos y
+  derechos"): **una sola sesión coherente de stock de Pexels por diseño**,
+  con autor, enlace y licencia comprobados foto por foto (2026-10-11). La
+  licencia de Pexels permite el uso comercial y en plantillas, pero
+  **Pexels no garantiza autorizaciones de las personas fotografiadas**
+  (términos del 15-11-2024): licencia de la foto ≠ derechos de imagen
+  resueltos. Por eso: nombres ficticios, ningún uso como testimonio y un
+  aviso visible en cada demo (`Shell.tsx`, solo con `isDemo`) y en el pie
+  del catálogo. Aurora, Camelia (quinceañeras) y Nube (bebé) muestran
+  menores identificables: riesgo medio documentado; antes de una campaña
+  comercial conviene reemplazarlas por sesiones propias con autorización
+  firmada de los padres o tutores. No se usó ninguna imagen generada.
+  `npm run placeholders` (imágenes abstractas) queda para un diseño nuevo
+  sin fotos y nunca toca una carpeta `fotos/`.
 
 ## Funcionalidades comunes (cuando el diseño las muestra)
 
@@ -267,7 +278,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - `preload="none"`: el archivo no se descarga hasta ese toque.
 - **Una sola lógica, siete presentaciones**: `players.tsx` define la forma
   de cada diseño (`lino` Olivo, `ficha` Tierra, `deco` Gala, `destello`
-  Aurora, `broche` Camelia, `sello` Arrullo, `globo` Nube); el diseño trae
+  Aurora, `broche` Camelia, `sello` Riviera, `globo` Nube); el diseño trae
   la suya en `meta.musicPlayer` y
   `music.player` la cambia.
 - Estado visual solo desde eventos nativos del `<audio>` (`playing`,
@@ -387,7 +398,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 ### Teléfono primero (revisión 2026-10-08, no revertir)
 Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
 - **La portada cabe en la primera pantalla** con "Desliza hacia abajo"
-  visible. En Tierra, Gala, Camelia y Arrullo el ancho de la foto de
+  visible. En Tierra, Gala, Camelia y Riviera el ancho de la foto de
   portada en teléfono sale del alto de la pantalla
   (`w-[min(…,max(…,calc((100svh-Xrem)*ratio)))]`): la proporción sigue
   siendo la de `meta.ts`, solo cambia el tamaño. En Olivo, el alto de la
@@ -398,7 +409,7 @@ Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
   ancho < 1024 px; 320×568, o un teléfono con la barra del navegador
   abierta): las portadas se recomponen en vez de encogerse. "Desliza hacia
   abajo" pasa a una fila (flecha al lado del texto, mismo tamaño) y cada
-  diseño ajusta lo suyo: Gala y Arrullo, márgenes; Camelia, la fecha en una
+  diseño ajusta lo suyo: Gala y Riviera, márgenes; Camelia, la fecha en una
   línea; Olivo, nombres un escalón más chicos; Tierra deja la foto pasar el borde (invita a bajar) y sube la
   flecha a la mitad de la foto (`ScrollCue stacked`). Medido a 320×568: el
   indicador queda a 20-60 px del borde en los 7 diseños.
@@ -464,11 +475,11 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 
 ## Limitaciones conocidas
 
-- Bodas, quince años, baby shower y primer cumpleaños, en español (el
+- Bodas, quinceaños, baby shower y primer cumpleaños, en español (el
   nombre del evento es configurable: `event.name`/`article`; los textos de
   interfaz están en español). Otros eventos se harían como personalizados.
 - Música de las demos: solo hay 5 pistas con licencia verificada para 7
-  diseños; Tierra y Arrullo comparten la de Satie, Gala y Camelia la de
+  diseños; Tierra y Riviera comparten la de Satie, Gala y Camelia la de
   Debussy. Cambiarlas requiere otra pista con licencia comprobada.
 - Microtextos de interfaz fijos en los componentes ("Cómo llegar",
   "Desliza hacia abajo", textos del RSVP…).
@@ -478,17 +489,13 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 - Sin tests automatizados (la validación es `npm run check`).
 - El catálogo precarga las fuentes de todos los diseños (22 archivos; las
   necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
-- Seis demos usan fotos de stock (Pexels): personas reales
-  identificables, incluidos un bebé y quinceañeras; no usarlas en
-  contextos que sugieran que esas personas respaldan el negocio (licencia
-  de Pexels).
-- Olivo usa las
-  fotos de una sesión de pareja (Don Ramón y Doña Florinda caracterizados)
-  aportadas por el dueño; la demo se llama "Ramón & Florinda". Esos
-  nombres viven solo en `templates/olivo/demo.ts`: `npm run nueva` deja
-  `couple` y los `alt` en "REEMPLAZAR" en cualquier diseño. **Antes de publicarlas en el catálogo:**
-  confirmar que hay derecho a usar esas imágenes (personajes de una serie
-  de TV y el parecido de personas reales) en un sitio comercial.
+- Las siete demos usan fotos de stock (Pexels) con personas
+  identificables, incluidos menores (quinceañeras, una bebé): no
+  usarlas como testimonios ni en contextos que sugieran que esas personas
+  son clientes o recomiendan el servicio. Las fotos de Olivo hasta el
+  2026-10-10 (procedencia no verificable, personajes de una serie de TV)
+  siguen en el historial Git de este repositorio privado; no se reescribe
+  el historial.
 
 ## Riesgos conocidos
 

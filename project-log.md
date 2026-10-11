@@ -4,6 +4,47 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-11 — Auditoría de fotos, Camelia "Aguamarina" y regreso de Riviera
+
+### Qué se hizo
+- **Auditoría de fotos y derechos** (photo-map.md): las 46 fotos de las
+  siete demos comprobadas una por una en Pexels (autor, enlace, licencia).
+  Documentado que la licencia de Pexels no garantiza autorizaciones de las
+  personas (términos del 15-11-2024). Aviso visible en cada demo
+  (`Shell.tsx`) y en el pie del catálogo: nombres ficticios, fotos de
+  stock, las personas no son clientes ni recomiendan el servicio.
+- **Olivo:** las fotos de "Ramón y Florinda" (procedencia no verificable,
+  personajes reconocibles de una serie de TV) se reemplazaron por una
+  sesión de Pexels en un olivar (Igor La Prado); la pareja de la demo es
+  ahora **Elena y Tomás**. Los originales del Escritorio no se tocaron.
+- **Nube:** Pexels describe a la bebé de la sesión como niña; la demo pasó
+  de "Mateo" a **Emma**.
+- **Camelia rediseñada ("Aguamarina"):** azul petróleo, perla, aguamarina
+  y oro champán; marcos tallados como una esmeralda, tiara de línea fina,
+  Cormorant cursiva, cuenta regresiva en gemas, tarjetas talladas,
+  programa con línea y rombos; reproductor `broche` en forma de gema.
+  Nueva sesión de fotos en un salón de fiesta (Juliano Astc). Diagnóstico
+  frente a Aurora en `docs/templates/05-camelia.md`.
+- **Riviera recuperada** desde el commit `6c9d245` de este repositorio:
+  ornamentos, tipografías, cuenta regresiva, paleta y reproductor
+  originales; plantilla y miniatura restauradas y adaptadas solo en textos
+  al **baby shower**, en el lugar de Arrullo (que deja de existir;
+  `/plantillas/arrullo` redirige a `/plantillas/riviera`).
+- **Catálogo:** la categoría se llama **Quinceaños** (una palabra) en el
+  índice, los encabezados y las tarjetas; siguen siendo siete diseños.
+
+### Verificación
+- `check`, `typecheck`, `lint`, `build` sin errores.
+- Sin red de seguridad: escritorio (1024, 1366, 1440, 1920) y móvil (320,
+  360, 390, 430, más 320 con letra al 125 %) con toques/clics reales,
+  música, visor y RSVP; música con pausa y reanudación en los 7.
+- `npm run nueva` probado con Olivo, Camelia y Riviera.
+- Revisión visual de Camelia, Riviera y Olivo a 390 y 1440 px.
+
+### Pendiente
+- Reemplazar las fotos de menores (Aurora, Camelia, Nube) por sesiones con
+  autorización firmada antes de una campaña comercial.
+
 ## 2026-10-10 — Tres categorías, Olivo nuevo, Camelia, Arrullo y Nube festiva
 
 ### Qué se hizo

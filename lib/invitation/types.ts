@@ -6,14 +6,14 @@
 // ─── Diseños disponibles ─────────────────────────────────────────────────
 
 // Catálogo: Bodas (Olivo, Tierra, Gala) · Quince años (Aurora, Camelia) ·
-// Bebés (Arrullo, baby shower; Nube, primer cumpleaños).
+// Bebés (Riviera, baby shower; Nube, primer cumpleaños).
 
 // Bodas: celebra una pareja (`couple`).
 export type WeddingTemplateId = "olivo" | "tierra" | "gala";
 // Quince años y cumpleaños: celebra una persona (`honoree`).
 export type HonoreeTemplateId = "aurora" | "camelia" | "nube";
 // Baby shower: lo organizan los futuros padres (`shower`).
-export type ShowerTemplateId = "arrullo";
+export type ShowerTemplateId = "riviera";
 export type TemplateId = WeddingTemplateId | HonoreeTemplateId | ShowerTemplateId;
 
 // Tipo de celebración de cada diseño (categoría del catálogo y textos).
@@ -32,8 +32,8 @@ export type PhotoSlots = {
     | "galeria4";
   tierra: "portada" | "historia" | "retrato" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   gala: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
-  camelia: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3";
-  arrullo: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
+  camelia: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
+  riviera: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
   aurora: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   nube: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
 };
@@ -113,7 +113,7 @@ export type Couple = {
 
 // Persona que celebra (quinceaños, cumpleaños).
 export type Honoree = {
-  // Nombre como se muestra en grande ("Valentina", "Mateo").
+  // Nombre como se muestra en grande ("Valentina", "Emma").
   name: string;
   // Años que cumple (15 en quinceaños, 1 en un primer cumpleaños).
   age: number;
@@ -151,7 +151,7 @@ export type InvitationContent = {
 
   // Cómo se nombra el evento en títulos, calendario y mensajes de WhatsApp:
   // "Boda de Ana y Luis", "confirmar mi asistencia a la boda…",
-  // "la fiesta de quince años de Valentina", "el primer cumpleaños de Mateo".
+  // "la fiesta de quince años de Valentina", "el primer cumpleaños de Emma".
   event: {
     name: string; // "boda", "fiesta de quince años", "primer cumpleaños"
     article: "la" | "el";
@@ -178,7 +178,7 @@ export type InvitationContent = {
 
   hero: {
     eyebrow: string;
-    // Frase grande de la portada en los diseños que la tienen (Arrullo:
+    // Frase grande de la portada en los diseños que la tienen (Riviera:
     // "Un bebé en camino" cuando no se muestra el nombre del bebé).
     title?: string;
   };

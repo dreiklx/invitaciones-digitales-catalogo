@@ -1,17 +1,17 @@
-// Demo del diseño 06 · Arrullo (baby shower ficticio de Natalia y Joaquín;
+// Demo del diseño 06 · Riviera (baby shower ficticio de Natalia y Joaquín;
 // el nombre del bebé no se muestra). También es el punto de partida de una
-// invitación nueva: `npm run nueva -- arrullo`. Guía: docs/templates/06-arrullo.md.
+// invitación nueva: `npm run nueva -- riviera`. Guía: docs/templates/06-riviera.md.
 // Fotos: una sola sesión de baby shower de stock (Pexels; licencia de
-// Pexels) en public/plantillas/arrullo/fotos/. Fuentes: photo-map.md.
+// Pexels) en public/plantillas/riviera/fotos/. Fuentes: photo-map.md.
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
 
-export const demo: InvitationOf<"arrullo"> = {
-  template: "arrullo",
+export const demo: InvitationOf<"riviera"> = {
+  template: "riviera",
 
   site: {
-    url: `${catalog.url}/plantillas/arrullo`,
+    url: `${catalog.url}/plantillas/riviera`,
     locale: "es-CR",
     timeZone: "America/Costa_Rica",
   },
@@ -24,7 +24,7 @@ export const demo: InvitationOf<"arrullo"> = {
   durationHours: 4,
 
   // Solo los colores que se quieran cambiar de la paleta del diseño, p. ej.:
-  // colors: { primary: "#6b7fa8" },
+  // colors: { primary: "#2e6f5e" },
 
   welcome: { eyebrow: "Baby shower", buttonLabel: "Abrir invitación" },
   hero: { eyebrow: "Baby shower", title: "Un bebé en camino" },
@@ -114,11 +114,11 @@ export const demo: InvitationOf<"arrullo"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/arrullo/fotos/futuros-padres.jpg", alt: "Natalia y Joaquín junto a la torta de ositos", position: "50% 25%" },
-    historia: { src: "/plantillas/arrullo/fotos/beso-en-la-frente.jpg", alt: "Joaquín le da un beso a Natalia", position: "50% 30%" },
-    galeria1: { src: "/plantillas/arrullo/fotos/mesa-dulce.jpg", alt: "Mesa de dulces con flores blancas y ositos", position: "50% 40%" },
-    galeria2: { src: "/plantillas/arrullo/fotos/ositos.jpg", alt: "Tres ositos de azúcar sobre un plato", position: "50% 50%" },
-    galeria3: { src: "/plantillas/arrullo/fotos/oso-de-peluche.jpg", alt: "Un oso de peluche blanco entre flores", position: "50% 40%" },
-    galeria4: { src: "/plantillas/arrullo/fotos/mesa-de-postres.jpg", alt: "Postres y flores de la celebración", position: "50% 50%" },
+    portada: { src: "/plantillas/riviera/fotos/futuros-padres.jpg", alt: "Natalia y Joaquín junto a la torta de ositos", position: "50% 25%" },
+    historia: { src: "/plantillas/riviera/fotos/beso-en-la-frente.jpg", alt: "Joaquín le da un beso a Natalia", position: "50% 30%" },
+    galeria1: { src: "/plantillas/riviera/fotos/mesa-dulce.jpg", alt: "Mesa de dulces con flores blancas y ositos", position: "50% 40%" },
+    galeria2: { src: "/plantillas/riviera/fotos/ositos.jpg", alt: "Tres ositos de azúcar sobre un plato", position: "50% 50%" },
+    galeria3: { src: "/plantillas/riviera/fotos/oso-de-peluche.jpg", alt: "Un oso de peluche blanco entre flores", position: "50% 40%" },
+    galeria4: { src: "/plantillas/riviera/fotos/mesa-de-postres.jpg", alt: "Postres y flores de la celebración", position: "50% 50%" },
   },
 };

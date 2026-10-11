@@ -1,8 +1,9 @@
 // Demo del diseño 05 · Camelia (quinceañera ficticia: Renata). También es
 // el punto de partida de una invitación nueva: `npm run nueva -- camelia`.
 // Guía: docs/templates/05-camelia.md.
-// Fotos: una sola sesión de quince años de stock (Pexels; licencia de
-// Pexels) en public/plantillas/camelia/fotos/. Fuentes: photo-map.md.
+// Fotos: una sola sesión de quince años de stock en un salón de fiesta
+// (Pexels, Juliano Astc; licencia de Pexels) en public/plantillas/camelia/fotos/.
+// Fuentes y advertencias de uso: photo-map.md.
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
@@ -42,7 +43,7 @@ export const demo: InvitationOf<"camelia"> = {
     groups: [
       { label: "Mis padres", names: ["Paola Jiménez Ureña", "Esteban Salas Montero"] },
       { label: "Mis padrinos", names: ["Viviana Ureña Castro", "Marco Salas Pérez"] },
-      { label: "Mi corte de honor", names: ["Ana Lucía, Fernanda, Mariel y Sofía", "Tomás, Emilio, Rodrigo y Pablo"] },
+      { label: "Mi corte de honor", names: ["Ana Lucía, Fernanda, Mariel y Sofía", "Rodrigo, Emilio, Julián y Pablo"] },
     ],
   },
 
@@ -93,9 +94,9 @@ export const demo: InvitationOf<"camelia"> = {
     dressCode: {
       title: "Formal",
       description: "Vestido largo o de cóctel; traje o saco y corbata.",
-      avoidLabel: "Colores reservados",
+      avoidLabel: "Colores reservados para la quinceañera",
       avoidColors: [
-        { name: "Fucsia", hex: "#d4237a" },
+        { name: "Aguamarina", hex: "#7fd6d0" },
         { name: "Blanco", hex: "#ffffff" },
       ],
     },
@@ -121,7 +122,7 @@ export const demo: InvitationOf<"camelia"> = {
     allowDecline: true,
   },
 
-  gallery: { eyebrow: "Galería", title: "Mis XV" },
+  gallery: { eyebrow: "Galería", title: "Una noche para recordar" },
 
   closingQuote: null,
 
@@ -135,10 +136,11 @@ export const demo: InvitationOf<"camelia"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/camelia/fotos/retrato-tiara.jpg", alt: "Renata sonríe con su tiara y su vestido fucsia", position: "50% 30%" },
-    historia: { src: "/plantillas/camelia/fotos/jardin.jpg", alt: "Renata posa en el jardín", position: "50% 30%" },
-    galeria1: { src: "/plantillas/camelia/fotos/vestido-completo.jpg", alt: "Renata con su vestido de quince años", position: "50% 30%" },
-    galeria2: { src: "/plantillas/camelia/fotos/mis-xv.jpg", alt: "Renata frente a la pared de globos de su fiesta", position: "50% 35%" },
-    galeria3: { src: "/plantillas/camelia/fotos/con-sus-amigas.jpg", alt: "Renata ríe con sus amigas", position: "50% 30%" },
+    portada: { src: "/plantillas/camelia/fotos/vestido-aguamarina.jpg", alt: "Renata con su vestido aguamarina en el salón", position: "50% 20%" },
+    historia: { src: "/plantillas/camelia/fotos/vestido-blanco.jpg", alt: "Renata con su vestido blanco, sentada en el salón", position: "50% 30%" },
+    galeria1: { src: "/plantillas/camelia/fotos/salon-de-fiesta.jpg", alt: "Renata bajo las lámparas del salón", position: "50% 35%" },
+    galeria2: { src: "/plantillas/camelia/fotos/retrato.jpg", alt: "Retrato de Renata con su tiara", position: "50% 35%" },
+    galeria3: { src: "/plantillas/camelia/fotos/mirada.jpg", alt: "Renata mira hacia atrás con su vestido blanco", position: "50% 30%" },
+    galeria4: { src: "/plantillas/camelia/fotos/hacia-el-salon.jpg", alt: "Renata con su vestido aguamarina en la pista", position: "50% 30%" },
   },
 };

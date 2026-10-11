@@ -1,4 +1,4 @@
-# Plantilla 04 · Aurora (quince años)
+# Plantilla 04 · Aurora (quinceaños)
 
 **Id en el config:** `template: "aurora"` · **Demo:** `/plantillas/aurora` ·
 **Código:** `templates/aurora/` · **Datos de ejemplo:** `templates/aurora/demo.ts`

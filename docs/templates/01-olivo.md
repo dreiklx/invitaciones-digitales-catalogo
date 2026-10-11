@@ -8,7 +8,7 @@ Rediseñado por completo el 2026-10-10 (del diseño botánico original solo
 quedan los colores). Una revista de arquitectura en verde olivo y lino:
 portada a dos columnas (bloque olivo | fotografía a toda la altura),
 nombres en una columna tipográfica alineada a la izquierda con el segundo
-en cursiva ("Ramón / y Florinda"), la fecha como **ficha de tres cifras**
+en cursiva ("Elena / y Tomás"), la fecha como **ficha de tres cifras**
 (día · mes · año, con su rótulo), díptico de fotos, cuenta regresiva en
 franja, itinerario con línea de tiempo y un mosaico de fotos a sangre.
 Sin sombras, sin tarjetas, casi sin filetes; el único adorno es una hoja
@@ -57,14 +57,16 @@ con los nombres y la ficha de la fecha.
 Pedir al cliente: 4 verticales, 2 horizontales y 1 panorámica (o
 horizontal con aire arriba y abajo).
 
-**Demo — Ramón & Florinda** (`public/plantillas/olivo/fotos/`, las 7 fotos
-de la sesión aportada por el dueño, cada una una sola vez): portada = el
-abrazo; díptico = la propuesta + la rosa lanzada; mosaico = ella enseña el
-anillo (alta), la rosa en el patio, sentados felices y el anillo celebrado
-(panorámica). Nombres, textos alternativos, título, vista previa al
-compartir y calendario salen de `templates/olivo/demo.ts`. `npm run nueva`
-no los copia (quedan en "REEMPLAZAR") y `npm run check` marca error si un
-texto de un cliente nombra a la pareja de la demo.
+**Demo — Elena & Tomás** (pareja ficticia; `public/plantillas/olivo/fotos/`,
+una sola sesión de Pexels en un olivar, de Igor La Prado, en color y en
+blanco y negro): portada = recostados en el pasto; díptico = las manos con
+el anillo + retrato de ella; mosaico = caminata por el olivar (alta), el
+abrazo entre olivos, el vestido al viento y él la lleva en brazos
+(panorámica). Hasta el 2026-10-10 la demo era "Ramón y Florinda" con
+fotos sin procedencia verificable que reproducían personajes de una serie
+de TV: se retiraron (ver la auditoría en `photo-map.md`). `npm run nueva`
+no copia los nombres (quedan en "REEMPLAZAR") y `npm run check` marca
+error si un texto de un cliente nombra a la pareja de la demo.
 
 ## Rasgos propios
 - La fecha como ficha de tres cifras (`DateSheet`): portada inicial,
@@ -101,5 +103,5 @@ texto de un cliente nombra a la pareja de la demo.
   pantalla): rostros en el tercio superior.
 - Nombres muy largos bajan de tamaño solos (todo en `vw`), pero conviene
   revisarlos a 320 px.
-- Las fotos de la demo son personajes de una serie de TV: ver "Riesgos" en
-  `PROJECT-CONTEXT.md` antes de publicar el catálogo con ellas.
+- Las fotos de la demo son de stock con personas identificables: ver la
+  auditoría en `photo-map.md`.

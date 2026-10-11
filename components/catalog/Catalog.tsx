@@ -11,7 +11,7 @@ import { ArrowDownIcon, ArrowRightIcon } from "@/templates/shared/icons";
 import { catalogFonts } from "./fonts";
 
 // Catálogo público: "/" cuando config/invitation.ts es null. Presenta los
-// siete diseños en tres categorías (Bodas, Quince años, Bebés) como un
+// siete diseños en tres categorías (Bodas, Quinceaños, Bebés) como un
 // estudio de invitaciones
 // (no un panel): poca palabra, mucho aire y las miniaturas como
 // protagonistas. Al tocar un
@@ -32,17 +32,18 @@ const neutral: Palette = {
 };
 
 // Las tres categorías del catálogo; cada diseño entra por su `kind`
-// (meta.ts): 3 bodas + 2 quince años + 2 bebés.
+// (meta.ts): 3 bodas + 2 quinceaños + 2 bebés. La categoría se llama
+// "Quinceaños", en una sola palabra (decisión del dueño, 2026-10-11).
 const groups: { id: string; title: string; text: string; kinds: EventKind[] }[] = [
   { id: "bodas", title: "Bodas", text: "Tres estilos para el día del sí: editorial en olivo y lino, revista en tonos tierra y noche de gala.", kinds: ["boda"] },
-  { id: "quince-anos", title: "Quince años", text: "Dos fiestas para sus XV: una de ensueño en lila y otra de gala en vino y rosa.", kinds: ["quinceanos"] },
+  { id: "quinceanos", title: "Quinceaños", text: "Dos fiestas para sus XV: una de ensueño en lila y otra de joyería en azul petróleo y aguamarina.", kinds: ["quinceanos"] },
   { id: "bebes", title: "Bebés", text: "Para esperar su llegada con un baby shower y para celebrar su primer añito.", kinds: ["baby-shower", "cumpleanos-infantil"] },
 ];
 
 // Tipo de evento que se muestra en cada tarjeta.
 const eventLabel: Record<EventKind, string> = {
   boda: "Boda",
-  quinceanos: "Quince años",
+  quinceanos: "Quinceaños",
   "baby-shower": "Baby shower",
   "cumpleanos-infantil": "Primer cumpleaños",
 };
@@ -51,8 +52,8 @@ const eventLabel: Record<EventKind, string> = {
 // diseño afín.
 const events: [string, string][] = [
   ["Bodas", templateMetas.olivo.palette.primary],
-  ["Quince años", templateMetas.camelia.palette.primary],
-  ["Baby showers", templateMetas.arrullo.palette.primary],
+  ["Quinceaños", templateMetas.camelia.palette.primary],
+  ["Baby showers", templateMetas.riviera.palette.primary],
   ["Primeros cumpleaños", templateMetas.nube.palette.accent],
   ["Cumpleaños infantiles", templateMetas.nube.palette.primary],
   ["Otros eventos", neutral.secondary],
@@ -81,7 +82,7 @@ export default function Catalog() {
 
       <section className="mx-auto max-w-7xl px-6 pb-14 pt-6 sm:px-10 sm:pb-32 sm:pt-20">
         <Reveal variant="fade">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Bodas · Quince años · Bebés</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Bodas · Quinceaños · Bebés</p>
         </Reveal>
         <Reveal delay={120}>
           <h1 className="mt-5 font-display text-[3.4rem] font-light leading-[0.95] tracking-tight min-[400px]:text-6xl sm:mt-6 sm:text-8xl lg:text-[8.5rem]">
@@ -214,6 +215,10 @@ export default function Catalog() {
           <div>
             <p className="font-display text-2xl italic">Invitaciones digitales</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-paper/65">Diseños para personalizar con sus datos, fotos y colores.</p>
+            <p className="mt-4 max-w-sm text-xs leading-relaxed text-paper/50">
+              Las demostraciones usan nombres ficticios y fotos de stock con licencia de Pexels: las personas que aparecen no son clientes ni recomiendan este
+              servicio.
+            </p>
           </div>
           <div className="border-t border-paper/15 pt-6 sm:border-0 sm:pt-0 sm:text-right">
             <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-paper/50">Creado por</p>

@@ -54,12 +54,12 @@ círculos cruzados) → regalos → RSVP sobre cielo con nubes → pie amarillo
 con globos.
 
 ## Datos propios
-- `honoree: { name: "Mateo", age: 1, ageLabel: "1 añito" }` → "¡Cumple 1
+- `honoree: { name: "Emma", age: 1, ageLabel: "1 añito" }` → "¡Cumple 1
   añito!" e insignia "1 AÑITO". Sin `ageLabel`: "1 año". Para meses:
   `age: 0, ageLabel: "6 meses"` (`ageLabel` debe empezar con el número;
   `npm run check` lo revisa).
 - `event: { name: "primer cumpleaños", article: "el" }` → "Primer
-  cumpleaños de Mateo". Para otras edades: `"cumpleaños"`, `"fiesta de
+  cumpleaños de Emma". Para otras edades: `"cumpleaños"`, `"fiesta de
   cumpleaños"`.
 - `schedule` opcional; `closingQuote` suele ir en `null`.
 - El RSVP no pregunta "¿de parte de quién?" salvo que se den `referrerOptions`.
@@ -76,13 +76,14 @@ con globos.
 
 Los círculos recortan las esquinas: la carita al centro.
 
-**Demo — Mateo** (`public/plantillas/nube/fotos/`, una sola sesión de
+**Demo — Emma** (`public/plantillas/nube/fotos/`, una sola sesión de
 primer cumpleaños de stock de Pexels; fuentes en `photo-map.md`): globos
 amarillos, turquesa y blancos y las letras "ONE" en un parque. Portada = en
 su cajón con los globos; sobre mí = junto a los globos amarillos; galería =
 con las letras y los globos, en el parque, sonriendo en el pasto y con las
 letras en el puente rojo. Se evitaron las fotos con la silueta de Mickey
-(marca registrada).
+(marca registrada). Pexels describe a la bebé como niña: la demo se
+llamaba "Mateo" y pasó a **Emma** (2026-10-11) por coherencia.
 
 ## En el teléfono
 - La foto circular de la portada se achica según el alto de la pantalla

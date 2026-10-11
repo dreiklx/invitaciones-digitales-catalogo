@@ -1,4 +1,4 @@
-// Demo del diseño 07 · Nube (primer cumpleaños de un bebé ficticio: Mateo).
+// Demo del diseño 07 · Nube (primer cumpleaños de una bebé ficticia: Emma).
 // También es el punto de partida de una invitación nueva: `npm run nueva --
 // nube` copia este archivo a config/invitation.ts. Guía: docs/templates/07-nube.md.
 // Fotos: una sola sesión de primer cumpleaños de stock (Pexels; licencia de
@@ -17,7 +17,7 @@ export const demo: InvitationOf<"nube"> = {
   },
   event: { name: "primer cumpleaños", article: "el" },
   // `age` en años; `ageLabel` cambia el texto ("1 añito", "6 meses" con age: 0).
-  honoree: { name: "Mateo", age: 1, ageLabel: "1 añito" },
+  honoree: { name: "Emma", age: 1, ageLabel: "1 añito" },
   date: "2027-06-12",
   time: "15:00",
   durationHours: 4,
@@ -122,11 +122,11 @@ export const demo: InvitationOf<"nube"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/nube/fotos/globos.jpg", alt: "Mateo sentado en un cajón de madera con globos de colores", position: "50% 55%" },
-    historia: { src: "/plantillas/nube/fotos/globos-amarillos.jpg", alt: "Mateo junto a sus globos amarillos", position: "50% 35%" },
-    galeria1: { src: "/plantillas/nube/fotos/letras-one.jpg", alt: "Mateo con sus globos y las letras de su primer año", position: "50% 50%" },
-    galeria2: { src: "/plantillas/nube/fotos/en-su-cajon.jpg", alt: "Mateo sentado en el parque", position: "45% 40%" },
-    galeria3: { src: "/plantillas/nube/fotos/en-el-pasto.jpg", alt: "Mateo sonríe sentado en el pasto", position: "50% 45%" },
-    galeria4: { src: "/plantillas/nube/fotos/puente-rojo.jpg", alt: "Mateo con las letras de su primer año", position: "50% 45%" },
+    portada: { src: "/plantillas/nube/fotos/globos.jpg", alt: "Emma sentada en un cajón de madera con globos de colores", position: "50% 55%" },
+    historia: { src: "/plantillas/nube/fotos/globos-amarillos.jpg", alt: "Emma junto a sus globos amarillos", position: "50% 35%" },
+    galeria1: { src: "/plantillas/nube/fotos/letras-one.jpg", alt: "Emma con sus globos y las letras de su primer año", position: "50% 50%" },
+    galeria2: { src: "/plantillas/nube/fotos/en-su-cajon.jpg", alt: "Emma sentada en el parque", position: "45% 40%" },
+    galeria3: { src: "/plantillas/nube/fotos/en-el-pasto.jpg", alt: "Emma sonríe sentada en el pasto", position: "50% 45%" },
+    galeria4: { src: "/plantillas/nube/fotos/puente-rojo.jpg", alt: "Emma con las letras de su primer año", position: "50% 45%" },
   },
 };

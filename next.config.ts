@@ -7,12 +7,13 @@ const nextConfig: NextConfig = {
     // sin esto, cada página precargaba las tipografías de los cinco diseños.
     cssChunking: { type: "graph", requestCost: 2000 },
   },
-  // Diseños renombrados en la reorganización del catálogo (2026-10-10):
+  // Diseños renombrados (2026-10-10: Borgoña → Camelia; Arrullo volvió a
+  // ser Riviera el 2026-10-11):
   // los enlaces viejos de las demos siguen funcionando.
   async redirects() {
     return [
-      { source: "/plantillas/riviera", destination: "/plantillas/arrullo", permanent: true },
-      { source: "/plantillas/riviera/:path+", destination: "/plantillas/arrullo/:path+", permanent: true },
+      { source: "/plantillas/arrullo", destination: "/plantillas/riviera", permanent: true },
+      { source: "/plantillas/arrullo/:path+", destination: "/plantillas/riviera/:path+", permanent: true },
       { source: "/plantillas/borgona", destination: "/plantillas/camelia", permanent: true },
       { source: "/plantillas/borgona/:path+", destination: "/plantillas/camelia/:path+", permanent: true },
     ];
