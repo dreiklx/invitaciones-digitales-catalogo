@@ -6,7 +6,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const ids = ["olivo", "tierra", "gala", "riviera", "borgona", "aurora", "nube"];
+const ids = ["olivo", "tierra", "gala", "aurora", "camelia", "arrullo", "nube"];
 const id = process.argv[2];
 
 if (!ids.includes(id)) {
@@ -38,9 +38,12 @@ source = source
   .replace(/url: `\$\{catalog\.url\}\/plantillas\/[a-z]+`,/, 'url: "https://REEMPLAZAR.vercel.app",')
   .replace(/import type \{ InvitationOf \} from "@\/lib\/invitation\/types";/, 'import type { Invitation } from "@/lib/invitation/types";')
   .replace(/export const demo: InvitationOf<"[a-z]+"> =/, "export const invitation: Invitation | null =")
-  // Nombres de la pareja: nunca se heredan de la demo (Olivo usa una
-  // pareja concreta). `npm run check` exige reemplazarlos.
+  // Nombres (pareja, festejado o futuros padres): nunca se heredan de la
+  // demo. `npm run check` exige reemplazarlos.
   .replace(/couple: \{ partnerOne: "[^"]*", partnerTwo: "[^"]*" \}/, 'couple: { partnerOne: "REEMPLAZAR", partnerTwo: "REEMPLAZAR" }')
+  .replace(/honoree: \{ name: "[^"]*"/, 'honoree: { name: "REEMPLAZAR"')
+  // Baby shower: sin el nombre del bebé (opcional: solo si la familia quiere mostrarlo).
+  .replace(/shower: \{ parents: \[[^\]]*\](, babyName: "[^"]*")? \}/, 'shower: { parents: ["REEMPLAZAR", "REEMPLAZAR"] }')
   // Fotos: una por espacio en public/images/ del cliente (galeria1 →
   // galeria-1.jpg), con su texto alternativo por escribir.
   .replace(

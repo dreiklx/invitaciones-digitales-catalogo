@@ -54,7 +54,7 @@ function Caption({ title, artist, state, titleClass, statusClass }: FaceProps & 
   );
 }
 
-// Tres barras de ecualizador (Tierra, Borgoña).
+// Tres barras de ecualizador (Olivo, Tierra).
 function Bars({ playing, className }: { playing: boolean; className: string }) {
   return (
     <span aria-hidden="true" className={`flex h-3 items-end gap-[3px] ${className}`}>
@@ -65,7 +65,7 @@ function Bars({ playing, className }: { playing: boolean; className: string }) {
   );
 }
 
-// Estrella de cuatro puntas (Aurora).
+// Estrella de cuatro puntas (Aurora, Camelia).
 function Star({ className }: { className: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
@@ -74,19 +74,23 @@ function Star({ className }: { className: string }) {
   );
 }
 
-// ─── 01 Olivo · "rama": círculo de lino con una rama de olivo ────────────
-function Rama(p: FaceProps) {
+// ─── 01 Olivo · "lino": marcapáginas de tela olivo ───────────────────────
+function Lino(p: FaceProps) {
   const playing = p.state === "playing";
   return (
     <>
-      <span className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary text-on-primary ring-[3px] ring-paper sm:ring-0">
-        <svg viewBox="0 0 40 40" aria-hidden="true" className={`pointer-events-none absolute -left-4 -top-4 h-9 w-9 text-secondary ${playing ? "player-sway" : ""}`} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
-          <path d="M34 34C26 26 18 20 6 16" />
-          <path d="M14 19c-4-1-7 0-9 3 4 1 7 0 9-3zM20 23c-1-4-4-6-8-6 1 4 4 6 8 6zM24 26c-4 0-7 2-8 5 4 0 7-2 8-5zM28 29c-1-4 0-7 3-9 1 4 0 7-3 9z" fill="currentColor" fillOpacity="0.35" />
-        </svg>
-        <Glyph state={p.state} />
+      {/* La sombra va en el envoltorio: en el mismo elemento, clip-path la recortaría. */}
+      <span className="flex-shrink-0 drop-shadow-[0_10px_14px_rgba(35,39,28,0.32)]">
+        <span className="flex h-[62px] w-12 flex-col items-center gap-1.5 bg-primary pt-3.5 text-on-primary [clip-path:polygon(0_0,100%_0,100%_100%,50%_82%,0_100%)]">
+          <Glyph state={p.state} size={14} />
+          <Bars playing={playing} className="h-2 text-on-primary/75" />
+        </span>
       </span>
-      <Caption {...p} titleClass="font-display text-base italic text-ink" statusClass="text-muted" />
+      <span className="hidden min-w-0 flex-col items-start py-2 pl-1 pr-5 text-left leading-tight sm:flex">
+        <span className="text-[10px] uppercase tracking-[0.3em] text-muted">{statusText[p.state]}</span>
+        <span className="mt-1 max-w-[13rem] truncate font-display text-lg italic text-ink">{p.title}</span>
+        {p.artist && <span className="max-w-[13rem] truncate text-xs text-muted">{p.artist}</span>}
+      </span>
     </>
   );
 }
@@ -132,47 +136,27 @@ function Deco(p: FaceProps) {
   );
 }
 
-// ─── 04 Riviera · "sello": sello postal con borde perforado ──────────────
-function Sello(p: FaceProps) {
+// ─── 05 Camelia · "broche": medallón vino con anillo rosa y destello ─────
+function Broche(p: FaceProps) {
   const playing = p.state === "playing";
   return (
     <>
-      <span className="relative flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-full bg-paper shadow-[0_12px_28px_-12px_rgba(20,38,79,0.6)]">
-        <span aria-hidden="true" className={`absolute inset-[3px] rounded-full border-2 border-dashed border-primary/70 ${playing ? "player-spin" : ""}`} />
-        <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-primary text-on-primary">
-          <Glyph state={p.state} />
-          <span aria-hidden="true" className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full border-2 border-paper bg-secondary" />
-        </span>
-      </span>
-      <Caption {...p} titleClass="font-display text-base text-primary" statusClass="text-muted" />
-    </>
-  );
-}
-
-// ─── 05 Borgoña · "etiqueta": bloque vino tipográfico, esquinas rectas ───
-function Etiqueta(p: FaceProps) {
-  const playing = p.state === "playing";
-  return (
-    <>
-      <span className="flex h-[52px] w-[52px] flex-shrink-0 flex-col items-center justify-center gap-1.5 bg-primary text-on-primary ring-1 ring-secondary/70 sm:ring-0">
+      <span className="relative flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary text-on-primary shadow-[0_14px_30px_-12px_rgba(60,10,30,0.6)] ring-2 ring-secondary ring-offset-2 ring-offset-paper">
+        <Star className={`absolute -right-1 -top-1.5 h-4 w-4 text-secondary ${playing ? "twinkle" : ""}`} />
         <Glyph state={p.state} />
-        <span aria-hidden="true" className={`h-0.5 bg-secondary transition-all duration-700 ${playing ? "w-7" : "w-3"}`} />
       </span>
-      <span className="hidden items-center gap-4 py-2 pl-4 pr-5 sm:flex">
+      <span className="hidden min-w-0 items-center gap-3 pl-1 pr-5 sm:flex">
         <span className="font-display text-2xl italic leading-none text-primary">Música</span>
-        <span className="flex flex-col items-start border-l border-primary/25 pl-4 text-left leading-tight">
-          <span className="max-w-[11rem] truncate text-xs font-semibold uppercase tracking-[0.2em] text-ink">{p.title}</span>
-          <span className="mt-1 flex items-center gap-2 text-[11px] text-muted">
-            <Bars playing={playing} className="h-2 text-primary" />
-            {statusText[p.state]}
-          </span>
+        <span className="flex min-w-0 flex-col items-start border-l border-primary/25 pl-3 text-left leading-tight">
+          <span className="max-w-[11rem] truncate text-xs font-semibold uppercase tracking-[0.18em] text-ink">{p.title}</span>
+          <span className="mt-1 text-[11px] text-muted">{statusText[p.state]}</span>
         </span>
       </span>
     </>
   );
 }
 
-// ─── 06 Aurora · "destello": cristal lila con destellos ──────────────────
+// ─── 04 Aurora · "destello": cristal lila con destellos ──────────────────
 function Destello(p: FaceProps) {
   const playing = p.state === "playing";
   return (
@@ -190,12 +174,30 @@ function Destello(p: FaceProps) {
   );
 }
 
-// ─── 07 Nube · "globo": globo durazno con su hilo ────────────────────────
+// ─── 06 Arrullo · "sello": sello de papelería con borde de puntada ──────
+function Sello(p: FaceProps) {
+  const playing = p.state === "playing";
+  return (
+    <>
+      <span className="relative flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-full bg-paper shadow-[0_12px_28px_-12px_rgba(74,63,53,0.5)]">
+        <span aria-hidden="true" className={`absolute inset-[3px] rounded-full border-2 border-dashed border-primary/70 ${playing ? "player-spin" : ""}`} />
+        <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-primary text-on-primary">
+          <Glyph state={p.state} />
+          <span aria-hidden="true" className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full border-2 border-paper bg-secondary" />
+        </span>
+      </span>
+      <Caption {...p} titleClass="font-display text-base text-primary" statusClass="text-muted" />
+    </>
+  );
+}
+
+// ─── 07 Nube · "globo": globo coral (y uno amarillo detrás) con su hilo ───
 function Globo(p: FaceProps) {
   const playing = p.state === "playing";
   return (
     <>
       <span className={`relative flex h-[66px] w-[52px] flex-shrink-0 flex-col items-center ${playing ? "float-soft" : ""}`}>
+        <span aria-hidden="true" className="absolute -left-3 top-1 h-7 w-6 rounded-[50%_50%_48%_48%/55%_55%_45%_45%] bg-secondary shadow-[inset_-3px_-4px_0_rgba(0,0,0,0.06)]" />
         <span className="flex h-[54px] w-[52px] items-center justify-center rounded-[50%_50%_48%_48%/55%_55%_45%_45%] bg-accent text-on-accent shadow-[inset_-6px_-8px_0_rgba(0,0,0,0.06),0_10px_20px_-10px_rgba(0,0,0,0.35)]">
           <span aria-hidden="true" className="absolute left-3 top-2.5 h-3 w-2 rotate-[25deg] rounded-full bg-paper/60" />
           <Glyph state={p.state} />
@@ -211,10 +213,10 @@ function Globo(p: FaceProps) {
 }
 
 export const players: Record<MusicPlayerStyle, Variant> = {
-  rama: {
+  lino: {
     position: STANDARD_POSITION,
-    button: "flex items-center gap-3 rounded-full p-0 sm:bg-paper/95 sm:py-1.5 sm:pl-1.5 sm:pr-5 sm:shadow-lg sm:ring-1 sm:ring-primary/20 sm:backdrop-blur max-sm:shadow-lg max-sm:rounded-full",
-    Face: Rama,
+    button: "flex items-start sm:items-center sm:bg-paper sm:pl-1.5 sm:shadow-[0_14px_30px_-18px_rgba(35,39,28,0.45)] sm:ring-1 sm:ring-line",
+    Face: Lino,
   },
   ficha: {
     position: STANDARD_POSITION,
@@ -231,10 +233,10 @@ export const players: Record<MusicPlayerStyle, Variant> = {
     button: "flex items-center gap-3 rounded-full sm:bg-paper sm:py-1 sm:pl-1 sm:pr-5 sm:shadow-lg sm:ring-1 sm:ring-primary/15",
     Face: Sello,
   },
-  etiqueta: {
+  broche: {
     position: STANDARD_POSITION,
-    button: "flex items-stretch bg-paper shadow-[0_14px_30px_-14px_rgba(0,0,0,0.45)] sm:border sm:border-primary/20",
-    Face: Etiqueta,
+    button: "flex items-center gap-2 rounded-full sm:bg-paper sm:py-1 sm:pl-1 sm:shadow-lg sm:ring-1 sm:ring-primary/15",
+    Face: Broche,
   },
   destello: {
     position: STANDARD_POSITION,

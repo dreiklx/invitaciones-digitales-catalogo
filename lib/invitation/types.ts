@@ -5,14 +5,19 @@
 
 // ─── Diseños disponibles ─────────────────────────────────────────────────
 
-// Bodas: celebra una pareja (`couple`).
-export type WeddingTemplateId = "olivo" | "tierra" | "gala" | "riviera" | "borgona";
-// Quinceaños y cumpleaños: celebra una persona (`honoree`).
-export type HonoreeTemplateId = "aurora" | "nube";
-export type TemplateId = WeddingTemplateId | HonoreeTemplateId;
+// Catálogo: Bodas (Olivo, Tierra, Gala) · Quince años (Aurora, Camelia) ·
+// Bebés (Arrullo, baby shower; Nube, primer cumpleaños).
 
-// Tipo de celebración de cada diseño (catálogo y textos armados).
-export type EventKind = "boda" | "quinceanos" | "cumpleanos-infantil";
+// Bodas: celebra una pareja (`couple`).
+export type WeddingTemplateId = "olivo" | "tierra" | "gala";
+// Quince años y cumpleaños: celebra una persona (`honoree`).
+export type HonoreeTemplateId = "aurora" | "camelia" | "nube";
+// Baby shower: lo organizan los futuros padres (`shower`).
+export type ShowerTemplateId = "arrullo";
+export type TemplateId = WeddingTemplateId | HonoreeTemplateId | ShowerTemplateId;
+
+// Tipo de celebración de cada diseño (categoría del catálogo y textos).
+export type EventKind = "boda" | "quinceanos" | "baby-shower" | "cumpleanos-infantil";
 
 // Espacios de fotografía de cada diseño. Cada uno tiene una proporción fija
 // (ver `templates/<diseño>/meta.ts` y `docs/templates/`).
@@ -20,17 +25,15 @@ export type PhotoSlots = {
   olivo:
     | "portada"
     | "historia"
-    | "cuentaRegresiva"
-    | "regalos"
+    | "retrato"
     | "galeria1"
     | "galeria2"
     | "galeria3"
-    | "galeria4"
-    | "cierre";
+    | "galeria4";
   tierra: "portada" | "historia" | "retrato" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   gala: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
-  riviera: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
-  borgona: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3";
+  camelia: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3";
+  arrullo: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
   aurora: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   nube: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
 };
@@ -110,13 +113,23 @@ export type Couple = {
 
 // Persona que celebra (quinceaños, cumpleaños).
 export type Honoree = {
-  // Nombre como se muestra en grande ("Mariana", "Mateo").
+  // Nombre como se muestra en grande ("Valentina", "Mateo").
   name: string;
   // Años que cumple (15 en quinceaños, 1 en un primer cumpleaños).
   age: number;
   // Texto de la edad si no son años cumplidos ("6 meses"). Si falta:
   // "1 año", "2 años"…
   ageLabel?: string;
+};
+
+// Baby shower: los futuros padres (o la futura madre o padre) que invitan.
+// El nombre del bebé es opcional: muchas familias no lo revelan. Ningún
+// texto del diseño supone el sexo del bebé.
+export type Shower = {
+  // Uno o dos nombres, en el orden en que se muestran ("Natalia", "Joaquín").
+  parents: string[];
+  // Nombre del bebé, solo si la familia quiere mostrarlo.
+  babyName?: string;
 };
 
 // ─── Contenido común a todos los diseños ─────────────────────────────────
@@ -138,14 +151,14 @@ export type InvitationContent = {
 
   // Cómo se nombra el evento en títulos, calendario y mensajes de WhatsApp:
   // "Boda de Ana y Luis", "confirmar mi asistencia a la boda…",
-  // "la fiesta de quince años de Mariana", "el primer cumpleaños de Mateo".
+  // "la fiesta de quince años de Valentina", "el primer cumpleaños de Mateo".
   event: {
     name: string; // "boda", "fiesta de quince años", "primer cumpleaños"
     article: "la" | "el";
   };
 
-  // Quién celebra: `couple` en las bodas, `honoree` en quinceaños y
-  // cumpleaños (ver InvitationOf, más abajo).
+  // Quién celebra: `couple` en las bodas, `honoree` en quince años y
+  // cumpleaños, `shower` en el baby shower (ver InvitationOf, más abajo).
 
   // Fecha y hora de inicio (hora local del evento, 24 h).
   date: string; // "2027-04-17"
@@ -165,6 +178,9 @@ export type InvitationContent = {
 
   hero: {
     eyebrow: string;
+    // Frase grande de la portada en los diseños que la tienen (Arrullo:
+    // "Un bebé en camino" cuando no se muestra el nombre del bebé).
+    title?: string;
   };
 
   openingQuote: Quote | null;
@@ -286,7 +302,7 @@ export type InvitationContent = {
 
 // Una invitación = contenido común + quién celebra + diseño elegido + sus fotos.
 export type InvitationOf<T extends TemplateId> = InvitationContent &
-  (T extends WeddingTemplateId ? { couple: Couple } : { honoree: Honoree }) & {
+  (T extends WeddingTemplateId ? { couple: Couple } : T extends ShowerTemplateId ? { shower: Shower } : { honoree: Honoree }) & {
     template: T;
     photos: Record<PhotoSlots[T], Photo>;
   };
@@ -306,7 +322,7 @@ export type PhotoSlotSpec = {
 
 // Presentaciones del reproductor de música (templates/shared/players.tsx).
 // Cada diseño trae la suya; `music.player` la reemplaza.
-export type MusicPlayerStyle = "rama" | "ficha" | "deco" | "sello" | "etiqueta" | "destello" | "globo";
+export type MusicPlayerStyle = "lino" | "ficha" | "deco" | "destello" | "broche" | "sello" | "globo";
 
 export type TemplateMeta<T extends TemplateId = TemplateId> = {
   id: T;

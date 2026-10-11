@@ -1,24 +1,25 @@
 import Image from "next/image";
 import type { ResolvedInvitation } from "@/lib/invitation/resolve";
 
-// Miniatura del diseño para el catálogo (proporción 4:5). Usa unidades de
-// contenedor (cqw) para verse igual en cualquier ancho de tarjeta.
+// Miniatura del catálogo (4:5): fotografía arriba y bloque olivo con los
+// nombres en columna y la ficha de la fecha, como la portada del diseño.
 export default function OlivoPreview({ inv }: { inv: ResolvedInvitation }) {
   const { photos, names, dates, content } = inv;
   return (
-    <div className="relative h-full w-full overflow-hidden bg-ink text-paper">
-      <Image src={photos.portada.src} alt="" fill sizes="(min-width: 1024px) 26vw, 90vw" className="object-cover" style={{ objectPosition: photos.portada.position }} />
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/35 via-transparent to-ink/85" />
-      <div className="absolute inset-[5cqw] border border-paper/35" />
-      <div className="absolute inset-x-0 bottom-[11cqw] flex flex-col items-center text-center">
-        <p className="font-display text-[3.4cqw] uppercase italic tracking-[0.35em] text-secondary">{content.hero.eyebrow}</p>
-        <p className="mt-[3cqw] font-display text-[11cqw] leading-none">
-          {names.one}
-          <span className="mx-[2cqw] align-middle text-[7cqw] text-secondary">&amp;</span>
-          {names.two}
+    <div className="flex h-full w-full flex-col bg-primary text-on-primary">
+      <div className="relative h-[52%] w-full">
+        <Image src={photos.portada.src} alt="" fill sizes="(min-width: 1024px) 26vw, 90vw" className="object-cover" style={{ objectPosition: photos.portada.position }} />
+      </div>
+      <div className="flex flex-1 flex-col justify-between px-[6cqw] pb-[5cqw] pt-[4cqw]">
+        <p className="text-[2.5cqw] font-semibold uppercase tracking-[0.3em] text-secondary">{content.hero.eyebrow}</p>
+        <p className="font-display text-[11cqw] font-light leading-[0.92] tracking-tight">
+          <span className="block">{names.one}</span>
+          <span className="block pl-[0.55em] italic text-secondary">y {names.two}</span>
         </p>
-        <div className="ornament mt-[4cqw] text-secondary">
-          <span className="whitespace-nowrap font-display text-[3.2cqw] tracking-[0.25em] text-paper/90">{dates.display}</span>
+        <div className="grid grid-cols-[1fr_1fr_1.45fr] border-t border-on-primary/25 pt-[2cqw] font-display text-[6cqw] font-light leading-none">
+          <span>{dates.day}</span>
+          <span className="border-l border-on-primary/25 pl-[2.5cqw]">{String(dates.monthNumber).padStart(2, "0")}</span>
+          <span className="border-l border-on-primary/25 pl-[2.5cqw]">{dates.year}</span>
         </div>
       </div>
     </div>

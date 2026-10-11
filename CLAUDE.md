@@ -3,13 +3,13 @@
 Lee primero, en este orden:
 
 1. `PROJECT-CONTEXT.md` — qué es el proyecto (catálogo de 7 diseños de
-   invitación: bodas, quinceaños y cumpleaños), estado, arquitectura y decisiones, plantilla vs.
+   invitación en tres categorías: Bodas, Quince años y Bebés), estado, arquitectura y decisiones, plantilla vs.
    personalizada, reglas que no se deben revertir, limitaciones, riesgos
    y pendientes.
 2. `project-log.md` — historial de sesiones (la más reciente primero).
 3. Si el trabajo es sobre un diseño ("vamos a usar la plantilla 3"):
    `docs/templates/<número>-<diseño>.md` (01-olivo, 02-tierra, 03-gala,
-   04-riviera, 05-borgona, 06-aurora, 07-nube).
+   04-aurora, 05-camelia, 06-arrullo, 07-nube).
 4. `photo-map.md` si hay fotos de por medio; `README.md` para el flujo de
    crear una invitación.
 

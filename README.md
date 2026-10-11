@@ -1,8 +1,8 @@
 # Invitaciones digitales — catálogo de diseños
 
-Proyecto interno para producir invitaciones digitales de bodas,
-quinceaños y cumpleaños. Contiene **siete diseños** distintos (cinco de
-boda, uno de quinceaños y uno de cumpleaños infantil) que comparten las
+Proyecto interno para producir invitaciones digitales. Contiene **siete
+diseños** en tres categorías — **Bodas** (3), **Quince años** (2) y
+**Bebés** (2: baby shower y primer cumpleaños) — que comparten las
 mismas funciones (portada,
 cuenta regresiva, lugares con Maps/Waze, calendario, aviso, vestimenta,
 regalos, galería, música, confirmación por WhatsApp…) y un **catálogo**
@@ -17,20 +17,26 @@ Contexto, arquitectura y decisiones: `PROJECT-CONTEXT.md`. Historial:
 
 ## Los diseños
 
-| N.º | Id | Nombre | Evento | Concepto | Guía |
-|---|---|---|---|---|---|
-| 01 | `olivo` | Olivo | Boda | Botánico y cálido (diseño original) | `docs/templates/01-olivo.md` |
-| 02 | `tierra` | Tierra | Boda | Editorial de revista, café y arcilla | `docs/templates/02-tierra.md` |
-| 03 | `gala` | Gala | Boda | Noche de etiqueta, negro/dorado/plata | `docs/templates/03-gala.md` |
-| 04 | `riviera` | Riviera | Boda | Mediterráneo: cobalto, porcelana, limón | `docs/templates/04-riviera.md` |
-| 05 | `borgona` | Borgoña | Boda | Contemporáneo y tipográfico: vino y rosa | `docs/templates/05-borgona.md` |
-| 06 | `aurora` | Aurora | Quinceaños | Lila, violeta y rosa cuarzo, con destellos | `docs/templates/06-aurora.md` |
-| 07 | `nube` | Nube | Cumpleaños de bebé / infantil | Crema, celeste empolvado y amarillo mantequilla | `docs/templates/07-nube.md` |
+| Categoría | N.º | Id | Nombre | Evento | Concepto | Demo | Guía |
+|---|---|---|---|---|---|---|---|
+| Bodas | 01 | `olivo` | Olivo | Boda | Editorial en olivo y lino (rediseño 2026-10-10) | Ramón & Florinda | `docs/templates/01-olivo.md` |
+| Bodas | 02 | `tierra` | Tierra | Boda | Revista en café y arcilla | Camila & Diego | `docs/templates/02-tierra.md` |
+| Bodas | 03 | `gala` | Gala | Boda | Noche de etiqueta, negro y dorado, fotos en blanco y negro | Isabella & Sebastián | `docs/templates/03-gala.md` |
+| Quince años | 04 | `aurora` | Aurora | Quince años | Lila de ensueño, espejo ovalado y caligrafía | Valentina | `docs/templates/04-aurora.md` |
+| Quince años | 05 | `camelia` | Camelia | Quince años | Gala en vino frambuesa y rosa, nombre monumental | Renata | `docs/templates/05-camelia.md` |
+| Bebés | 06 | `arrullo` | Arrullo | Baby shower | Papelería en crema, salvia y mantequilla | Natalia y Joaquín | `docs/templates/06-arrullo.md` |
+| Bebés | 07 | `nube` | Nube | Primer cumpleaños | Fiesta en cielo celeste, banderines y globos | Mateo | `docs/templates/07-nube.md` |
 
-**Quién celebra:** las bodas usan `couple` (dos nombres); Aurora y Nube
-usan `honoree` (`name`, `age` y opcional `ageLabel`, p. ej. "6 meses").
-Aurora y Nube muestran además el **programa** del evento (`schedule`:
-vals, brindis, pastel…), que es opcional y las bodas ignoran.
+Camelia y Arrullo ocupan los lugares de los antiguos diseños de boda
+Borgoña y Riviera (las URL `/plantillas/borgona` y `/plantillas/riviera`
+redirigen a las nuevas).
+
+**Quién celebra:** las bodas usan `couple` (dos nombres); Aurora, Camelia
+y Nube usan `honoree` (`name`, `age` y opcional `ageLabel`, p. ej. "1
+añito" o "6 meses"); Arrullo usa `shower` (`parents`, uno o dos nombres, y
+`babyName` solo si la familia quiere mostrarlo; ningún texto supone el
+sexo del bebé). Aurora, Camelia y Nube muestran además el **programa** del
+evento (`schedule`: vals, brindis, pastel…), opcional.
 
 ## Dos modos del mismo proyecto
 
@@ -56,7 +62,7 @@ npm run dev            # http://localhost:3000
 2. `npm install`
 3. **Elegir el diseño** y crear el archivo de datos:
    ```bash
-   npm run nueva -- riviera     # olivo | tierra | gala | riviera | borgona | aurora | nube
+   npm run nueva -- camelia     # olivo | tierra | gala | aurora | camelia | arrullo | nube
    ```
    Copia la demo de ese diseño a `config/invitation.ts`, con las fotos
    apuntando a `public/images/<espacio>.jpg` (`galeria1` → `galeria-1.jpg`).
@@ -135,8 +141,8 @@ music: {
 
 - **Sin música:** `music: null` (no hay reproductor ni créditos).
 - **Estilo del reproductor:** cada diseño trae el suyo (`musicPlayer` en
-  su `meta.ts`): Olivo `rama`, Tierra `ficha`, Gala `deco`, Riviera
-  `sello`, Borgoña `etiqueta`, Aurora `destello`, Nube `globo`. `player`
+  su `meta.ts`): Olivo `lino`, Tierra `ficha`, Gala `deco`, Aurora
+  `destello`, Camelia `broche`, Arrullo `sello`, Nube `globo`. `player`
   usa otro; toma los colores y letras del diseño.
 - **Licencia, antes de publicar:** solo audio que el cliente pueda usar en
   una web. Comprar una canción o tenerla en Spotify/YouTube **no** da ese
@@ -149,8 +155,8 @@ music: {
 | Archivo | Obra · intérprete | Licencia | Demo |
 |---|---|---|---|
 | `pachelbel-canon-macleod.mp3` | Pachelbel, Canon en re · Kevin MacLeod | CC BY 3.0 (atribución obligatoria) | Olivo |
-| `satie-gymnopedie-1.mp3` | Satie, Gymnopédie n.º 1 · Robin Alciatore (Musopen) | Dominio público | Tierra, Riviera |
-| `debussy-clair-de-lune.mp3` | Debussy, Clair de lune · Laurens Goedhart | Dominio público | Gala, Borgoña |
+| `satie-gymnopedie-1.mp3` | Satie, Gymnopédie n.º 1 · Robin Alciatore (Musopen) | Dominio público | Tierra, Arrullo |
+| `debussy-clair-de-lune.mp3` | Debussy, Clair de lune · Laurens Goedhart | Dominio público | Gala, Camelia |
 | `chopin-vals-op69-1.mp3` | Chopin, Vals op. 69 n.º 1 (Musopen) | CC0 | Aurora |
 | `cajita-musical-cuna.mp3` | Brahms, Canción de cuna (cajita musical, pdsounds.org) | Dominio público | Nube |
 
@@ -181,13 +187,14 @@ openingQuote: {
   copyright). `npm run check` avisa si a un versículo le falta la
   referencia o la traducción.
 - Demos: Olivo, Colosenses 3:14; Tierra, Cantares 8:7; Gala, Mateo 19:6
-  (Reina-Valera 1909). Riviera, Borgoña, Aurora y Nube usan frases.
+  (Reina-Valera 1909). Aurora, Camelia, Arrullo y Nube usan frases.
 
 ## Datos a pedir al cliente (todo de una vez)
 
 1. Diseño elegido (01–07) y, si quieren, ajuste de colores.
-2. Nombres como deben aparecer y en qué orden (bodas), o nombre y edad de
-   quien celebra (quinceaños, cumpleaños).
+2. Nombres como deben aparecer y en qué orden (bodas); nombre y edad de
+   quien celebra (quince años, cumpleaños); o quiénes invitan al baby
+   shower y si quieren mostrar el nombre del bebé.
 3. Fecha, hora de inicio y duración aproximada (`event.name`: "boda",
    "fiesta de quince años", "primer cumpleaños"…).
 4. Lugar(es): nombre, dirección corta, enlace de Google Maps (y Waze), hora de cada uno.
@@ -200,8 +207,8 @@ openingQuote: {
 11. WhatsApp que recibe las confirmaciones, fecha límite, "¿de parte de quién?".
 12. Música con permiso de uso para web (y su licencia o atribución), o
     sin música.
-13. Aurora y Nube: programa del evento (hora y momento: vals, pastel…), o
-    "no incluir".
+13. Aurora, Camelia y Nube: programa del evento (hora y momento: vals,
+    pastel…), o "no incluir". Camelia: también la corte de honor.
 14. Cita, versículo (con referencia y traducción) o nada, para la apertura
     y el cierre.
 

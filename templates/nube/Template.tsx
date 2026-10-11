@@ -15,29 +15,37 @@ import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
 import { AvoidSwatch, CalendarIcon, PinIcon } from "../shared/icons";
 import Countdown from "./Countdown";
-import { Balloon, Cloud, CloudEdge, Confetti } from "./ornaments";
+import { Balloon, Bunting, Cloud, CloudEdge, Confetti, FallingConfetti, Flame, Star } from "./ornaments";
 import { fontClasses } from "./fonts";
 
-// 07 · Nube — cumpleaños de bebé o infantil. Cielo celeste empolvado con
-// nubes que flotan, globos de trazo suave, la edad en una insignia
-// amarilla, formas redondeadas y bordes ondulados entre secciones.
-// Tierno y limpio: colores claros, mucho aire, texto siempre oscuro (los
-// colores van en las formas, no en las letras).
+// 07 · Nube — primer cumpleaños (y cualquier cumpleaños infantil). Cielo
+// celeste con nubes que flotan, banderines de colores, globos, estrellas que
+// titilan, confeti que cae despacio y la edad en una insignia amarilla con
+// su velita. Festivo pero ordenado: texto siempre oscuro (los colores van
+// en las formas), movimientos lentos y cortos, todo quieto con "reducir
+// movimiento", y cada adorno dentro de una sección con overflow-hidden.
 
 function Heading({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div className="text-center">
-      <p className="mx-auto w-fit rounded-full bg-secondary/55 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-ink">{eyebrow}</p>
+      <p className="mx-auto flex w-fit items-center gap-2 rounded-full bg-secondary/60 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-ink">
+        <Star className="h-3.5 w-3.5 text-accent" />
+        {eyebrow}
+      </p>
       <h2 className="mt-4 font-display text-4xl font-medium leading-tight text-ink sm:text-6xl">{title}</h2>
     </div>
   );
 }
 
-// Insignia con la edad: "1 año" → "1" grande y "año" debajo.
+// Insignia con la edad y su velita: "1 añito" → "1" grande y "añito" debajo.
 function AgeBadge({ age, label, className = "" }: { age: number; label: string; className?: string }) {
   const match = label.match(/^(\d+)\s*(.*)$/);
   return (
     <div className={`flex flex-col items-center justify-center rounded-full bg-secondary text-ink shadow-lg shadow-secondary/40 ring-4 ring-paper ${className}`}>
+      <span aria-hidden="true" className="absolute -top-[1.35em] left-1/2 flex -translate-x-1/2 flex-col items-center">
+        <Flame className="flicker h-[0.95em] w-[0.65em]" />
+        <span className="h-[0.6em] w-[0.3em] rounded-sm bg-accent" />
+      </span>
       <span className="font-display text-[2.6em] font-semibold leading-none">{match ? match[1] : age}</span>
       <span className="text-[0.7em] font-extrabold uppercase tracking-[0.12em]">{match ? match[2] : label}</span>
     </div>
@@ -80,13 +88,18 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
 
   const cover = (
     <div className="relative flex h-full flex-col items-center justify-center overflow-hidden bg-paper px-6 text-center text-ink">
-      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[42%] bg-primary/30">
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[42%] bg-primary/40">
         <CloudEdge id="gate" className="absolute inset-x-0 -bottom-px text-paper" />
       </div>
+      <Bunting id="gate" className="absolute inset-x-0 top-0" />
+      <FallingConfetti />
+      <Star className="twinkle absolute left-[16%] top-[30%] w-4 text-secondary" />
+      <Star className="twinkle absolute right-[18%] top-[12%] w-3 text-paper" style={{ animationDelay: "1.1s" }} />
       <Cloud className="float-soft absolute left-[6%] top-[10%] w-20 text-paper sm:w-28" />
       <Cloud className="float-soft absolute right-[8%] top-[22%] w-14 text-paper sm:w-20" style={{ animationDelay: "2s" }} />
-      <Balloon className="float-soft absolute bottom-[8%] left-[6%] w-8 text-accent/70 sm:w-10" style={{ animationDelay: "1s" }} />
+      <Balloon className="float-soft absolute bottom-[8%] left-[6%] w-8 text-accent sm:w-10" style={{ animationDelay: "1s" }} />
       <Balloon className="float-soft absolute bottom-[14%] right-[7%] w-7 text-primary sm:w-9" style={{ animationDelay: "3s" }} />
+      <Balloon className="float-soft absolute bottom-[10%] right-[17%] w-6 text-secondary sm:w-8" style={{ animationDelay: "2s" }} />
       <div className="relative flex flex-col items-center">
         <div className="relative w-[min(48vw,13rem)]">
           <Frame photo={photos.portada} ratio={ratio("portada")} sizes="208px" priority className="rounded-full border-[6px] border-paper shadow-xl shadow-primary/30" />
@@ -107,12 +120,19 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Cielo con la foto en un círculo y la edad. En teléfono el tamaño
             de la foto sale del alto de la pantalla para que todo quepa. */}
-        <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-primary/30 px-6 pb-14 pt-20 text-center sm:pb-20 sm:pt-20">
+        <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-primary/35 px-6 pb-14 pt-20 text-center sm:pb-20 sm:pt-20">
+          <Bunting id="hero" className="absolute inset-x-0 top-0" />
+          <FallingConfetti />
+          <Star className="twinkle absolute left-[12%] top-[22%] w-4 text-secondary sm:w-6" />
+          <Star className="twinkle absolute right-[14%] top-[16%] w-3 text-paper sm:w-5" style={{ animationDelay: "1.4s" }} />
+          <Star className="twinkle absolute bottom-[30%] right-[22%] hidden w-4 text-accent sm:block" style={{ animationDelay: "0.7s" }} />
           <Cloud className="float-soft absolute left-[4%] top-[9%] w-24 text-paper sm:w-36" />
           <Cloud className="float-soft absolute right-[5%] top-[28%] w-16 text-paper sm:w-24" style={{ animationDelay: "2.5s" }} />
           <Cloud className="float-soft absolute bottom-[22%] left-[8%] hidden w-20 text-paper sm:block" style={{ animationDelay: "4s" }} />
-          <Balloon className="float-soft absolute right-[6%] top-[52%] w-8 text-accent/70 sm:right-[14%] sm:w-12" style={{ animationDelay: "1s" }} />
+          <Balloon className="float-soft absolute right-[6%] top-[52%] w-8 text-accent sm:right-[14%] sm:w-12" style={{ animationDelay: "1s" }} />
           <Balloon className="float-soft absolute left-[5%] top-[48%] hidden w-10 text-secondary sm:block" style={{ animationDelay: "3s" }} />
+          <Balloon className="float-soft absolute left-[11%] top-[55%] hidden w-8 text-primary sm:block" style={{ animationDelay: "1.6s" }} />
+          <Balloon className="float-soft absolute right-[19%] top-[58%] hidden w-9 text-secondary sm:block" style={{ animationDelay: "2.2s" }} />
           <Confetti />
           <Reveal variant="fade" className="relative">
             <p className="rounded-full bg-paper/80 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-ink">{c.hero.eyebrow}</p>
@@ -123,7 +143,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
           </Reveal>
           <Reveal delay={200} className="relative">
             <h1 className="mt-5 font-display text-[clamp(3.25rem,17vw,6.5rem)] font-semibold leading-none text-ink">{names.one}</h1>
-            <p className="mt-2 font-display text-xl text-ink/80 sm:text-2xl">Cumple {ageText}</p>
+            <p className="mt-2 font-display text-xl text-ink/80 sm:text-2xl">¡Cumple {ageText}!</p>
             <p className="mx-auto mt-4 w-fit whitespace-nowrap rounded-full bg-paper px-5 py-2 font-display text-base text-ink shadow-sm sm:text-lg">{dates.weekdayLong}</p>
           </Reveal>
           <ScrollCue className="relative mx-auto mt-5 text-ink sm:mt-8" circleClassName="border-ink/40 bg-paper/50" />
@@ -133,7 +153,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
         {c.openingQuote && (
           <section className="px-6 py-16 text-center sm:py-24">
             <Reveal className="mx-auto max-w-2xl">
-              <Balloon className="mx-auto w-7 text-accent/70" />
+              <Balloon className="mx-auto w-7 text-accent" />
               <p className="mt-6 font-display text-3xl font-medium leading-snug text-ink sm:text-4xl">{c.openingQuote.text}</p>
               {c.openingQuote.reference && <p className="mt-4 text-sm font-bold uppercase tracking-[0.2em] text-muted">{quoteCitation(c.openingQuote)}</p>}
             </Reveal>
@@ -423,12 +443,13 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
         <footer className="relative mt-10">
           <CloudEdge id="footer" className="text-secondary/45" />
           <div className="relative overflow-hidden bg-secondary/45 px-6 pb-20 pt-14 text-center sm:pb-24">
-            <Balloon className="float-soft absolute left-[8%] top-10 w-9 text-accent/70 sm:left-[20%] sm:w-11" />
+            <FallingConfetti />
+            <Balloon className="float-soft absolute left-[8%] top-10 w-9 text-accent sm:left-[20%] sm:w-11" />
             <Balloon className="float-soft absolute right-[8%] top-16 w-8 text-primary sm:right-[20%] sm:w-10" style={{ animationDelay: "2s" }} />
             <div className="relative">
               <p className="text-sm font-extrabold uppercase tracking-[0.22em] text-ink/80">{c.footer.message}</p>
               <p className="mt-3 font-display text-[clamp(3.25rem,16vw,6rem)] font-semibold leading-none text-ink">{names.one}</p>
-              <p className="mt-3 font-display text-xl text-ink/80">Cumple {ageText}</p>
+              <p className="mt-3 font-display text-xl text-ink/80">¡Cumple {ageText}!</p>
               <p className="mx-auto mt-4 w-fit whitespace-nowrap rounded-full bg-paper px-5 py-2 font-display text-base text-ink sm:text-lg">{dates.weekdayLong}</p>
               <MusicCredit music={c.music} className="mt-8 text-ink/65" />
             </div>

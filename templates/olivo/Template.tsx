@@ -1,6 +1,8 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { quoteCitation, type ResolvedInvitation, type ResolvedLocation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec, Quote } from "@/lib/invitation/types";
+import type { EventDates } from "@/lib/invitation/time";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
@@ -14,351 +16,423 @@ import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
 import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
-import { AvoidSwatch, CalendarIcon, PinIcon } from "../shared/icons";
+import { ArrowRightIcon, AvoidSwatch, CalendarIcon, PinIcon } from "../shared/icons";
 import Countdown from "./Countdown";
 import { fontClasses } from "./fonts";
 
-// 01 · Olivo — el diseño original de la plantilla (probado con invitados
-// reales, incluidas personas mayores), en verde olivo y lino.
-// Composición: portada de papel → foto a pantalla completa → frases y foto
-// de la pareja → bloque verde con cuenta regresiva y lugares → detalles →
-// regalos → RSVP verde → galería collage → pie sobre foto.
+// 01 · Olivo — rediseño completo (2026-10-10). Una revista de arquitectura
+// en verde olivo y lino: portada a dos columnas (bloque olivo | fotografía
+// a toda la altura), nombres en una columna tipográfica alineada a la
+// izquierda, la fecha como ficha de tres cifras, díptico de fotos,
+// cuenta regresiva en franja, itinerario con línea de tiempo y un mosaico
+// de fotos a sangre. Sin sombras, sin tarjetas, casi sin filetes; el único
+// adorno es una hoja mínima junto a los antetítulos.
 
-function Sprig({ className }: { className?: string }) {
+function Leaf({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 40 28" className={className} fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" aria-hidden="true">
-      <path d="M20 27V7" />
-      <path d="M20 11c0 0-6-2-8-7" />
-      <path d="M20 17c0 0 6-2 8-7" />
-      <path d="M20 7c0 0-3.5-2.5-5.5-4.5" opacity="0.65" />
-      <path d="M20 7c0 0 3.5-2.5 5.5-4.5" opacity="0.65" />
+    <svg viewBox="0 0 12 12" className={className} aria-hidden="true">
+      <path d="M1 11C1.5 5 5 1.5 11 1c-.5 6-4 9.5-10 10Z" fill="currentColor" />
     </svg>
   );
 }
 
-function Heading({ eyebrow, title, light = false }: { eyebrow: string; title: string; light?: boolean }) {
+function Eyebrow({ children, light = false }: { children: ReactNode; light?: boolean }) {
   return (
-    <div className="flex flex-col items-center text-center">
-      <p className={`text-xs uppercase tracking-[0.3em] sm:text-sm ${light ? "text-secondary" : "text-accent"}`}>{eyebrow}</p>
-      <h2 className={`mt-3 font-display text-3xl sm:text-5xl ${light ? "text-on-primary" : "text-primary"}`}>{title}</h2>
-      <div className="ornament mt-5 w-full max-w-[220px] text-secondary" />
+    <p className={`flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.3em] sm:text-xs ${light ? "text-secondary" : "text-accent"}`}>
+      <Leaf className="h-2.5 w-2.5 flex-shrink-0" />
+      {children}
+    </p>
+  );
+}
+
+function Title({ children, light = false, className = "" }: { children: ReactNode; light?: boolean; className?: string }) {
+  return <h2 className={`mt-4 font-display text-[2.5rem] font-light leading-[1.02] tracking-tight sm:text-6xl ${light ? "text-on-primary" : "text-ink"} ${className}`}>{children}</h2>;
+}
+
+// La fecha como ficha de tres cifras: día · mes · año, con su rótulo.
+function DateSheet({ dates, light = false, className = "" }: { dates: EventDates; light?: boolean; className?: string }) {
+  const cells: [string, string][] = [
+    [dates.day, dates.weekday],
+    [String(dates.monthNumber).padStart(2, "0"), dates.monthLong],
+    [dates.year, dates.time],
+  ];
+  return (
+    <div className={`grid grid-cols-[1fr_1fr_1.45fr] border-t ${light ? "border-on-primary/25" : "border-ink/20"} ${className}`}>
+      {cells.map(([value, label], i) => (
+        <div key={label} className={`min-w-0 pt-3 ${i ? `border-l pl-3 sm:pl-5 ${light ? "border-on-primary/25" : "border-ink/20"}` : "pr-3"}`}>
+          <p className={`font-display text-[min(10vw,3.25rem)] font-light leading-none tabular-nums ${light ? "text-on-primary" : "text-ink"}`}>{value}</p>
+          <p className={`mt-1.5 truncate text-[11px] font-semibold uppercase tracking-[0.18em] ${light ? "text-secondary" : "text-muted"}`}>{label}</p>
+        </div>
+      ))}
     </div>
   );
 }
 
-// Cita o versículo entre filetes botánicos. Un versículo va entre
-// comillas latinas, con la referencia y debajo la traducción.
-function QuoteBlock({ quote }: { quote: Quote }) {
-  const verse = quote.kind === "verse";
-  const start = quote.align === "start";
+// Nombres en columna: el segundo, en cursiva y con sangría. Tamaño solo en
+// vw (sin mínimo en rem): un nombre largo no ensancha la página aunque el
+// teléfono tenga la letra agrandada.
+function Names({ one, two, accentClass, size }: { one: string; two: string; accentClass: string; size: string }) {
   return (
-    <section className="bg-paper px-6 py-16 sm:py-20">
-      <Reveal>
-        <div className={`mx-auto max-w-2xl ${start ? "text-left" : "text-center"}`}>
-          <div className={`ornament w-full max-w-[140px] text-secondary ${start ? "" : "mx-auto"}`} />
-          <p className={`mt-6 font-display italic text-primary ${verse ? "text-[1.7rem] leading-[1.35] sm:text-[2.1rem]" : "text-2xl leading-snug sm:text-3xl"}`}>
-            {verse ? <>&laquo;{quote.text}&raquo;</> : <>&ldquo;{quote.text}&rdquo;</>}
-          </p>
-          {quote.reference && <p className="mt-5 text-xs font-medium uppercase tracking-[0.3em] text-accent sm:text-sm">{verse ? quote.reference : quoteCitation(quote)}</p>}
-          {verse && quote.translation && <p className="mt-1.5 text-xs text-muted">{quote.translation}</p>}
-          <div className={`ornament mt-6 w-full max-w-[140px] text-secondary ${start ? "" : "mx-auto"}`} />
+    <h1 className={`font-display font-light leading-[0.92] tracking-tight ${size}`}>
+      <span className="block">{one}</span>
+      <span className={`block pl-[0.55em] italic ${accentClass}`}>y {two}</span>
+    </h1>
+  );
+}
+
+// Cita o versículo en dos columnas: la fuente a la izquierda (como una nota
+// al margen) y el texto grande en cursiva, alineado a la izquierda.
+function QuoteBlock({ quote, tone = "paper" }: { quote: Quote; tone?: "paper" | "surface" }) {
+  const verse = quote.kind === "verse";
+  return (
+    <section className={`px-6 py-20 sm:px-12 sm:py-28 ${tone === "surface" ? "bg-surface" : ""}`}>
+      <Reveal className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
+        <div className="md:col-span-3 md:pt-3">
+          {quote.reference && <Eyebrow>{verse ? quote.reference : quoteCitation(quote)}</Eyebrow>}
+          {verse && quote.translation && <p className="mt-2 text-xs text-muted">{quote.translation}</p>}
         </div>
+        <p className="font-display text-[1.75rem] font-light italic leading-[1.25] text-ink sm:text-[2.5rem] md:col-span-9">
+          {verse ? <>&laquo;{quote.text}&raquo;</> : <>&ldquo;{quote.text}&rdquo;</>}
+        </p>
       </Reveal>
     </section>
   );
 }
 
-function LocationBlock({ location }: { location: ResolvedLocation }) {
+// Un lugar del itinerario: hora a la izquierda, línea de tiempo y datos.
+function Stop({ location, last }: { location: ResolvedLocation; last: boolean }) {
   return (
-    <div className="mt-4 border-t border-on-primary/15 pt-4 text-center lg:text-left">
-      {location.label && (
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-secondary">
-          {location.label}
-          {location.timeLabel && <span className="text-on-primary/80"> · {location.timeLabel}</span>}
-        </p>
-      )}
-      <p className={`font-display text-xl text-on-primary ${location.label ? "mt-1.5" : ""}`}>{location.name}</p>
-      {!location.label && location.timeLabel && <p className="mt-1 text-sm text-on-primary/90">{location.timeLabel}</p>}
-      <p className="mt-1 text-sm leading-relaxed text-on-primary/80">{location.address}</p>
-      {/* Forma de botón y aviso de que abre Google Maps (personas mayores). */}
-      {/* Teléfono: botones del mismo ancho, uno debajo del otro (< 400px) o
-          en dos columnas; fáciles de acertar con el pulgar. */}
-      <div className="mt-5 flex flex-col items-center gap-2 lg:items-start">
-        <div className={`grid w-full max-w-sm grid-cols-1 gap-3 lg:flex lg:w-auto lg:max-w-none ${location.wazeUrl ? "min-[400px]:grid-cols-2" : ""}`}>
-          <a href={location.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-full border-2 border-secondary bg-secondary/10 px-5 py-3 text-base font-bold text-secondary transition hover:bg-secondary hover:text-ink lg:px-6">
-            <PinIcon />
+    <li className="grid grid-cols-1 sm:grid-cols-[10rem_1fr] sm:gap-10">
+      {/* Escritorio: la hora en su columna. Teléfono: dentro del lugar (en una columna angosta se partía en dos líneas). */}
+      <p className="hidden whitespace-nowrap pt-0.5 font-display text-4xl font-light leading-tight text-ink sm:block">{location.timeLabel}</p>
+      <div className={`relative border-l border-primary/35 pl-5 sm:pl-10 ${last ? "pb-2" : "pb-14"}`}>
+        <span aria-hidden="true" className="absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full bg-primary" />
+        {location.timeLabel && <p className="mb-2 font-display text-3xl font-light leading-none text-ink sm:hidden">{location.timeLabel}</p>}
+        {location.label && <Eyebrow>{location.label}</Eyebrow>}
+        <p className="mt-2 font-display text-[1.7rem] leading-tight text-ink sm:text-4xl">{location.name}</p>
+        <p className="mt-1.5 text-base leading-relaxed text-muted">{location.address}</p>
+        <div className={`mt-5 grid max-w-md grid-cols-1 gap-3 ${location.wazeUrl ? "min-[420px]:grid-cols-2" : ""}`}>
+          <a href={location.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2.5 bg-primary px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-on-primary transition hover:bg-ink">
+            <PinIcon size={18} />
             Cómo llegar
           </a>
           {location.wazeUrl && (
-            <a href={location.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center rounded-full border-2 border-on-primary/40 px-5 py-3 text-base font-bold text-on-primary transition hover:border-on-primary hover:bg-on-primary/10 lg:px-6">
+            <a href={location.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center border border-ink/30 px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-ink transition hover:border-primary hover:text-primary">
               Abrir en Waze
             </a>
           )}
         </div>
-        <p className="text-xs text-on-primary/75">{location.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+        <p className="mt-2 text-xs text-muted">{location.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
       </div>
-    </div>
+    </li>
   );
 }
 
 const rsvpStyles: RsvpStyles = {
-  intro: "text-on-primary/90",
-  deadline: "text-secondary",
-  progressDot: "bg-on-primary/25",
-  progressDotActive: "bg-secondary",
-  progressLabel: "text-on-primary/60",
-  legend: "text-on-primary",
-  required: "text-secondary",
-  option: "rounded-2xl border-2 border-on-primary/60 bg-on-primary/5 text-on-primary hover:border-on-primary hover:bg-on-primary/10",
-  optionSelected: "rounded-2xl border-2 border-secondary bg-secondary text-ink",
-  optionCheck: "bg-ink text-paper",
-  label: "text-on-primary/90",
-  input: "rounded-2xl border-2 border-transparent bg-paper text-ink placeholder:text-muted/60 focus:ring-4 focus:ring-secondary/60",
-  inputError: "!border-red-400",
-  error: "text-red-200",
-  help: "text-on-primary/80",
-  stepButton: "border-2 border-secondary text-on-primary",
-  counter: "font-display text-on-primary",
-  submit: "rounded-full bg-accent font-display text-on-accent shadow-lg shadow-black/20 hover:brightness-110",
-  submitNote: "text-on-primary/90",
-  divider: "border-on-primary/15",
-  declineLink: "text-on-primary/85 hover:text-on-primary",
-  declineSubmit: "rounded-full border-2 border-on-primary/60 text-on-primary hover:border-on-primary hover:bg-on-primary/10",
-  contact: "text-on-primary/80",
-  panel: "rounded-2xl border border-on-primary/20 bg-on-primary/10 text-on-primary",
+  intro: "text-muted",
+  deadline: "text-accent",
+  progressDot: "bg-ink/15",
+  progressDotActive: "bg-primary",
+  progressLabel: "text-muted",
+  legend: "text-ink",
+  required: "text-accent",
+  option: "border border-ink/25 bg-paper text-ink hover:border-primary",
+  optionSelected: "border border-primary bg-primary text-on-primary",
+  optionCheck: "bg-on-primary text-primary",
+  label: "text-muted",
+  input: "border border-ink/20 bg-paper text-ink placeholder:text-muted/60 focus:border-primary focus:ring-2 focus:ring-primary/25",
+  inputError: "!border-accent",
+  error: "text-accent",
+  help: "text-muted",
+  stepButton: "border border-primary text-primary",
+  counter: "font-display text-primary",
+  submit: "bg-primary font-semibold uppercase tracking-[0.08em] text-on-primary hover:bg-ink sm:tracking-[0.14em]",
+  submitNote: "text-muted",
+  divider: "border-ink/15",
+  declineLink: "text-ink/80 hover:text-ink",
+  declineSubmit: "border border-ink/30 text-ink hover:border-primary hover:text-primary",
+  contact: "text-muted",
+  panel: "border border-primary/25 bg-paper text-ink",
 };
 
 export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
   const { content: c, photos, names, dates, meta } = inv;
-  const slot = (key: string) => (meta.photoSlots as Record<string, PhotoSlotSpec>)[key].ratio;
+  const ratio = (key: string) => (meta.photoSlots as Record<string, PhotoSlotSpec>)[key].ratio;
   const gallery = [photos.galeria1, photos.galeria2, photos.galeria3, photos.galeria4];
+  const monogram = `${names.initials[0]} · ${names.initials[1]}`;
 
+  // Portada "Abrir invitación": lino, nombres en columna y la ficha de la
+  // fecha; el botón es una barra olivo a todo el ancho.
   const cover = (
-    <div className="flex h-full items-center justify-center bg-gradient-to-b from-surface via-paper to-surface px-5 py-10 text-center sm:px-6">
-      <div className="relative flex w-full max-w-md flex-col items-center gap-5 rounded-sm border border-secondary/50 bg-paper px-5 py-12 shadow-[0_30px_60px_-25px_rgba(28,32,20,0.35)] min-[360px]:px-8 sm:max-w-lg sm:px-14 sm:py-16">
-        <Sprig className="h-7 w-10 text-secondary" />
-        <p className="font-display text-xs uppercase italic tracking-[0.4em] text-accent">{c.welcome.eyebrow}</p>
-        {/* Teléfono: un nombre por línea (no se pegan al borde de la tarjeta). */}
-        <h1 className="font-display text-[2.6rem] leading-[1.08] text-ink sm:text-5xl sm:leading-tight">
-          <span className="block sm:inline">{names.one}</span>
-          <span className="block text-2xl text-accent sm:mx-2 sm:inline sm:align-middle sm:text-3xl">&amp;</span>
-          <span className="block sm:inline">{names.two}</span>
-        </h1>
-        <div className="ornament w-full max-w-xs text-secondary">
-          <span className="whitespace-nowrap font-display text-xs tracking-[0.25em] text-muted sm:text-sm sm:tracking-[0.3em]">{dates.display}</span>
+    <div className="flex h-full flex-col bg-paper text-ink">
+      <div className="flex items-center justify-between border-b border-line px-6 pb-4 pt-20 sm:px-12 sm:pt-8">
+        <span className="font-display text-lg italic tracking-[0.2em] text-primary">{monogram}</span>
+        <span className="font-display text-lg italic text-muted">{dates.dotted}</span>
+      </div>
+      <div className="flex flex-1 flex-col justify-center px-6 sm:px-12 lg:px-24">
+        <Eyebrow>{c.welcome.eyebrow}</Eyebrow>
+        <div className="mt-6">
+          <Names one={names.one} two={names.two} accentClass="text-primary" size="text-[min(16vw,8.5rem)]" />
         </div>
-        <GateButton className="mt-6 rounded-full border border-ink bg-ink px-6 py-4 text-[13px] font-semibold uppercase tracking-[0.18em] text-paper shadow-lg shadow-ink/20 transition hover:bg-primary min-[360px]:px-9 min-[360px]:text-sm min-[360px]:tracking-[0.3em]">
+        <DateSheet dates={dates} className="mt-10 max-w-md" />
+      </div>
+      <div className="px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-12 sm:pb-12">
+        <GateButton className="flex min-h-[60px] w-full items-center justify-between gap-4 bg-primary px-6 text-sm font-semibold uppercase tracking-[0.24em] text-on-primary transition hover:bg-ink sm:max-w-md">
           {c.welcome.buttonLabel}
+          <ArrowRightIcon size={18} />
         </GateButton>
       </div>
     </div>
   );
 
   return (
-    <Shell inv={inv} fontClasses={fontClasses} backClassName="bg-paper/80 text-ink shadow-sm">
+    <Shell inv={inv} fontClasses={fontClasses} backClassName="bg-paper/90 text-ink">
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
-        {/* Hero a pantalla completa */}
-        <section className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
-          <Image src={photos.portada.src} alt={photos.portada.alt} fill priority sizes="100vw" className="object-cover" style={{ objectPosition: photos.portada.position }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/5 via-45% to-ink/85" />
-          <div className="relative z-10 flex h-full flex-col items-center justify-end px-6 pb-10 text-center text-paper [text-shadow:0_1px_3px_rgba(0,0,0,0.45)] sm:pb-20">
-            <p className="font-display text-sm uppercase italic tracking-[0.35em] text-paper/90 sm:text-base">{c.hero.eyebrow}</p>
-            {/* Teléfono: un nombre por línea y más grandes (antes iban en una
-                sola línea pegada a los bordes). Escritorio: una línea. */}
-            <h1 className="mt-4 font-display text-[clamp(2.75rem,14vw,4rem)] leading-[1.02] sm:text-7xl sm:leading-[1.05]">
-              <span className="block sm:inline">{names.one}</span>
-              <span className="my-1 block text-[0.55em] text-secondary sm:mx-4 sm:my-0 sm:inline sm:align-middle sm:text-5xl">&amp;</span>
-              <span className="block sm:inline">{names.two}</span>
-            </h1>
-            <div className="ornament mt-6 w-full max-w-sm text-secondary">
-              <span className="whitespace-nowrap font-display text-sm tracking-[0.22em] sm:text-xl sm:tracking-[0.3em]">{dates.display}</span>
+        {/* Portada: teléfono = foto arriba (su alto sale del de la pantalla,
+            para que nombres, fecha y "Desliza hacia abajo" quepan sin
+            desplazar) y bloque olivo abajo; escritorio = dos columnas. */}
+        <section className="grid min-h-[100svh] grid-cols-1 grid-rows-[auto_1fr] lg:grid-cols-2 lg:grid-rows-1">
+          <div className="relative h-[max(11rem,calc(100svh-25rem))] lg:order-2 lg:h-auto">
+            <Image src={photos.portada.src} alt={photos.portada.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" style={{ objectPosition: photos.portada.position }} />
+          </div>
+          <div className="flex flex-col bg-primary px-6 pb-6 pt-6 text-on-primary sm:px-12 lg:order-1 lg:justify-between lg:px-16 lg:pb-14 lg:pt-28">
+            <div className="flex items-baseline justify-between gap-4">
+              <Eyebrow light>{c.hero.eyebrow}</Eyebrow>
+              <span className="font-display text-lg italic text-secondary">{monogram}</span>
             </div>
-            <ScrollCue className="mt-8 text-paper" circleClassName="border-paper/80 bg-ink/25" />
+            <div className="mt-5 lg:mt-0">
+              <Names one={names.one} two={names.two} accentClass="text-secondary" size="text-[min(15vw,7.5rem)] short:text-[min(12vw,7.5rem)]" />
+            </div>
+            <DateSheet dates={dates} light className="mt-6 max-w-lg lg:mt-0" />
+            <ScrollCue className="mx-auto mt-4 text-on-primary lg:mx-0 lg:mt-8" circleClassName="border-on-primary/50" />
           </div>
         </section>
 
         {c.openingQuote && <QuoteBlock quote={c.openingQuote} />}
 
+        {/* Díptico: foto horizontal grande + retrato pequeño, con el texto
+            entre las dos como en una página de revista. */}
         {c.story && (
-          <section id="historia" className="bg-surface px-6 py-16 sm:py-20">
-            <div className="mx-auto max-w-2xl">
-              <Reveal>
-                <Frame photo={photos.historia} ratio={slot("historia")} sizes="(min-width: 768px) 672px, 100vw" className="rounded-[28px] shadow-xl shadow-ink/10" />
+          <section id="historia" className="bg-surface px-6 py-20 sm:px-12 sm:py-28">
+            <div className="mx-auto grid max-w-6xl grid-cols-12 gap-x-4 gap-y-8 sm:gap-x-8 md:gap-y-12">
+              <Reveal className="col-span-12 md:col-span-8">
+                <Frame photo={photos.historia} ratio={ratio("historia")} sizes="(min-width: 1152px) 740px, (min-width: 768px) 64vw, 100vw" />
               </Reveal>
-              {c.story.caption && (
-                <Reveal delay={100}>
-                  <p className="mx-auto mt-5 max-w-md text-center font-display text-lg italic text-muted sm:text-xl">{c.story.caption}</p>
-                </Reveal>
-              )}
+              <Reveal delay={100} className="col-span-12 md:col-span-4 md:self-end">
+                <Eyebrow>Nuestra historia</Eyebrow>
+                {c.story.caption && <p className="mt-4 font-display text-[1.65rem] font-light leading-snug text-ink sm:text-3xl">{c.story.caption}</p>}
+              </Reveal>
               {c.story.quote && (
-                <Reveal delay={160}>
-                  <p className="mx-auto mt-4 max-w-md text-center font-display text-base italic text-muted sm:text-lg">
-                    &ldquo;{c.story.quote.text}&rdquo;
-                    {c.story.quote.reference && <span className="mt-1.5 block font-body text-xs not-italic uppercase tracking-[0.25em] text-accent">{quoteCitation(c.story.quote)}</span>}
-                  </p>
+                <Reveal delay={140} className="col-span-7 self-center md:col-span-6 md:col-start-2">
+                  <p className="font-display text-xl italic leading-snug text-primary sm:text-3xl">&ldquo;{c.story.quote.text}&rdquo;</p>
+                  {c.story.quote.reference && <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-muted">{quoteCitation(c.story.quote)}</p>}
                 </Reveal>
               )}
+              <Reveal delay={180} className={`md:col-span-4 md:col-start-9 ${c.story.quote ? "col-span-5" : "col-span-8 col-start-5"}`}>
+                <Frame photo={photos.retrato} ratio={ratio("retrato")} sizes="(min-width: 768px) 30vw, 42vw" />
+              </Reveal>
             </div>
           </section>
         )}
 
         {c.family && (
-          <section className={`bg-surface px-6 pb-16 sm:pb-20 ${c.story ? "pt-0" : "pt-16 sm:pt-20"}`}>
-            <Reveal>
-              <div className="mx-auto max-w-2xl text-center">
-                <div className="ornament mx-auto w-full max-w-[140px] text-secondary" />
-                <p className="mt-6 font-display text-xl italic text-primary sm:text-2xl">{c.family.intro}</p>
-                <div className="mt-8 flex flex-col items-center justify-center gap-8 sm:flex-row sm:items-start sm:gap-16">
-                  {c.family.groups.map((group) => (
-                    <div key={group.label} className="min-w-0">
-                      <p className="text-xs uppercase tracking-[0.3em] text-accent sm:text-sm">{group.label}</p>
-                      <div className="mt-3 space-y-1">
-                        {group.names.map((name, i) => (
-                          <p key={i} className="font-display text-lg text-ink sm:text-xl">{name}</p>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          <section className="px-6 py-20 sm:px-12 sm:py-24">
+            <Reveal className="mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-12">
+              <p className="font-display text-[1.9rem] font-light italic leading-tight text-ink sm:text-4xl md:col-span-5">{c.family.intro}</p>
+              <div className="grid grid-cols-1 gap-8 min-[480px]:grid-cols-2 md:col-span-6 md:col-start-7">
+                {c.family.groups.map((group, i) => (
+                  <div key={group.label} className="border-t border-ink/20 pt-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent">
+                      <span className="mr-2 font-display text-sm normal-case italic tracking-normal text-muted">{["I", "II", "III", "IV"][i] ?? i + 1}.</span>
+                      {group.label}
+                    </p>
+                    {group.names.map((name, j) => (
+                      <p key={j} className="mt-2 font-display text-xl text-ink sm:text-2xl">{name}</p>
+                    ))}
+                  </div>
+                ))}
               </div>
             </Reveal>
           </section>
         )}
 
-        {/* Cuenta regresiva, calendario y lugares */}
-        <section id="ceremonia" className="relative overflow-hidden bg-primary px-6 py-20 sm:py-28">
-          <div className="mx-auto grid grid-cols-1 max-w-5xl grid-cols-1 items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-            <Reveal className="order-2 lg:order-1">
-              <Frame photo={photos.cuentaRegresiva} ratio={slot("cuentaRegresiva")} sizes="(min-width: 1024px) 380px, 320px" className="mx-auto w-full max-w-xs rounded-[28px] shadow-2xl shadow-black/30 lg:max-w-sm" />
+        {/* Cuenta regresiva en franja olivo + calendario */}
+        <section className="bg-primary px-6 py-20 text-on-primary sm:px-12 sm:py-28">
+          <div className="mx-auto max-w-6xl">
+            <Reveal>
+              <Eyebrow light>{c.countdown.eyebrow}</Eyebrow>
+              <Title light>{c.countdown.title}</Title>
             </Reveal>
-            <div className="order-1 lg:order-2">
-              <Reveal>
-                <Heading eyebrow={c.countdown.eyebrow} title={c.countdown.title} light />
-              </Reveal>
-              <Reveal delay={100} className="mt-10">
-                <Countdown startISO={inv.startISO} endISO={inv.endISO} todayMessage={c.countdown.todayMessage} afterMessage={c.countdown.afterMessage} />
-              </Reveal>
-              <Reveal delay={200}>
-                <p className="mt-8 text-center text-sm text-on-primary/90 sm:text-base lg:text-left">
-                  {dates.weekdayLong} · {dates.time}
-                </p>
-                <div className="mt-4 flex flex-col items-center gap-2 lg:items-start">
-                  <a href={inv.links.calendar} className="inline-flex min-h-12 items-center gap-2.5 rounded-full border-2 border-on-primary/40 px-4 py-3 text-base font-bold text-on-primary transition hover:border-on-primary hover:bg-on-primary/10 min-[360px]:px-6 max-w-full text-center [&_svg]:shrink-0">
-                    <CalendarIcon />
-                    Agregar a mi calendario
-                  </a>
-                  <a href={inv.links.googleCalendar} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm text-on-primary/80 underline underline-offset-4 hover:text-on-primary">
-                    o agregar en Google Calendar
-                  </a>
-                </div>
-              </Reveal>
+            <Reveal delay={100} className="mt-10 sm:mt-14">
+              <Countdown startISO={inv.startISO} endISO={inv.endISO} todayMessage={c.countdown.todayMessage} afterMessage={c.countdown.afterMessage} />
+            </Reveal>
+            <Reveal delay={180} className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="font-display text-xl text-on-primary sm:text-2xl">
+                {dates.weekdayLong} <span className="whitespace-nowrap text-secondary">· {dates.time}</span>
+              </p>
+              <div className="flex flex-col items-start gap-1">
+                <a href={inv.links.calendar} className="inline-flex min-h-12 max-w-full items-center gap-2.5 border border-on-primary/50 px-5 py-3 text-center text-sm font-semibold uppercase tracking-[0.12em] text-on-primary transition hover:bg-on-primary hover:text-primary [&_svg]:shrink-0">
+                  <CalendarIcon size={18} />
+                  Agregar a mi calendario
+                </a>
+                <a href={inv.links.googleCalendar} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm text-on-primary/80 underline underline-offset-4 hover:text-on-primary">
+                  o agregar en Google Calendar
+                </a>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* Itinerario: hora | línea de tiempo | lugar */}
+        <section id="ceremonia" className="px-6 py-20 sm:px-12 sm:py-28">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-12">
+            <Reveal className="md:col-span-4">
+              <Eyebrow>Itinerario</Eyebrow>
+              <Title>Dónde y cuándo</Title>
+            </Reveal>
+            <ol className="md:col-span-8">
               {inv.locations.map((location, i) => (
-                <Reveal key={location.name + i} delay={260 + i * 60}>
-                  <LocationBlock location={location} />
+                <Reveal key={location.name + i} delay={i * 100}>
+                  <Stop location={location} last={i === inv.locations.length - 1} />
                 </Reveal>
               ))}
-            </div>
+            </ol>
           </div>
         </section>
 
         {c.details && (c.details.notice || c.details.dressCode) && (
-          <section id="detalles" className="bg-surface px-6 py-20 sm:py-28">
-            <div className="mx-auto max-w-3xl">
+          <section id="detalles" className="bg-surface px-6 py-20 sm:px-12 sm:py-28">
+            <div className="mx-auto max-w-6xl">
               <Reveal>
-                <Heading eyebrow={c.details.eyebrow} title={c.details.title} />
+                <Eyebrow>{c.details.eyebrow}</Eyebrow>
+                <Title>{c.details.title}</Title>
               </Reveal>
-              {c.details.notice && (
-                <Reveal delay={80}>
-                  <div className="mx-auto mt-10 max-w-2xl rounded-[24px] border-2 border-accent bg-accent/10 px-6 py-7 text-center sm:px-10 sm:py-8">
-                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-accent">{c.details.notice.label}</p>
-                    <p className="mt-3 text-lg font-bold leading-snug text-primary sm:text-xl">
-                      <Emphasis text={c.details.notice.title} className="text-accent" />
-                    </p>
-                    {c.details.notice.body && (
-                      <p className="mt-4 text-sm leading-relaxed text-ink sm:text-base">
-                        <Emphasis text={c.details.notice.body} className="font-bold text-accent" />
+              <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-12">
+                {c.details.notice && (
+                  <Reveal className="md:col-span-7">
+                    <div className="border-l-4 border-accent pl-5 sm:pl-8">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">{c.details.notice.label}</p>
+                      <p className="mt-3 font-display text-[1.75rem] font-light leading-snug text-ink sm:text-4xl">
+                        <Emphasis text={c.details.notice.title} className="italic text-accent" />
                       </p>
-                    )}
-                    {c.details.notice.note && <p className="mt-3 text-sm text-muted">{c.details.notice.note}</p>}
-                  </div>
-                </Reveal>
-              )}
-              {c.details.dressCode && (
-                <Reveal delay={200}>
-                  <div className={`mx-auto max-w-md rounded-[24px] border-2 border-accent/50 bg-paper px-6 py-8 text-center sm:px-8 ${c.details.notice ? "mt-8" : "mt-10"}`}>
-                    <h3 className="font-display text-xl text-primary">{c.details.dressCode.title}</h3>
-                    {c.details.dressCode.description && <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">{c.details.dressCode.description}</p>}
+                      {c.details.notice.body && (
+                        <p className="mt-4 text-base leading-relaxed text-ink/85 sm:text-lg">
+                          <Emphasis text={c.details.notice.body} className="font-bold text-ink" />
+                        </p>
+                      )}
+                      {c.details.notice.note && <p className="mt-3 text-sm text-muted">{c.details.notice.note}</p>}
+                    </div>
+                  </Reveal>
+                )}
+                {c.details.dressCode && (
+                  <Reveal delay={120} className={c.details.notice ? "md:col-span-4 md:col-start-9" : "md:col-span-6"}>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted">Vestimenta</p>
+                    <p className="mt-3 font-display text-3xl text-ink">{c.details.dressCode.title}</p>
+                    {c.details.dressCode.description && <p className="mt-2 text-base leading-relaxed text-muted">{c.details.dressCode.description}</p>}
                     {c.details.dressCode.avoidColors.length > 0 && (
-                      <>
-                        {c.details.dressCode.avoidLabel && <p className="mt-4 text-sm font-bold uppercase tracking-wide text-accent">{c.details.dressCode.avoidLabel}</p>}
-                        <div className="mt-3 flex flex-col items-center gap-2.5">
+                      <div className="mt-5 border-t border-ink/15 pt-4">
+                        {c.details.dressCode.avoidLabel && <p className="text-sm font-bold uppercase tracking-wide text-accent">{c.details.dressCode.avoidLabel}</p>}
+                        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-3">
                           {c.details.dressCode.avoidColors.map((color) => (
-                            <span key={color.name} className="flex items-center gap-2.5 text-lg font-bold uppercase tracking-wide text-ink">
-                              <AvoidSwatch hex={color.hex} />
+                            <span key={color.name} className="flex items-center gap-2.5 text-lg font-semibold text-ink">
+                              <AvoidSwatch hex={color.hex} size={26} />
                               {color.name}
                             </span>
                           ))}
                         </div>
-                      </>
+                      </div>
                     )}
-                    {c.details.dressCode.notice && <p className="mt-5 text-sm font-semibold leading-relaxed text-primary">{c.details.dressCode.notice}</p>}
+                    {c.details.dressCode.notice && <p className="mt-4 text-sm font-semibold leading-relaxed text-primary">{c.details.dressCode.notice}</p>}
+                  </Reveal>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Mosaico a sangre: alta | vertical + horizontal; y una horizontal a todo el ancho. */}
+        {c.gallery && (
+          <section id="galeria" className="px-6 py-20 sm:px-12 sm:py-28">
+            <div className="mx-auto max-w-6xl">
+              <Reveal className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <Eyebrow>{c.gallery.eyebrow}</Eyebrow>
+                  <Title>{c.gallery.title}</Title>
+                </div>
+                <p className="text-sm text-muted">Toca una foto para verla más grande.</p>
+              </Reveal>
+              <LightboxProvider photos={gallery} overlayClassName="bg-ink/92" closeClassName="bg-paper text-ink hover:bg-surface">
+                <div className="mt-10 grid grid-cols-12 gap-2 sm:mt-14 sm:gap-4">
+                  <Reveal variant="fade" className="col-span-6 sm:col-span-5">
+                    <LightboxItem index={0} label={gallery[0].alt}>
+                      <Frame photo={gallery[0]} ratio={ratio("galeria1")} sizes="(min-width: 1152px) 470px, 48vw" />
+                    </LightboxItem>
+                  </Reveal>
+                  <div className="col-span-6 flex flex-col gap-2 sm:col-span-7 sm:gap-4">
+                    <Reveal variant="fade" delay={100} className="w-[78%] self-end sm:w-[62%]">
+                      <LightboxItem index={1} label={gallery[1].alt}>
+                        <Frame photo={gallery[1]} ratio={ratio("galeria2")} sizes="(min-width: 1152px) 420px, 38vw" />
+                      </LightboxItem>
+                    </Reveal>
+                    <Reveal variant="fade" delay={160}>
+                      <LightboxItem index={2} label={gallery[2].alt}>
+                        <Frame photo={gallery[2]} ratio={ratio("galeria3")} sizes="(min-width: 1152px) 660px, 48vw" />
+                      </LightboxItem>
+                    </Reveal>
                   </div>
-                </Reveal>
-              )}
+                  <Reveal variant="fade" delay={200} className="col-span-12">
+                    <LightboxItem index={3} label={gallery[3].alt}>
+                      <Frame photo={gallery[3]} ratio={ratio("galeria4")} sizes="(min-width: 1152px) 1152px, 100vw" />
+                    </LightboxItem>
+                  </Reveal>
+                </div>
+              </LightboxProvider>
             </div>
           </section>
         )}
 
         {c.gifts && (
-          <section id="regalos" className="bg-paper px-6 py-20 sm:py-28">
-            <div className="mx-auto grid grid-cols-1 max-w-5xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
-              <Reveal>
-                <Frame photo={photos.regalos} ratio={slot("regalos")} sizes="(min-width: 1024px) 380px, 320px" className="mx-auto w-full max-w-xs rounded-[28px] shadow-xl shadow-ink/10 lg:max-w-sm" />
+          <section id="regalos" className="border-t border-line px-6 py-20 sm:px-12 sm:py-28">
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 md:grid-cols-12 md:items-end">
+              <Reveal className="md:col-span-6">
+                <Eyebrow>{c.gifts.eyebrow}</Eyebrow>
+                <Title>{c.gifts.title}</Title>
+                <p className="mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg">{c.gifts.message}</p>
               </Reveal>
-              <div>
-                <Reveal>
-                  <Heading eyebrow={c.gifts.eyebrow} title={c.gifts.title} />
-                </Reveal>
-                <Reveal delay={100}>
-                  <p className="mx-auto mt-6 max-w-md text-center text-sm leading-relaxed text-muted sm:text-base">{c.gifts.message}</p>
-                </Reveal>
-                {c.gifts.method && (
-                  <Reveal delay={180}>
-                    <p className="mt-6 text-center text-sm font-bold uppercase tracking-[0.2em] text-accent">{c.gifts.method}</p>
-                  </Reveal>
-                )}
+              <Reveal delay={120} className="md:col-span-5 md:col-start-8">
+                {c.gifts.method && <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">{c.gifts.method}</p>}
                 {c.gifts.value && (
-                  <Reveal delay={240} className="mt-3">
+                  <div className="mt-3">
                     <CopyValue
                       value={c.gifts.value}
                       copyLabel={c.gifts.copyLabel}
                       copiedLabel={c.gifts.copiedLabel}
-                      valueClassName="text-center font-display text-3xl tracking-wider text-primary min-[360px]:text-4xl sm:text-5xl"
-                      buttonClassName="rounded-full border-2 border-secondary bg-paper px-7 py-3 text-base font-semibold uppercase tracking-wide text-primary hover:bg-secondary/20"
+                      align="start"
+                      valueClassName="font-display text-[min(11vw,3.5rem)] font-light tracking-wide text-ink"
+                      buttonClassName="border border-primary px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-primary hover:bg-primary hover:text-on-primary"
                       noteClassName="text-muted"
                     />
-                  </Reveal>
+                  </div>
                 )}
                 {c.gifts.link && (
-                  <Reveal delay={280} className="mt-6 flex justify-center">
-                    <a href={c.gifts.link.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center rounded-full bg-ink px-7 py-4 text-base font-semibold uppercase tracking-wide text-paper transition hover:bg-primary">
-                      {c.gifts.link.label}
-                    </a>
-                  </Reveal>
+                  <a href={c.gifts.link.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-12 max-w-full items-center bg-primary px-6 py-3 text-center text-sm font-semibold uppercase tracking-[0.14em] text-on-primary hover:bg-ink">
+                    {c.gifts.link.label}
+                  </a>
                 )}
-              </div>
+              </Reveal>
             </div>
           </section>
         )}
 
         {inv.rsvp && (
           <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <section id="confirmar" className="bg-primary px-6 py-20 sm:py-28">
-              <div className="mx-auto max-w-xl">
-                <Reveal>
-                  <Heading eyebrow={inv.rsvp.eyebrow} title={inv.rsvp.title} light />
+            <section id="confirmar" className="bg-surface px-6 py-20 sm:px-12 sm:py-28">
+              <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 lg:grid-cols-12">
+                <Reveal className="lg:col-span-5">
+                  <Eyebrow>{inv.rsvp.eyebrow}</Eyebrow>
+                  <Title className="italic">{inv.rsvp.title}</Title>
                 </Reveal>
-                <Reveal delay={120} className="mt-8">
+                <Reveal delay={120} className="lg:col-span-6 lg:col-start-7">
                   <RsvpForm rsvp={inv.rsvp} isDemo={inv.isDemo} styles={rsvpStyles} />
                 </Reveal>
               </div>
@@ -366,69 +440,22 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
           </BeforeEvent>
         )}
 
-        {c.gallery && (
-          <section id="galeria" className="bg-surface px-6 py-20 sm:py-28">
-            <div className="mx-auto max-w-3xl">
-              <Reveal>
-                <Heading eyebrow={c.gallery.eyebrow} title={c.gallery.title} />
-              </Reveal>
-              <Reveal delay={60}>
-                <p className="mx-auto mt-4 max-w-sm text-center text-sm text-muted">Toca una foto para verla más grande.</p>
-              </Reveal>
-              {/* Collage editorial con marcos de proporción fija: fila 1
-                  horizontal grande + vertical; fila 2 vertical + horizontal
-                  inclinada y superpuesta. Igual en teléfono y escritorio. */}
-              <LightboxProvider photos={gallery} overlayClassName="bg-ink/90" closeClassName="bg-paper text-ink hover:bg-surface">
-                <div className="mt-8 sm:mt-12">
-                  <div className="flex items-start gap-2.5 sm:gap-4">
-                    <Reveal className="w-[58%]">
-                      <LightboxItem index={0} label={gallery[0].alt} className="rounded-2xl border-[3px] border-paper shadow-lg shadow-ink/15 transition duration-300 hover:-translate-y-1">
-                        <Frame photo={gallery[0]} ratio={slot("galeria1")} sizes="(min-width: 768px) 440px, 60vw" className="rounded-[13px]" />
-                      </LightboxItem>
-                    </Reveal>
-                    <Reveal delay={100} className="mt-6 min-w-0 flex-1 sm:mt-10">
-                      <LightboxItem index={1} label={gallery[1].alt} className="rounded-2xl border-[3px] border-paper shadow-lg shadow-ink/15 transition duration-300 hover:-translate-y-1">
-                        <Frame photo={gallery[1]} ratio={slot("galeria2")} sizes="(min-width: 768px) 300px, 40vw" className="rounded-[13px]" />
-                      </LightboxItem>
-                    </Reveal>
-                  </div>
-                  <div className="-mt-3 flex items-start gap-2.5 sm:-mt-6 sm:gap-4">
-                    <Reveal delay={150} className="relative z-0 w-[40%]">
-                      <LightboxItem index={2} label={gallery[2].alt} className="rounded-2xl border-[3px] border-paper shadow-lg shadow-ink/15 transition duration-300 hover:-translate-y-1">
-                        <Frame photo={gallery[2]} ratio={slot("galeria3")} sizes="(min-width: 768px) 300px, 40vw" className="rounded-[13px]" />
-                      </LightboxItem>
-                    </Reveal>
-                    <Reveal delay={220} className="relative z-10 -ml-4 mt-10 min-w-0 flex-1 sm:-ml-6 sm:mt-16">
-                      <LightboxItem index={3} label={gallery[3].alt} className="rounded-2xl border-[3px] border-paper shadow-2xl shadow-ink/30 transition duration-300 [transform:rotate(-2.5deg)] hover:[transform:rotate(-1deg)_translateY(-4px)]">
-                        <Frame photo={gallery[3]} ratio={slot("galeria4")} sizes="(min-width: 768px) 460px, 62vw" className="rounded-[13px]" />
-                      </LightboxItem>
-                    </Reveal>
-                  </div>
-                </div>
-              </LightboxProvider>
-            </div>
-          </section>
-        )}
-
         {c.closingQuote && <QuoteBlock quote={c.closingQuote} />}
 
-        <footer className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-ink px-6 py-24 text-center">
-          <Image src={photos.cierre.src} alt={photos.cierre.alt} fill sizes="100vw" className="object-cover opacity-30" style={{ objectPosition: photos.cierre.position }} />
-          <div className="relative z-10 flex flex-col items-center">
-            <p className="font-display text-xl italic text-paper/90 sm:text-2xl">{c.footer.message}</p>
-            <h2 className="mt-3 font-display text-[2.6rem] leading-[1.1] text-paper sm:text-6xl">
-              <span className="block sm:inline">{names.one}</span> <span className="block sm:inline">&amp; {names.two}</span>
-            </h2>
-            <div className="ornament mt-6 w-full max-w-xs text-secondary">
-              <span className="whitespace-nowrap text-xs uppercase tracking-[0.25em] text-paper/80">{dates.numeric}</span>
+        <footer className="bg-primary px-6 pb-16 pt-20 text-on-primary sm:px-12 sm:pb-20 sm:pt-28">
+          <div className="mx-auto max-w-6xl">
+            <Eyebrow light>{c.footer.message}</Eyebrow>
+            <div className="mt-6">
+              <Names one={names.one} two={names.two} accentClass="text-secondary" size="text-[min(15vw,8rem)]" />
             </div>
-            <MusicCredit music={c.music} className="mt-10 text-paper/60" />
+            <DateSheet dates={dates} light className="mt-12 max-w-lg" />
+            <MusicCredit music={c.music} className="!mx-0 mt-10 text-on-primary/60" />
           </div>
         </footer>
 
         {inv.rsvp && (
           <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-ink/95 backdrop-blur" textClassName="font-display text-paper/90" buttonClassName="rounded-full bg-accent font-bold text-on-accent" />
+            <StickyRsvp date={dates.compact} time={dates.time} barClassName="bg-ink/95 backdrop-blur" textClassName="font-display text-paper/90" buttonClassName="bg-secondary font-bold text-ink" />
           </BeforeEvent>
         )}
         {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}

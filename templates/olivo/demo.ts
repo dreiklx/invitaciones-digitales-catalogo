@@ -121,16 +121,14 @@ export const demo: InvitationOf<"olivo"> = {
   },
 
   photos: {
-    // Sesión de pareja real (public/plantillas/olivo/fotos/), contada en
-    // orden: abrazo → propuesta → el anillo → la galería → el cierre.
-    portada: { src: "/plantillas/olivo/fotos/abrazo.jpg", alt: "Ramón y Florinda abrazados en el patio", position: "54% 10%" },
+    // Sesión de pareja real (public/plantillas/olivo/fotos/): cada foto una
+    // sola vez, contada en orden (abrazo → propuesta → rosa → el anillo).
+    portada: { src: "/plantillas/olivo/fotos/abrazo.jpg", alt: "Ramón y Florinda abrazados en el patio", position: "54% 12%" },
     historia: { src: "/plantillas/olivo/fotos/propuesta.jpg", alt: "Ramón, de rodillas, le propone matrimonio a Florinda", position: "50% 45%" },
-    cuentaRegresiva: { src: "/plantillas/olivo/fotos/anillo-vertical.jpg", alt: "Florinda enseña el anillo junto a Ramón", position: "50% 28%" },
-    regalos: { src: "/plantillas/olivo/fotos/rosa.jpg", alt: "Ramón le lanza una rosa a Florinda", position: "50% 40%" },
-    galeria1: { src: "/plantillas/olivo/fotos/sentados.jpg", alt: "Ramón y Florinda sentados en el patio, felices", position: "50% 35%" },
+    retrato: { src: "/plantillas/olivo/fotos/rosa.jpg", alt: "Ramón le lanza una rosa a Florinda", position: "50% 40%" },
+    galeria1: { src: "/plantillas/olivo/fotos/anillo-vertical.jpg", alt: "Florinda enseña el anillo junto a Ramón", position: "50% 28%" },
     galeria2: { src: "/plantillas/olivo/fotos/patio.jpg", alt: "Ramón le ofrece una rosa a Florinda", position: "50% 30%" },
-    galeria3: { src: "/plantillas/olivo/fotos/abrazo.jpg", alt: "Ramón y Florinda abrazados", position: "50% 22%" },
+    galeria3: { src: "/plantillas/olivo/fotos/sentados.jpg", alt: "Ramón y Florinda sentados en el patio, felices", position: "50% 35%" },
     galeria4: { src: "/plantillas/olivo/fotos/anillo-horizontal.jpg", alt: "Florinda enseña el anillo y Ramón celebra", position: "50% 35%" },
-    cierre: { src: "/plantillas/olivo/fotos/anillo-vertical.jpg", alt: "Ramón y Florinda con el anillo de compromiso", position: "50% 25%" },
   },
 };

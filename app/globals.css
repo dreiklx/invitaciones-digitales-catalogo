@@ -197,6 +197,34 @@ body {
 
 /* Reproductor de música (templates/shared/players.tsx): solo se mueve
    mientras suena. */
+/* Nube: confeti que cae despacio dentro de su sección (overflow-hidden),
+   un "bote" suave de los bloques de la cuenta regresiva y la llama de la
+   velita. Movimientos cortos y lentos; nada se sale del ancho. */
+@keyframes confetti-fall {
+  0% { transform: translateY(-2rem) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translateY(105svh) rotate(240deg); opacity: 0; }
+}
+.confetti-fall {
+  animation: confetti-fall 10s linear infinite;
+}
+@keyframes bob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5px; }
+}
+.bob {
+  animation: bob 3.2s ease-in-out infinite;
+}
+@keyframes flicker {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.08, 0.94) rotate(2deg); }
+}
+.flicker {
+  transform-origin: 50% 90%;
+  animation: flicker 1.4s ease-in-out infinite;
+}
+
 @keyframes player-sway {
   0%, 100% { transform: rotate(-6deg); }
   50% { transform: rotate(6deg); }
@@ -232,7 +260,10 @@ body {
   .player-sway,
   .player-bar,
   .player-pulse,
-  .player-spin {
+  .player-spin,
+  .confetti-fall,
+  .bob,
+  .flicker {
     animation: none;
   }
 }

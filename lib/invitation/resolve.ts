@@ -38,11 +38,18 @@ export type ResolvedInvitation = {
   names: {
     one: string;
     two: string;
-    // "Ana & Luis" o "Mariana"
+    // "Ana & Luis", "Valentina" o, en un baby shower, "Natalia & Joaquín"
     joined: string;
     // "A", "L" (o "M", "")
     initials: [string, string];
   };
+  // Solo baby shower: futuros padres y, si se muestra, el nombre del bebé.
+  shower: {
+    parents: string[];
+    // "Natalia y Joaquín"
+    parentsText: string;
+    babyName?: string;
+  } | null;
   // Solo quinceaños y cumpleaños.
   honoree: {
     name: string;
@@ -81,14 +88,16 @@ export function resolveInvitation(
   const { site, event } = invitation;
   const couple = "couple" in invitation ? invitation.couple : null;
   const person = "honoree" in invitation ? invitation.honoree : null;
-  const one = couple ? couple.partnerOne : (person?.name ?? "");
-  const two = couple ? couple.partnerTwo : "";
-  // "Ana y Luis" o "Mariana": en títulos y mensajes.
-  const who = couple ? `${one} y ${two}` : one;
+  const shower = "shower" in invitation ? invitation.shower : null;
+  // Baby shower: los nombres "grandes" son los de quienes invitan.
+  const one = couple ? couple.partnerOne : shower ? (shower.parents[0] ?? "") : (person?.name ?? "");
+  const two = couple ? couple.partnerTwo : shower ? (shower.parents[1] ?? "") : "";
+  // "Ana y Luis" o "Valentina": en títulos y mensajes.
+  const who = two ? `${one} y ${two}` : one;
   const start = zonedTimeToUtc(invitation.date, invitation.time, site.timeZone);
   const end = new Date(start.getTime() + invitation.durationHours * 3600_000);
   const dates = formatEventDates(start, site.locale, site.timeZone);
-  const joined = couple ? `${one} & ${two}` : one;
+  const joined = two ? `${one} & ${two}` : one;
   const eventTitle = `${capitalize(event.name)} de ${who}`;
   const timeAt = (time: string) => formatTime(zonedTimeToUtc(invitation.date, time, site.timeZone), site.locale, site.timeZone);
 
@@ -128,7 +137,9 @@ export function resolveInvitation(
     site.description ||
     (couple
       ? `Acompáñanos a celebrar ${event.article === "la" ? "nuestra" : "nuestro"} ${event.name} el ${dates.long}`
-      : `Acompáñanos a celebrar ${event.article} ${event.name} de ${one} el ${dates.long}`) +
+      : shower
+        ? `Acompáñanos a celebrar la llegada de ${shower.babyName ?? "nuestro bebé"} el ${dates.long}`
+        : `Acompáñanos a celebrar ${event.article} ${event.name} de ${one} el ${dates.long}`) +
       (firstPlace ? ` en ${firstPlace.name}.` : ".");
 
   return {
@@ -143,6 +154,7 @@ export function resolveInvitation(
       joined,
       initials: [initial(one), two ? initial(two) : ""],
     },
+    shower: shower ? { parents: shower.parents, parentsText: who, babyName: shower.babyName?.trim() || undefined } : null,
     honoree: person
       ? { name: person.name, age: person.age, ageText: person.ageLabel ?? `${person.age} ${person.age === 1 ? "año" : "años"}` }
       : null,

@@ -11,7 +11,8 @@ import { ArrowDownIcon, ArrowRightIcon } from "@/templates/shared/icons";
 import { catalogFonts } from "./fonts";
 
 // Catálogo público: "/" cuando config/invitation.ts es null. Presenta los
-// diseños (bodas, quinceaños y cumpleaños) como un estudio de invitaciones
+// siete diseños en tres categorías (Bodas, Quince años, Bebés) como un
+// estudio de invitaciones
 // (no un panel): poca palabra, mucho aire y las miniaturas como
 // protagonistas. Al tocar un
 // diseño, su miniatura se transforma en la portada de la demo (View
@@ -30,20 +31,30 @@ const neutral: Palette = {
   line: "#d9d2c5",
 };
 
-// Los diseños se agrupan por tipo de celebración (`kind` en cada meta.ts).
+// Las tres categorías del catálogo; cada diseño entra por su `kind`
+// (meta.ts): 3 bodas + 2 quince años + 2 bebés.
 const groups: { id: string; title: string; text: string; kinds: EventKind[] }[] = [
-  { id: "bodas", title: "Bodas", text: "Cinco maneras de decir sí.", kinds: ["boda"] },
-  { id: "celebraciones", title: "Quinceaños y cumpleaños", text: "Para festejar a alguien especial.", kinds: ["quinceanos", "cumpleanos-infantil"] },
+  { id: "bodas", title: "Bodas", text: "Tres estilos para el día del sí: editorial en olivo y lino, revista en tonos tierra y noche de gala.", kinds: ["boda"] },
+  { id: "quince-anos", title: "Quince años", text: "Dos fiestas para sus XV: una de ensueño en lila y otra de gala en vino y rosa.", kinds: ["quinceanos"] },
+  { id: "bebes", title: "Bebés", text: "Para esperar su llegada con un baby shower y para celebrar su primer añito.", kinds: ["baby-shower", "cumpleanos-infantil"] },
 ];
+
+// Tipo de evento que se muestra en cada tarjeta.
+const eventLabel: Record<EventKind, string> = {
+  boda: "Boda",
+  quinceanos: "Quince años",
+  "baby-shower": "Baby shower",
+  "cumpleanos-infantil": "Primer cumpleaños",
+};
 
 // "También creamos invitaciones para": el color de cada punto viene de un
 // diseño afín.
 const events: [string, string][] = [
   ["Bodas", templateMetas.olivo.palette.primary],
-  ["Quinceaños", templateMetas.aurora.palette.primary],
-  ["Cumpleaños", templateMetas.nube.palette.accent],
-  ["Celebraciones infantiles", templateMetas.nube.palette.primary],
-  ["Baby showers", templateMetas.nube.palette.secondary],
+  ["Quince años", templateMetas.camelia.palette.primary],
+  ["Baby showers", templateMetas.arrullo.palette.primary],
+  ["Primeros cumpleaños", templateMetas.nube.palette.accent],
+  ["Cumpleaños infantiles", templateMetas.nube.palette.primary],
   ["Otros eventos", neutral.secondary],
 ];
 
@@ -70,20 +81,20 @@ export default function Catalog() {
 
       <section className="mx-auto max-w-7xl px-6 pb-14 pt-6 sm:px-10 sm:pb-32 sm:pt-20">
         <Reveal variant="fade">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Bodas · Quinceaños · Cumpleaños</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Bodas · Quince años · Bebés</p>
         </Reveal>
         <Reveal delay={120}>
           <h1 className="mt-5 font-display text-[3.4rem] font-light leading-[0.95] tracking-tight min-[400px]:text-6xl sm:mt-6 sm:text-8xl lg:text-[8.5rem]">
-            Siete maneras
+            Siete diseños,
             <br />
-            de <em className="font-normal">celebrar.</em>
+            tres <em className="font-normal">celebraciones.</em>
           </h1>
         </Reveal>
         <div className="mt-7 grid grid-cols-1 gap-8 sm:mt-14 sm:gap-10 md:grid-cols-12">
           <Reveal delay={240} className="md:col-span-5 md:col-start-8">
             <p className="text-base leading-relaxed text-muted sm:text-lg">
               Invitaciones digitales que se abren en cualquier teléfono, con sus nombres, sus fotos, su fecha y sus colores.
-              Para bodas, quinceaños y cumpleaños; cada diseño con su propia personalidad.
+              Elija la celebración y después el estilo: cada diseño tiene su propia personalidad.
             </p>
             <a href="#disenos" className="mt-6 inline-flex min-h-12 items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] sm:mt-8">
               <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/30 transition hover:bg-ink hover:text-paper">
@@ -92,20 +103,31 @@ export default function Catalog() {
               Ver los diseños
             </a>
           </Reveal>
-          {/* Índice de los diseños: en el teléfono sirve para saltar
-              directo a uno sin recorrer todo el catálogo. */}
+          {/* Índice por categoría: en el teléfono sirve para saltar directo
+              a un diseño sin recorrer todo el catálogo. */}
           <Reveal delay={320} variant="fade" className="md:col-span-6 md:row-start-1 md:self-end">
-            <nav aria-label="Diseños" className="flex flex-wrap gap-2">
-              {templateIds.map((id) => (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 py-2 pl-2.5 pr-4 text-sm transition hover:border-ink/40 hover:bg-surface"
-                >
-                  <span className="h-4 w-4 rounded-full ring-1 ring-ink/10" style={{ background: templateMetas[id].palette.primary }} />
-                  <span className="font-display italic text-muted">{templateMetas[id].number}</span>
-                  {templateMetas[id].name}
-                </a>
+            <nav aria-label="Diseños por celebración" className="space-y-4">
+              {groups.map((group) => (
+                <div key={group.id}>
+                  <a href={`#${group.id}`} className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted hover:text-ink">
+                    {group.title}
+                  </a>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {templateIds
+                      .filter((id) => group.kinds.includes(templateMetas[id].kind))
+                      .map((id) => (
+                        <a
+                          key={id}
+                          href={`#${id}`}
+                          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 py-2 pl-2.5 pr-4 text-sm transition hover:border-ink/40 hover:bg-surface"
+                        >
+                          <span className="h-4 w-4 rounded-full ring-1 ring-ink/10" style={{ background: templateMetas[id].palette.primary }} />
+                          <span className="font-display italic text-muted">{templateMetas[id].number}</span>
+                          {templateMetas[id].name}
+                        </a>
+                      ))}
+                  </div>
+                </div>
               ))}
             </nav>
           </Reveal>
@@ -117,18 +139,19 @@ export default function Catalog() {
           const ids = templateIds.filter((id) => group.kinds.includes(templateMetas[id].kind));
           if (!ids.length) return null;
           return (
-            <section key={group.id} aria-labelledby={`grupo-${group.id}`} className="pt-6 sm:pt-10">
-              {/* Encabezado del grupo: filete grueso, número de los diseños y título. */}
-              <Reveal className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-t-2 border-ink pb-6 pt-5 sm:pb-8 sm:pt-6">
-                <div>
+            <section key={group.id} id={group.id} aria-labelledby={`grupo-${group.id}`} className="scroll-mt-4 pt-6 sm:pt-10">
+              {/* Encabezado de la categoría: filete grueso, números, título,
+                  cuántos diseños tiene y para qué sirven. */}
+              <Reveal className="grid grid-cols-1 gap-x-10 gap-y-3 border-t-2 border-ink pb-6 pt-5 sm:pb-8 sm:pt-6 md:grid-cols-12 md:items-end">
+                <div className="md:col-span-6">
                   <p className="font-display text-lg italic text-muted sm:text-xl">
-                    {templateMetas[ids[0]].number} — {templateMetas[ids[ids.length - 1]].number}
+                    {templateMetas[ids[0]].number} — {templateMetas[ids[ids.length - 1]].number} · {ids.length} diseños
                   </p>
-                  <h2 id={`grupo-${group.id}`} className="mt-1 font-display text-4xl font-light leading-none sm:text-6xl">
+                  <h2 id={`grupo-${group.id}`} className="mt-1 font-display text-5xl font-light leading-none sm:text-7xl">
                     {group.title}
                   </h2>
                 </div>
-                <p className="font-display text-xl italic text-muted sm:text-2xl">{group.text}</p>
+                <p className="max-w-md text-base leading-relaxed text-muted sm:text-lg md:col-span-6 md:justify-self-end">{group.text}</p>
               </Reveal>
               {ids.map((id) => (
                 <Design key={id} id={id} index={templateIds.indexOf(id)} />
@@ -221,9 +244,12 @@ function Design({ id, index }: { id: TemplateId; index: number }) {
     <article id={id} className="grid scroll-mt-4 grid-cols-1 items-center gap-6 border-t border-line pb-14 pt-8 sm:gap-8 sm:py-20 md:grid-cols-12 md:gap-12 lg:py-24">
       {/* Teléfono: número y nombre ANTES de la miniatura (se sabe qué
           diseño se está viendo); en escritorio van en la columna de texto. */}
-      <div className="flex items-baseline gap-3 md:hidden">
-        <p className="font-display text-xl italic text-muted">{meta.number}</p>
-        <h3 className="font-display text-5xl font-light leading-none">{meta.name}</h3>
+      <div className="md:hidden">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted">{eventLabel[meta.kind]}</p>
+        <div className="mt-1 flex items-baseline gap-3">
+          <p className="font-display text-xl italic text-muted">{meta.number}</p>
+          <h3 className="font-display text-5xl font-light leading-none">{meta.name}</h3>
+        </div>
       </div>
       <Reveal variant="scale" className={`mb-4 md:mb-0 md:col-span-6 ${flipped ? "md:order-2 md:col-start-7" : ""}`}>
         <Link href={href} transitionTypes={["nav-forward"]} aria-label={`Ver el diseño ${meta.name}`} className="group relative block">
@@ -244,7 +270,10 @@ function Design({ id, index }: { id: TemplateId; index: number }) {
       </Reveal>
 
       <Reveal delay={120} className={`md:col-span-5 ${flipped ? "md:order-1 md:col-start-1" : "md:col-start-8"}`}>
-        <p className="hidden font-display text-2xl italic text-muted md:block">{meta.number}</p>
+        <p className="hidden text-xs font-semibold uppercase tracking-[0.3em] text-muted md:block">
+          <span className="mr-3 font-display text-2xl normal-case italic tracking-normal">{meta.number}</span>
+          {eventLabel[meta.kind]}
+        </p>
         <h3 className="mt-1 hidden font-display text-7xl font-light leading-none md:block">{meta.name}</h3>
         <p className="max-w-sm text-base leading-relaxed text-muted sm:text-lg md:mt-5">{meta.concept}</p>
         <ul className="mt-5 space-y-2 text-[15px] text-ink/80 sm:mt-6 sm:text-sm">
@@ -272,7 +301,7 @@ function Design({ id, index }: { id: TemplateId; index: number }) {
           transitionTypes={["nav-forward"]}
           className="group/cta mt-8 flex min-h-[52px] w-full items-center justify-center gap-3 rounded-full bg-ink px-6 text-sm font-semibold uppercase tracking-[0.22em] text-paper transition hover:bg-ink/85 md:mt-9 md:inline-flex md:min-h-12 md:w-auto md:justify-start md:rounded-none md:border-b md:border-ink md:bg-transparent md:px-0 md:pb-1 md:text-ink md:hover:bg-transparent"
         >
-          Ver {meta.name}
+          Abrir {meta.name}
           <ArrowRightIcon size={16} className="transition-transform duration-300 group-hover/cta:translate-x-1" />
         </Link>
       </Reveal>

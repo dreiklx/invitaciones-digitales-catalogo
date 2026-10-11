@@ -4,6 +4,55 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-10 — Tres categorías, Olivo nuevo, Camelia, Arrullo y Nube festiva
+
+### Qué se hizo
+- **Catálogo en tres categorías** (exactamente 7 diseños): Bodas (01
+  Olivo, 02 Tierra, 03 Gala) · Quince años (04 Aurora, 05 Camelia) ·
+  Bebés (06 Arrullo, baby shower; 07 Nube, primer cumpleaños). Cada
+  categoría con título, descripción e índice; cada tarjeta dice su tipo de
+  evento. `kind` nuevo: `baby-shower`.
+- **Renombres:** `riviera` → `arrullo` y `borgona` → `camelia` (carpetas,
+  rutas, guías `docs/templates/04-aurora`, `05-camelia`, `06-arrullo`);
+  `/plantillas/riviera` y `/plantillas/borgona` redirigen (308).
+- **Olivo rediseñado por completo** (misma paleta olivo/lino): portada a
+  dos columnas, nombres en columna ("Ramón / y Florinda"), fecha como
+  ficha de tres cifras, díptico, cuenta regresiva en franja, itinerario con
+  línea de tiempo, mosaico a sangre, Newsreader + Manrope, reproductor
+  `lino` (marcapáginas). Espacios de foto: 7 (uno por foto de la sesión).
+- **Camelia** (quince años, sobre la base de Borgoña): nombre monumental,
+  medallón XV, programa de la noche, corte de honor; reproductor `broche`.
+- **Arrullo** (baby shower, sobre la base de Riviera): crema, salvia y
+  mantequilla; luna, banderines y puntadas; nuevo `shower` en el config
+  (`parents`, `babyName` opcional) y `hero.title`; nada supone el sexo
+  del bebé.
+- **Nube** más festiva: banderines, globos, estrellas que titilan,
+  confeti que cae despacio, velita sobre la edad ("1 añito"), bloques de la
+  cuenta regresiva que botan; todo quieto con "reducir movimiento".
+- **Aurora:** la quinceañera de la demo pasa a ser **Valentina**.
+- **Fotos:** sesiones de stock de Pexels, una por diseño, para Aurora,
+  Camelia, Arrullo y Nube (fuentes en photo-map.md); sin imágenes
+  abstractas en ninguna demo. No se generó ninguna imagen.
+- **Demos separadas de los clientes:** `npm run nueva` deja en
+  "REEMPLAZAR" `couple`, `honoree.name` y `shower.parents`; `npm run
+  check` da error si cualquier texto de un cliente nombra a la persona de
+  la demo.
+
+### Verificación
+- `check`, `typecheck`, `lint`, `build` sin errores.
+- Sin red de seguridad: escritorio (barra de 15 px, clic y rueda real,
+  rueda lateral) a 1024×768, 1366×768, 1440×900 y 1920×1080 → 32 casos;
+  móvil (toques reales) a 320×568, 360×740, 390×844 y 430×932 → 32 casos,
+  más 320×568 al 125 % → 8: sin desbordamiento ni desplazamiento lateral,
+  visor y RSVP recorridos, música sonando en todos.
+- Música con pausa/reanudación en los 7. `npm run nueva` probado con
+  Olivo, Aurora, Camelia, Arrullo y Nube.
+- Revisión visual: los 7 diseños y el catálogo a 320, 390 y 1440.
+
+### Pendiente
+- Teléfono físico: animaciones de Nube y música al abrir.
+- Derechos de imagen de las fotos de Olivo (personajes de TV).
+
 ## 2026-10-09 (7) — Desplazamiento lateral en escritorio y fotos de Gala
 
 ### Qué se hizo

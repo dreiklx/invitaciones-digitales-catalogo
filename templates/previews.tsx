@@ -11,12 +11,12 @@ import TierraPreview from "./tierra/Preview";
 import { fontClasses as tierraFonts } from "./tierra/fonts";
 import GalaPreview from "./gala/Preview";
 import { fontClasses as galaFonts } from "./gala/fonts";
-import RivieraPreview from "./riviera/Preview";
-import { fontClasses as rivieraFonts } from "./riviera/fonts";
-import BorgonaPreview from "./borgona/Preview";
-import { fontClasses as borgonaFonts } from "./borgona/fonts";
 import AuroraPreview from "./aurora/Preview";
 import { fontClasses as auroraFonts } from "./aurora/fonts";
+import CameliaPreview from "./camelia/Preview";
+import { fontClasses as cameliaFonts } from "./camelia/fonts";
+import ArrulloPreview from "./arrullo/Preview";
+import { fontClasses as arrulloFonts } from "./arrullo/fonts";
 import NubePreview from "./nube/Preview";
 import { fontClasses as nubeFonts } from "./nube/fonts";
 
@@ -24,8 +24,8 @@ export const templatePreviews: Record<TemplateId, { Preview: ComponentType<{ inv
   olivo: { Preview: OlivoPreview, fontClasses: olivoFonts },
   tierra: { Preview: TierraPreview, fontClasses: tierraFonts },
   gala: { Preview: GalaPreview, fontClasses: galaFonts },
-  riviera: { Preview: RivieraPreview, fontClasses: rivieraFonts },
-  borgona: { Preview: BorgonaPreview, fontClasses: borgonaFonts },
   aurora: { Preview: AuroraPreview, fontClasses: auroraFonts },
+  camelia: { Preview: CameliaPreview, fontClasses: cameliaFonts },
+  arrullo: { Preview: ArrulloPreview, fontClasses: arrulloFonts },
   nube: { Preview: NubePreview, fontClasses: nubeFonts },
 };

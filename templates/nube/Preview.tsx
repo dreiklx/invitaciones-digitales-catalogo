@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ResolvedInvitation } from "@/lib/invitation/resolve";
-import { Balloon, Cloud } from "./ornaments";
+import { Balloon, Bunting, Cloud } from "./ornaments";
 
 // Miniatura del diseño para el catálogo (proporción 4:5). Usa unidades de
 // contenedor (cqw) para verse igual en cualquier ancho de tarjeta.
@@ -10,10 +10,11 @@ export default function NubePreview({ inv }: { inv: ResolvedInvitation }) {
   const match = ageText.match(/^(\d+)\s*(.*)$/);
   return (
     <div className="relative flex h-full w-full flex-col items-center overflow-hidden bg-paper pt-[9cqw] text-center text-ink">
-      <div className="absolute inset-0 bg-primary/30" />
+      <div className="absolute inset-0 bg-primary/35" />
+      <Bunting id="preview" className="absolute inset-x-0 top-0 !h-[9cqw]" />
       <Cloud className="absolute left-[5cqw] top-[7cqw] w-[20cqw] text-paper" />
       <Cloud className="absolute right-[6cqw] top-[30cqw] w-[14cqw] text-paper" />
-      <Balloon className="absolute bottom-[14cqw] right-[9cqw] w-[7cqw] text-accent/70" />
+      <Balloon className="absolute bottom-[14cqw] right-[9cqw] w-[7cqw] text-accent" />
       <Balloon className="absolute bottom-[20cqw] left-[8cqw] w-[6cqw] text-secondary" />
       <p className="relative rounded-full bg-paper/80 px-[3cqw] py-[1cqw] text-[2.6cqw] font-extrabold uppercase tracking-[0.2em]">{content.hero.eyebrow}</p>
       <div className="relative mt-[5cqw] w-[46cqw]">
@@ -26,7 +27,7 @@ export default function NubePreview({ inv }: { inv: ResolvedInvitation }) {
         </div>
       </div>
       <p className="relative mt-[4cqw] font-display text-[13cqw] font-semibold leading-none">{names.one}</p>
-      <p className="relative mt-[2cqw] font-display text-[4cqw] text-ink/80">Cumple {ageText}</p>
+      <p className="relative mt-[2cqw] font-display text-[4cqw] text-ink/80">¡Cumple {ageText}!</p>
     </div>
   );
 }

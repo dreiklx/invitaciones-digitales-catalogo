@@ -1,37 +1,36 @@
 import type { TemplateMeta } from "@/lib/invitation/types";
 
-// 01 · Olivo — el diseño original (probado en una boda real), en verde olivo
-// y lino. Ver docs/templates/01-olivo.md.
+// 01 · Olivo — editorial y sereno: verde olivo y lino con la composición de
+// una revista de arquitectura (rediseñado por completo el 2026-10-10).
+// Ver docs/templates/01-olivo.md.
 export const meta: TemplateMeta<"olivo"> = {
   id: "olivo",
   number: "01",
   name: "Olivo",
   kind: "boda",
-  concept: "Botánico y cálido: verde olivo, lino y detalles dorados.",
-  highlights: ["Portada con fotografía a pantalla completa", "Collage de fotos con una postal inclinada", "Detalles botánicos de línea fina"],
+  concept: "Editorial y sereno: verde olivo y lino, con la calma de una revista de arquitectura.",
+  highlights: ["Portada a dos columnas: color olivo y fotografía", "La fecha en una ficha de tres cifras y un itinerario con línea de tiempo", "Mosaico de fotos a sangre, sin marcos ni adornos"],
   palette: {
-    background: "#f7f2e8",
-    surface: "#eee6d4",
-    text: "#262b1d",
-    textMuted: "#575c48",
-    primary: "#4a5432",
-    onPrimary: "#f7f2e8",
-    secondary: "#bfa26a",
-    accent: "#a5643c",
-    onAccent: "#fbf6ee",
-    line: "#dbd0b6",
+    background: "#f4efe4",
+    surface: "#e8e0cf",
+    text: "#23271c",
+    textMuted: "#5c5f4e",
+    primary: "#4a5433",
+    onPrimary: "#f4efe4",
+    secondary: "#c8bd97",
+    accent: "#8a5d36",
+    onAccent: "#f8f3ea",
+    line: "#d5cbb4",
   },
-  fonts: { display: "Playfair Display", body: "Jost" },
-  musicPlayer: "rama",
+  fonts: { display: "Newsreader", body: "Manrope" },
+  musicPlayer: "lino",
   photoSlots: {
-    portada: { ratio: [2, 3], where: "Portada a pantalla completa (en escritorio se recorta a lo ancho)", position: "50% 30%" },
-    historia: { ratio: [3, 2], where: "Foto de la pareja después de la frase de apertura", position: "50% 40%" },
-    cuentaRegresiva: { ratio: [2, 3], where: "Junto a la cuenta regresiva", position: "50% 30%" },
-    regalos: { ratio: [4, 5], where: "Sección de regalos", position: "50% 30%" },
-    galeria1: { ratio: [3, 2], where: "Galería, arriba a la izquierda (la más grande)", position: "50% 40%" },
-    galeria2: { ratio: [4, 5], where: "Galería, arriba a la derecha", position: "50% 35%" },
-    galeria3: { ratio: [4, 5], where: "Galería, abajo a la izquierda", position: "50% 35%" },
-    galeria4: { ratio: [3, 2], where: "Galería, abajo a la derecha (inclinada, superpuesta)", position: "50% 45%" },
-    cierre: { ratio: [2, 3], where: "Fondo del pie de página (al 30 %)", position: "50% 30%" },
+    portada: { ratio: [2, 3], where: "Portada, columna derecha a toda la altura (en teléfono, arriba)", position: "50% 25%" },
+    historia: { ratio: [3, 2], where: "Nuestra historia, foto principal del díptico", position: "50% 45%" },
+    retrato: { ratio: [4, 5], where: "Nuestra historia, foto pequeña del díptico", position: "50% 35%" },
+    galeria1: { ratio: [2, 3], where: "Mosaico, columna izquierda (la alta)", position: "50% 30%" },
+    galeria2: { ratio: [4, 5], where: "Mosaico, arriba a la derecha", position: "50% 35%" },
+    galeria3: { ratio: [3, 2], where: "Mosaico, abajo a la derecha", position: "50% 40%" },
+    galeria4: { ratio: [16, 9], where: "Mosaico, panorámica a todo el ancho", position: "50% 35%" },
   },
 };

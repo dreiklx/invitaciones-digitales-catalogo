@@ -1,4 +1,4 @@
-# Plantilla 03 · Gala
+# Plantilla 03 · Gala (boda)
 
 **Id en el config:** `template: "gala"` · **Demo:** `/plantillas/gala` ·
 **Código:** `templates/gala/` · **Datos de ejemplo:** `templates/gala/demo.ts`

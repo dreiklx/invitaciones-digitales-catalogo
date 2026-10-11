@@ -7,8 +7,8 @@ duplicar esta información en otros `.md`; actualizar estos archivos.
 
 ## Propósito y origen
 
-Proyecto interno para producir invitaciones digitales (bodas, quinceaños
-y cumpleaños) para un posible servicio. Nació como **copia** de la
+Proyecto interno para producir invitaciones digitales (bodas, quince
+años y bebés) para un posible servicio. Nació como **copia** de la
 invitación que el autor hizo para su propia boda (proyecto aparte, ya
 publicado):
 
@@ -16,6 +16,11 @@ publicado):
 - **2026-10-08:** se convirtió en un **catálogo de cinco diseños** de boda.
 - **2026-10-08 (4):** se agregaron Aurora (quinceaños) y Nube (cumpleaños
   de bebé/infantil): **siete diseños**.
+- **2026-10-10:** reorganización definitiva en **tres categorías**: Bodas
+  (Olivo, Tierra, Gala) · Quince años (Aurora, Camelia) · Bebés (Arrullo,
+  baby shower; Nube, primer cumpleaños). Camelia y Arrullo ocupan los
+  lugares de los antiguos diseños de boda Borgoña y Riviera; Olivo se
+  rediseñó por completo.
 
 **No recuperar ni reintroducir datos de la boda original**, tampoco desde
 su historial Git antiguo (archivado fuera del proyecto; ver "Riesgos").
@@ -25,13 +30,14 @@ panel, cuentas ni pagos. Nosotros editamos un archivo de datos y
 desplegamos una copia del proyecto por cliente. El catálogo es solo un
 escaparate.
 
-## Estado (2026-10-08)
+## Estado (2026-10-10)
 
-- Siete diseños completos (5 de boda, 1 de quinceaños, 1 de cumpleaños
-  infantil), un catálogo en `/` agrupado por tipo de evento, con transición hacia cada
-  demo, validación `npm run check`, demos con imágenes abstractas generadas
-  salvo Olivo (fotos de una sesión aportadas por el dueño), Tierra y Gala
-  (sesiones de pareja de Pexels).
+- Siete diseños completos en tres categorías (3 bodas, 2 quince años,
+  2 bebés), un catálogo en `/` con una sección por categoría (título,
+  descripción, tipo de evento en cada tarjeta), transición hacia cada demo
+  y validación `npm run check`. **Todas las demos usan fotos reales**:
+  Olivo, las de una sesión aportada por el dueño; las otras seis, una
+  sesión coherente de stock de Pexels cada una (ver photo-map.md).
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
@@ -132,10 +138,26 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   de WhatsApp y calendario se arman con "Ana y Luis" o con el nombre solo
   ("Fiesta de quince años de Mariana"). Con un solo festejado el RSVP no
   pregunta "¿de parte de quién?" salvo que se den `referrerOptions`.
-- **`kind` en cada `meta.ts`** (`boda` · `quinceanos` · `cumpleanos-infantil`):
-  el catálogo agrupa los diseños por tipo de evento.
+- **`kind` en cada `meta.ts`** (`boda` · `quinceanos` · `baby-shower` ·
+  `cumpleanos-infantil`): el catálogo arma sus tres categorías (Bodas =
+  `boda`; Quince años = `quinceanos`; Bebés = `baby-shower` +
+  `cumpleanos-infantil`) y muestra el tipo de evento en cada tarjeta.
+- **Baby shower** (`ShowerTemplateId`, hoy solo Arrullo) exige `shower`:
+  `parents` (uno o dos nombres) y `babyName` opcional (muchas familias no
+  lo revelan). `resolve.ts` lo unifica: `names.one`/`two` son quienes
+  invitan ("Baby shower de Natalia y Joaquín" en título, calendario y
+  WhatsApp) e `inv.shower` trae `parentsText` y `babyName`. Ningún texto
+  del diseño supone el sexo del bebé. `hero.title` (opcional, común) es la
+  frase grande de la portada cuando no se muestra el nombre del bebé.
+- **Las demos no se filtran a los clientes:** `npm run nueva` deja en
+  "REEMPLAZAR" los nombres (`couple`, `honoree.name`, `shower.parents`, sin
+  `babyName`) y los textos alternativos de las fotos, y nombra las fotos
+  por espacio. `npm run check` da error si cualquier texto de una
+  invitación de cliente todavía nombra a la persona de la demo
+  (palabra completa).
 - **`schedule` (programa del evento)**: opcional en el contenido común;
-  hoy solo lo muestran Aurora (línea de tiempo) y Nube (tarjetas). Horas en
+  lo muestran Aurora (línea de tiempo), Camelia (filas sobre vino) y Nube
+  (tarjetas). Horas en
   24 h, validadas por `npm run check`.
 - **Tercera tipografía opcional** `--f-script` → clase `font-script`
   (`globals.css`): la usa Aurora para el nombre en caligrafía.
@@ -168,13 +190,15 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
 - **Modo oscuro forzado bloqueado** (`color-scheme: only light` +
   `<meta name="darkreader-lock">`). Las extensiones y el modo oscuro de
   Chrome invertían los diseños; se detectó en la revisión visual.
-- **Imágenes de demostración abstractas** generadas por script (escenas de
-  luz desenfocada por diseño), salvo Olivo, Tierra y Gala, que usan fotos
-  reales (ver photo-map.md). Tierra y Gala usan sesiones de stock de Pexels: su
-  licencia permite el uso comercial y en plantillas que se venden, sin
-  atribución obligatoria; prohíbe mostrar a las personas de forma ofensiva
-  o insinuar que respaldan el producto. En este entorno no hay generador
-  de imágenes; no se usaron imágenes generadas.
+- **Fotos reales en las siete demos** (ver photo-map.md): Olivo, las de
+  una sesión aportada por el dueño; las demás, **una sola sesión coherente
+  de stock de Pexels por diseño** (la misma pareja, quinceañera, familia o
+  bebé en todas las fotos). La licencia de Pexels permite el uso comercial
+  y en plantillas que se venden, sin atribución obligatoria; prohíbe
+  mostrar a las personas de forma ofensiva o insinuar que respaldan el
+  producto. En este entorno no hay generador de imágenes: no se usó
+  ninguna imagen generada. `npm run placeholders` (imágenes abstractas)
+  queda para un diseño nuevo sin fotos y nunca toca una carpeta `fotos/`.
 
 ## Funcionalidades comunes (cuando el diseño las muestra)
 
@@ -242,8 +266,9 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   fallo es `error` ("No disponible").
 - `preload="none"`: el archivo no se descarga hasta ese toque.
 - **Una sola lógica, siete presentaciones**: `players.tsx` define la forma
-  de cada diseño (`rama`, `ficha`, `deco`, `sello`, `etiqueta`,
-  `destello`, `globo`); el diseño trae la suya en `meta.musicPlayer` y
+  de cada diseño (`lino` Olivo, `ficha` Tierra, `deco` Gala, `destello`
+  Aurora, `broche` Camelia, `sello` Arrullo, `globo` Nube); el diseño trae
+  la suya en `meta.musicPlayer` y
   `music.player` la cambia.
 - Estado visual solo desde eventos nativos del `<audio>` (`playing`,
   `pause`, `waiting`, `error`) + timeout de 12 s. Nunca un "Sonando"
@@ -266,7 +291,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - "Desliza hacia abajo" con palabras + flecha (`ScrollCue`); tocarla avanza.
 - Botones con forma de botón y ≥ 48 px ("Cómo llegar" + "Se abre en Google Maps").
 - "Confirmar por WhatsApp" puede ir en dos líneas equilibradas (Tierra,
-  Gala y Borgoña, con mayúsculas espaciadas, no cabían en una a 320-430 px
+  Gala y Camelia, con mayúsculas espaciadas, no cabían en una a 320-430 px
   y el texto se salía del botón). No achicar la letra para forzar una línea.
 - Visor: la foto empieza debajo de "Cerrar" y ambos respetan la zona segura
   del teléfono.
@@ -333,12 +358,12 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   sistema agrandada** (Android, personas mayores) se salían: "Agregar a mi
   calendario" (7 diseños), "Ver mesa de regalos" (Gala), "Desliza hacia
   abajo", y el botón de la barra "Confirmar asistencia" (quedaba cortado);
-  y en Borgoña los **nombres largos** ("& Bartolomeo", sin poder partirse)
-  ensanchaban la página o se cortaban en el pie.
+  y en el antiguo Borgoña los **nombres largos** ("& Bartolomeo", sin
+  poder partirse) ensanchaban la página o se cortaban en el pie.
 - Solución: esos textos pueden pasar a dos líneas (`text-center`,
-  `text-balance`, `max-w-full`, `min-w-0`); Borgoña baja un escalón la
-  letra de los nombres cuando uno pasa de 10 caracteres (`longNames`, con
-  tamaño solo en `vw`) y une "&" al nombre con un espacio fijo; las cifras
+  `text-balance`, `max-w-full`, `min-w-0`); los nombres gigantes tienen
+  tamaño solo en `vw` y bajan un escalón si son largos (hoy: `longName` de
+  Camelia, más de 8 letras; Olivo, todo en `vw`); las cifras
   de la cuenta regresiva de Gala llevan tope en `vw` (`min(rem, vw)`), así
   la letra agrandada no las saca de la fila.
 - Regla: un texto que no puede partirse (`whitespace-nowrap`, nombres
@@ -362,19 +387,19 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 ### Teléfono primero (revisión 2026-10-08, no revertir)
 Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
 - **La portada cabe en la primera pantalla** con "Desliza hacia abajo"
-  visible. En Tierra, Gala, Riviera y Borgoña el ancho de la foto de
+  visible. En Tierra, Gala, Camelia y Arrullo el ancho de la foto de
   portada en teléfono sale del alto de la pantalla
   (`w-[min(…,max(…,calc((100svh-Xrem)*ratio)))]`): la proporción sigue
-  siendo la de `meta.ts`, solo cambia el tamaño. Olivo usa foto a pantalla
-  completa. Medido en los 7 diseños a 320×600, 360×740, 390×844 y
+  siendo la de `meta.ts`, solo cambia el tamaño. En Olivo, el alto de la
+  foto (arriba) sale de la pantalla. Medido en los 7 diseños a 320×600, 360×740, 390×844 y
   430×932: "Desliza hacia abajo" entero y en una línea (a 320 px el texto
   usa menos espaciado).
 - **Teléfonos bajos (variante `short:`** en `globals.css`: alto ≤ 640 px y
   ancho < 1024 px; 320×568, o un teléfono con la barra del navegador
   abierta): las portadas se recomponen en vez de encogerse. "Desliza hacia
   abajo" pasa a una fila (flecha al lado del texto, mismo tamaño) y cada
-  diseño ajusta lo suyo: Gala y Riviera, márgenes; Borgoña, la fecha en una
-  línea; Tierra deja la foto pasar el borde (invita a bajar) y sube la
+  diseño ajusta lo suyo: Gala y Arrullo, márgenes; Camelia, la fecha en una
+  línea; Olivo, nombres un escalón más chicos; Tierra deja la foto pasar el borde (invita a bajar) y sube la
   flecha a la mitad de la foto (`ScrollCue stacked`). Medido a 320×568: el
   indicador queda a 20-60 px del borde en los 7 diseños.
 - **Nombres:** en teléfono, uno por línea ("Nombre / & Nombre") en portadas
@@ -383,7 +408,7 @@ Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
 - **Cortina (`Reveal variant="curtain"`):** el `clip-path` va en un hijo
   (`.reveal-curtain`), nunca en el elemento observado. Chrome no avisa la
   intersección de un elemento recortado por completo y las fotos de
-  Tierra y Borgoña **no aparecían nunca** (estaba en producción).
+  Tierra y del antiguo Borgoña **no aparecían nunca** (estaba en producción).
 - **Botones de lugar:** mismo ancho, ≥ 52 px de alto, uno debajo del otro
   o en dos columnas según el ancho.
 - **Barra flotante:** también se oculta sobre el `<footer>` (tapaba los
@@ -439,10 +464,12 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 
 ## Limitaciones conocidas
 
-- Bodas, quinceaños y cumpleaños, en español (el nombre del evento es
-  configurable: `event.name`/`article`; los textos de interfaz están en
-  español). Baby showers u otros eventos se harían como personalizados
-  (el catálogo los ofrece; no hay diseño propio todavía).
+- Bodas, quince años, baby shower y primer cumpleaños, en español (el
+  nombre del evento es configurable: `event.name`/`article`; los textos de
+  interfaz están en español). Otros eventos se harían como personalizados.
+- Música de las demos: solo hay 5 pistas con licencia verificada para 7
+  diseños; Tierra y Arrullo comparten la de Satie, Gala y Camelia la de
+  Debussy. Cambiarlas requiere otra pista con licencia comprobada.
 - Microtextos de interfaz fijos en los componentes ("Cómo llegar",
   "Desliza hacia abajo", textos del RSVP…).
 - Antes/durante/después se calcula en el navegador: el HTML estático
@@ -451,10 +478,11 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 - Sin tests automatizados (la validación es `npm run check`).
 - El catálogo precarga las fuentes de todos los diseños (22 archivos; las
   necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
-- Tierra y Gala usan fotos de stock (Pexels): personas reales identificables;
-  no usarlas en contextos que sugieran que esa pareja respalda el negocio
-  (licencia de Pexels).
-- Las imágenes de demostración son abstractas salvo en Olivo, Tierra y Gala. Olivo usa las
+- Seis demos usan fotos de stock (Pexels): personas reales
+  identificables, incluidos un bebé y quinceañeras; no usarlas en
+  contextos que sugieran que esas personas respaldan el negocio (licencia
+  de Pexels).
+- Olivo usa las
   fotos de una sesión de pareja (Don Ramón y Doña Florinda caracterizados)
   aportadas por el dueño; la demo se llama "Ramón & Florinda". Esos
   nombres viven solo en `templates/olivo/demo.ts`: `npm run nueva` deja

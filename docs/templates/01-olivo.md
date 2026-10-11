@@ -1,104 +1,105 @@
-# Plantilla 01 · Olivo
+# Plantilla 01 · Olivo (boda)
 
 **Id en el config:** `template: "olivo"` · **Demo:** `/plantillas/olivo` ·
 **Código:** `templates/olivo/` · **Datos de ejemplo:** `templates/olivo/demo.ts`
 
 ## Concepto
-Botánico, cálido y clásico. Es el diseño original de la plantilla, probado
-en una boda real con invitados de todas las edades, en verde olivo y lino.
-Portada de papel con una ramita de línea fina. La foto principal ocupa toda
-la pantalla, hay un bloque verde con la cuenta regresiva y los lugares, y
-una galería tipo collage con una foto inclinada. Para parejas que quieren
-algo elegante, tradicional y cercano.
+Rediseñado por completo el 2026-10-10 (del diseño botánico original solo
+quedan los colores). Una revista de arquitectura en verde olivo y lino:
+portada a dos columnas (bloque olivo | fotografía a toda la altura),
+nombres en una columna tipográfica alineada a la izquierda con el segundo
+en cursiva ("Ramón / y Florinda"), la fecha como **ficha de tres cifras**
+(día · mes · año, con su rótulo), díptico de fotos, cuenta regresiva en
+franja, itinerario con línea de tiempo y un mosaico de fotos a sangre.
+Sin sombras, sin tarjetas, casi sin filetes; el único adorno es una hoja
+mínima junto a los antetítulos. Para parejas que buscan algo sereno,
+natural y contemporáneo, no rústico.
 
 ## Paleta predeterminada (`templates/olivo/meta.ts`)
 | Token | Valor | Uso en este diseño |
 |---|---|---|
-| `background` | `#f7f2e8` | Papel/lino: fondo general, cajas de la cuenta regresiva |
-| `surface` | `#eee6d4` | Secciones alternas (historia, detalles, galería) |
-| `text` | `#262b1d` | Texto; también pie de página, botón de la portada, barra flotante |
-| `textMuted` | `#575c48` | Texto secundario |
-| `primary` | `#4a5432` | Verde olivo: bloque de cuenta regresiva/lugares y del RSVP, títulos |
-| `onPrimary` | `#f7f2e8` | Texto sobre el verde |
-| `secondary` | `#bfa26a` | Dorado: ornamentos, "Cómo llegar", opciones elegidas del RSVP |
-| `accent` | `#a5643c` | Botón "Confirmar por WhatsApp", aviso importante, etiquetas |
-| `onAccent` | `#fbf6ee` | Texto sobre el acento |
-| `line` | `#dbd0b6` | Bordes finos |
-
-Cambiar colores: `colors: { primary: "#5b6b3a" }` en `config/invitation.ts`.
-Mantener texto claro sobre `primary`/`text` y oscuro sobre `background`.
+| `background` | `#f4efe4` | Lino: papel de la página y de la portada inicial |
+| `surface` | `#e8e0cf` | Díptico de la historia, detalles y confirmación |
+| `text` | `#23271c` | Texto y titulares |
+| `textMuted` | `#5c5f4e` | Texto secundario |
+| `primary` | `#4a5433` | Verde olivo: portada, cuenta regresiva, pie, botones |
+| `onPrimary` | `#f4efe4` | Texto sobre el olivo |
+| `secondary` | `#c8bd97` | Paja: segundo nombre, rótulos sobre olivo, botón de la barra |
+| `accent` | `#8a5d36` | Coñac: antetítulos, aviso importante |
+| `onAccent` | `#f8f3ea` | Texto sobre el coñac |
+| `line` | `#d5cbb4` | Filetes |
 
 ## Tipografías
-Playfair Display (títulos, nombres, cursivas) + Jost (texto). En `templates/olivo/fonts.ts`.
+Newsreader (titulares, ligera y en cursiva) + Manrope (texto).
 
 ## Estructura (orden)
-Portada (tarjeta de papel) → Hero a pantalla completa con nombres, fecha y
-"Desliza hacia abajo" → frase de apertura → foto de la pareja + pie + cita
-→ padres → **bloque verde**: cuenta regresiva en cajas + calendario + lugares
-con Maps/Waze → "Antes de venir" (aviso + vestimenta) → regalos con foto →
-**RSVP verde** → galería collage → frase de cierre → pie sobre foto al 30 %.
-Barra flotante "Confirmar asistencia" y botón de música.
+Portada "Abrir invitación" (lino, monograma, nombres en columna, ficha de
+la fecha y botón olivo a todo el ancho) → **portada a dos columnas** →
+cita o versículo (fuente a la izquierda como nota al margen, texto grande
+en cursiva) → **díptico** de la historia (foto horizontal grande + retrato,
+con el texto entre las dos) → familia (columnas numeradas I, II) →
+**cuenta regresiva en franja** olivo + calendario → **itinerario** (hora |
+línea de tiempo | lugar) → detalles (aviso con borde coñac + vestimenta) →
+**mosaico** de fotos → regalos → confirmación → cita de cierre → pie olivo
+con los nombres y la ficha de la fecha.
 
-## Fotos (9) — proporción fija, igual en teléfono y escritorio
+## Fotos (7) — proporción fija, igual en teléfono y escritorio
 | Espacio | Proporción | Dónde | `position` sugerida |
 |---|---|---|---|
-| `portada` | 2:3 vertical | Pantalla completa. En teléfono se recorta a los lados; en escritorio se ve horizontal (recorte arriba/abajo): rostros en el tercio superior | `54% 10%` |
-| `historia` | 3:2 horizontal | Foto de la pareja tras la frase de apertura | `50% 45%` |
-| `cuentaRegresiva` | 2:3 vertical | Junto a la cuenta regresiva | `50% 28%` |
-| `regalos` | **4:5** vertical | Sección de regalos (antes 2:3) | `50% 40%` |
-| `galeria1` | 3:2 horizontal | Galería, arriba izquierda (la grande) | `50% 35%` |
-| `galeria2` | 4:5 vertical | Galería, arriba derecha | `50% 30%` |
-| `galeria3` | 4:5 vertical | Galería, abajo izquierda | `50% 22%` |
-| `galeria4` | 3:2 horizontal | Galería, abajo derecha, inclinada −2,5° | `50% 35%` |
-| `cierre` | 2:3 vertical | Fondo del pie de página, al 30 % de opacidad | `50% 25%` |
+| `portada` | 2:3 vertical | Columna derecha a toda la altura (en teléfono, arriba, con alto que sale de la pantalla) | `50% 25%` |
+| `historia` | 3:2 horizontal | Díptico, foto grande | `50% 45%` |
+| `retrato` | 4:5 vertical | Díptico, foto pequeña | `50% 35%` |
+| `galeria1` | 2:3 vertical | Mosaico, columna izquierda (la alta) | `50% 30%` |
+| `galeria2` | 4:5 vertical | Mosaico, arriba a la derecha | `50% 35%` |
+| `galeria3` | 3:2 horizontal | Mosaico, abajo a la derecha | `50% 40%` |
+| `galeria4` | 16:9 panorámica | Mosaico, a todo el ancho | `50% 35%` |
 
-Pedir al cliente: 6 verticales (2:3 o 4:5) y 3 horizontales (3:2).
+Pedir al cliente: 4 verticales, 2 horizontales y 1 panorámica (o
+horizontal con aire arriba y abajo).
 
-**Demo con fotos reales** (`public/plantillas/olivo/fotos/`), contada como
-una sesión: portada = el abrazo; historia = la propuesta; cuenta regresiva
-= ella enseña el anillo; regalos = la rosa lanzada; galería = sentados
-felices, la rosa en el patio, el abrazo y el anillo celebrado; cierre = el
-anillo (al 30 %). Son 7 fotos para 9 espacios: el abrazo y el anillo
-vertical se repiten (galería y fondo del pie, donde menos se nota).
+**Demo — Ramón & Florinda** (`public/plantillas/olivo/fotos/`, las 7 fotos
+de la sesión aportada por el dueño, cada una una sola vez): portada = el
+abrazo; díptico = la propuesta + la rosa lanzada; mosaico = ella enseña el
+anillo (alta), la rosa en el patio, sentados felices y el anillo celebrado
+(panorámica). Nombres, textos alternativos, título, vista previa al
+compartir y calendario salen de `templates/olivo/demo.ts`. `npm run nueva`
+no los copia (quedan en "REEMPLAZAR") y `npm run check` marca error si un
+texto de un cliente nombra a la pareja de la demo.
 
 ## Rasgos propios
-- Hero a pantalla completa con degradado oscuro y sombra en el texto (legible sobre cualquier foto).
-- Cuenta regresiva en cajas color papel con sombra difusa.
-- Collage: horizontal + vertical desplazada; vertical + horizontal inclinada y superpuesta.
-- Es la referencia de las reglas de usabilidad para personas mayores (ver `PROJECT-CONTEXT.md`).
+- La fecha como ficha de tres cifras (`DateSheet`): portada inicial,
+  portada y pie. Las cifras tienen tamaño solo en `vw` (no crecen con la
+  letra del sistema).
+- Itinerario con línea de tiempo: en escritorio la hora va en su columna;
+  en teléfono, dentro del lugar (en una columna angosta se partía).
+- Botones rectos (sin pastillas): olivo lleno para "Cómo llegar", borde
+  fino para Waze.
+- **Reproductor `lino`:** marcapáginas de tela olivo con ▶/❚❚ y tres barras
+  que se mueven al sonar; en escritorio, estado, título en cursiva e
+  intérprete.
 
 ## En el teléfono
-- Portada: foto a pantalla completa con los nombres uno por línea, y
-  "Desliza hacia abajo" siempre visible.
-- Botones de lugar del mismo ancho: uno debajo del otro por debajo de
-  400 px y en dos columnas a partir de ahí.
-- Galería collage: igual que en escritorio, con fotos de 130–220 px de
-  ancho. La foto 4 va inclinada; en ella no conviene un sujeto pegado a
-  los bordes.
+- Portada: foto arriba (alto = pantalla − 25 rem, mínimo 11 rem) y el
+  bloque olivo con nombres, ficha y "Desliza hacia abajo" visibles sin
+  desplazar; en teléfonos bajos (`short:`) los nombres bajan un escalón.
+- El díptico pone la cita y el retrato lado a lado (7/12 y 5/12).
+- Mosaico igual que en escritorio, más compacto (separación de 8 px).
 
 ## Música y cita
-- **Reproductor `rama`:** círculo verde olivo con una rama de olivo dorada
-  que se mece mientras suena; en teléfono, con borde de lino (se ve sobre
-  las secciones verdes). En escritorio, píldora de lino con el título en
-  cursiva.
-- **Demo:** Canon en re (Pachelbel · Kevin MacLeod, CC BY 3.0, con
+- **Demo:** Canon en re mayor (Pachelbel · Kevin MacLeod, CC BY 3.0 con
   atribución en el pie).
-- **Versículo** (`kind: "verse"`): entre filetes botánicos, comillas
-  latinas, referencia en terracota y la traducción debajo. Demo:
-  Colosenses 3:14 (Reina-Valera 1909). La frase de la historia y la de
-  cierre siguen siendo citas literarias.
+- **Versículo:** nota al margen con la referencia y la traducción; el
+  texto en cursiva grande entre comillas latinas. Demo: Colosenses 3:14
+  (Reina-Valera 1909).
 
 ## Uso
 `npm run nueva -- olivo` → editar `config/invitation.ts` → fotos en
 `public/images/` con los nombres del archivo → `npm run check`.
 
-La demo es **Ramón & Florinda** (los de las fotos): nombres, textos
-alternativos, título, vista previa al compartir y calendario salen de
-`templates/olivo/demo.ts`. `npm run nueva` no los copia (quedan en
-"REEMPLAZAR") y `npm run check` marca error si un `alt` de un cliente
-nombra a la pareja de la demo.
-
 ## Advertencias
-- La portada a pantalla completa necesita una foto con espacio libre abajo (los nombres van encima).
-- El pie usa la foto `cierre` muy tenue: casi cualquier foto sirve.
-- `story` y `gifts` en `null` ocultan también sus fotos (el espacio debe existir igual en `photos`).
+- La portada recorta la foto a lo alto en escritorio (columna de media
+  pantalla): rostros en el tercio superior.
+- Nombres muy largos bajan de tamaño solos (todo en `vw`), pero conviene
+  revisarlos a 320 px.
+- Las fotos de la demo son personajes de una serie de TV: ver "Riesgos" en
+  `PROJECT-CONTEXT.md` antes de publicar el catálogo con ellas.

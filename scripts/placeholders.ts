@@ -1,8 +1,11 @@
-// Genera las imágenes de demostración de los diseños en
+// Genera imágenes de demostración abstractas en
 // public/plantillas/<diseño>/<espacio>.jpg: escenas de luz desenfocadas
 // (cielo, horizonte, sol y bokeh) con el ambiente de cada diseño, la
 // proporción exacta de cada espacio y una etiqueta discreta
 // ("Foto · Portada · 4:5"). No son fotos reales ni de ningún cliente.
+// Hoy todas las demos usan fotos reales en public/plantillas/<diseño>/fotos/
+// (ver photo-map.md), que este script nunca toca: sirve para un diseño
+// nuevo mientras no tenga sus fotos.
 //
 // Uso: npm run placeholders   (sobrescribe esos archivos)
 
@@ -19,9 +22,9 @@ const MOODS: Record<TemplateId, { sky: string; horizon: string; ground: string; 
   olivo: { sky: "#e6dcc2", horizon: "#cdb98b", ground: "#5d6640", deep: "#2c3320", sun: "#fbeec6", bokeh: "#fff6dc" },
   tierra: { sky: "#e9cfb3", horizon: "#c48f62", ground: "#6b442c", deep: "#2e1d13", sun: "#ffd9ab", bokeh: "#fbe7cf" },
   gala: { sky: "#25252a", horizon: "#3a3833", ground: "#141416", deep: "#050506", sun: "#8a7444", bokeh: "#e3c98d" },
-  riviera: { sky: "#b8d0ee", horizon: "#f2eee2", ground: "#2a5cae", deep: "#13295a", sun: "#fbe38a", bokeh: "#ffffff" },
-  borgona: { sky: "#f3dcd5", horizon: "#dca7a2", ground: "#7a2a3c", deep: "#3a0f1a", sun: "#fff0ea", bokeh: "#ffe9e4" },
   aurora: { sky: "#e7dcf6", horizon: "#f3c6cf", ground: "#8a6cc0", deep: "#382858", sun: "#fff3f0", bokeh: "#ffffff" },
+  camelia: { sky: "#f3dcd5", horizon: "#dca7a2", ground: "#7a2a3c", deep: "#3a0f1a", sun: "#fff0ea", bokeh: "#ffe9e4" },
+  arrullo: { sky: "#e9ecdf", horizon: "#f3e6cf", ground: "#a7b39a", deep: "#5d6656", sun: "#fff6e3", bokeh: "#ffffff" },
   nube: { sky: "#d8e8f4", horizon: "#fbe7c6", ground: "#e8c7a6", deep: "#9a8270", sun: "#fff7df", bokeh: "#ffffff" },
 };
 

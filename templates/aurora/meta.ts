@@ -1,13 +1,13 @@
 import type { TemplateMeta } from "@/lib/invitation/types";
 
-// 06 · Aurora — quinceaños. Lila, violeta y rosa cuarzo; espejo ovalado,
+// 04 · Aurora — quince años. Lila, violeta y rosa cuarzo; espejo ovalado,
 // "XV" gigante de contorno, destellos y caligrafía. Ver docs/templates/06-aurora.md.
 export const meta: TemplateMeta<"aurora"> = {
   id: "aurora",
-  number: "06",
+  number: "04",
   name: "Aurora",
   kind: "quinceanos",
-  concept: "Quinceaños luminoso: lila, violeta y rosa cuarzo, con destellos.",
+  concept: "Quince años de ensueño: lila, violeta y rosa cuarzo, con destellos.",
   highlights: ["Retrato en espejo ovalado con un XV gigante", "Programa de la noche: vals, brindis y fiesta", "Tira de fotos de cabina y destellos"],
   palette: {
     background: "#faf7fd",

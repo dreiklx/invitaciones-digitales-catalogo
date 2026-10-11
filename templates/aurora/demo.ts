@@ -1,6 +1,8 @@
-// Demo del diseño 06 · Aurora (quinceañera ficticia). También es el punto de
-// partida de una invitación nueva: `npm run nueva -- aurora` copia este
-// archivo a config/invitation.ts. Guía: docs/templates/06-aurora.md.
+// Demo del diseño 04 · Aurora (quinceañera ficticia: Valentina). También es
+// el punto de partida de una invitación nueva: `npm run nueva -- aurora`
+// copia este archivo a config/invitation.ts. Guía: docs/templates/04-aurora.md.
+// Fotos: una sola sesión de quince años de stock (Pexels; licencia de
+// Pexels) en public/plantillas/aurora/fotos/. Fuentes: photo-map.md.
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
@@ -14,7 +16,7 @@ export const demo: InvitationOf<"aurora"> = {
     timeZone: "America/Costa_Rica",
   },
   event: { name: "fiesta de quince años", article: "la" },
-  honoree: { name: "Mariana", age: 15 },
+  honoree: { name: "Valentina", age: 15 },
   date: "2027-08-14",
   time: "17:00",
   durationHours: 7,
@@ -32,7 +34,7 @@ export const demo: InvitationOf<"aurora"> = {
   story: {
     caption:
       "Quince años de sueños, risas y aprendizajes. Quiero celebrar este momento tan especial con las personas que han sido parte de mi historia.",
-    quote: { text: "Gracias por acompañarme en cada paso.", reference: "Mariana" },
+    quote: { text: "Gracias por acompañarme en cada paso.", reference: "Valentina" },
   },
 
   family: {
@@ -131,12 +133,12 @@ export const demo: InvitationOf<"aurora"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/aurora/portada.jpg", alt: "Mariana", position: "50% 30%" },
-    historia: { src: "/plantillas/aurora/historia.jpg", alt: "Mariana", position: "50% 30%" },
-    galeria1: { src: "/plantillas/aurora/galeria-1.jpg", alt: "Mariana", position: "50% 30%" },
-    galeria2: { src: "/plantillas/aurora/galeria-2.jpg", alt: "Mariana", position: "50% 40%" },
-    galeria3: { src: "/plantillas/aurora/galeria-3.jpg", alt: "Mariana", position: "50% 40%" },
-    galeria4: { src: "/plantillas/aurora/galeria-4.jpg", alt: "Mariana", position: "50% 40%" },
-    cierre: { src: "/plantillas/aurora/cierre.jpg", alt: "Mariana", position: "50% 40%" },
+    portada: { src: "/plantillas/aurora/fotos/jardin-palmeras.jpg", alt: "Valentina con su vestido lila entre palmeras", position: "50% 40%" },
+    historia: { src: "/plantillas/aurora/fotos/retrato-vestido.jpg", alt: "Valentina recostada sobre su vestido lila", position: "50% 30%" },
+    galeria1: { src: "/plantillas/aurora/fotos/casa-jardin.jpg", alt: "Valentina en el jardín de su casa", position: "50% 45%" },
+    galeria2: { src: "/plantillas/aurora/fotos/retrato-tiara.jpg", alt: "Retrato de Valentina con su tiara", position: "50% 30%" },
+    galeria3: { src: "/plantillas/aurora/fotos/sobre-el-vestido.jpg", alt: "Valentina sonríe sobre su vestido", position: "50% 40%" },
+    galeria4: { src: "/plantillas/aurora/fotos/salon.jpg", alt: "Valentina en el salón", position: "50% 30%" },
+    cierre: { src: "/plantillas/aurora/fotos/con-sus-padres.jpg", alt: "Valentina con sus padres en el jardín", position: "50% 45%" },
   },
 };

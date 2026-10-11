@@ -19,7 +19,7 @@ import Countdown from "./Countdown";
 import { Sparkle, SparkleField, SparkleRule } from "./ornaments";
 import { fontClasses } from "./fonts";
 
-// 06 · Aurora — quinceaños. Un amanecer lila: luces suaves de color,
+// 04 · Aurora — quince años. Un amanecer lila: luces suaves de color,
 // destellos que titilan, el retrato en un espejo ovalado con un "XV"
 // gigante de contorno detrás y el nombre en caligrafía. Elegante y juvenil,
 // sin coronas ni brillos recargados.

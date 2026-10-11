@@ -1,26 +1,27 @@
 import type { TemplateMeta } from "@/lib/invitation/types";
 
-// 07 · Nube — cumpleaños de bebé o infantil. Crema, celeste empolvado,
-// amarillo mantequilla y durazno; nubes, globos y confeti de trazo suave.
+// 07 · Nube — primer cumpleaños (sirve para cualquier cumpleaños infantil).
+// Cielo celeste, amarillo sol y coral; banderines, globos, confeti que cae
+// despacio y una velita sobre la edad. Festivo sin saturar.
 // Ver docs/templates/07-nube.md.
 export const meta: TemplateMeta<"nube"> = {
   id: "nube",
   number: "07",
   name: "Nube",
   kind: "cumpleanos-infantil",
-  concept: "Tierno y moderno: crema, celeste empolvado y amarillo mantequilla.",
-  highlights: ["La edad como protagonista, en una insignia", "Nubes que flotan, globos y confeti suave", "Programa de la fiesta y galería en burbujas"],
+  concept: "Su primer añito, en fiesta: cielo celeste, amarillo sol, banderines y globos.",
+  highlights: ["La edad con su velita, como protagonista", "Banderines, globos, estrellas y confeti que cae despacio", "Programa de la fiesta y galería en burbujas"],
   palette: {
-    background: "#fffaf2",
-    surface: "#f6eee2",
-    text: "#33354c",
-    textMuted: "#6c6d85",
-    primary: "#86b1d3",
-    onPrimary: "#1d283d",
-    secondary: "#f6cc72",
-    accent: "#ef936f",
+    background: "#fffcf5",
+    surface: "#e9f5fc",
+    text: "#2e3250",
+    textMuted: "#62668a",
+    primary: "#7cc1e8",
+    onPrimary: "#16304a",
+    secondary: "#ffd35e",
+    accent: "#ff8b69",
     onAccent: "#2c1a12",
-    line: "#ebe0d0",
+    line: "#dfe9ef",
   },
   fonts: { display: "Fredoka", body: "Nunito" },
   musicPlayer: "globo",

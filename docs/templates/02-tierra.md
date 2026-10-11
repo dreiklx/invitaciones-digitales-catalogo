@@ -1,4 +1,4 @@
-# Plantilla 02 · Tierra
+# Plantilla 02 · Tierra (boda)
 
 **Id en el config:** `template: "tierra"` · **Demo:** `/plantillas/tierra` ·
 **Código:** `templates/tierra/` · **Datos de ejemplo:** `templates/tierra/demo.ts`

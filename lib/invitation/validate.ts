@@ -45,6 +45,9 @@ export function validateInvitation(inv: Invitation, options: ValidateOptions): I
   // Quién celebra y fecha
   if ("couple" in inv) {
     if (!inv.couple.partnerOne.trim() || !inv.couple.partnerTwo.trim()) error("couple: faltan nombres.");
+  } else if ("shower" in inv) {
+    if (!inv.shower.parents.length || inv.shower.parents.some((p) => !p.trim())) error("shower.parents: falta al menos un nombre (y ninguno puede estar vacío).");
+    if (inv.shower.parents.length > 2) warn("shower.parents: el diseño muestra hasta dos nombres.");
   } else {
     if (!inv.honoree.name.trim()) error("honoree.name está vacío.");
     if (!(Number.isInteger(inv.honoree.age) && inv.honoree.age >= 0 && inv.honoree.age <= 120)) error("honoree.age debe ser un número entero de años.");
@@ -159,11 +162,19 @@ export function validateInvitation(inv: Invitation, options: ValidateOptions): I
     const d = options.demo;
     if ("couple" in inv && "couple" in d && inv.couple.partnerOne === d.couple.partnerOne && inv.couple.partnerTwo === d.couple.partnerTwo)
       error("couple: siguen los nombres de la demo.");
-    const demoPeople = "couple" in d ? [d.couple.partnerOne, d.couple.partnerTwo] : [d.honoree.name];
-    const ownPeople = "couple" in inv ? [inv.couple.partnerOne, inv.couple.partnerTwo] : [inv.honoree.name];
-    for (const [slot, photo] of Object.entries(inv.photos ?? {})) {
-      if (photo && demoPeople.some((n) => !ownPeople.includes(n) && photo.alt.includes(n)))
-        error(`photos.${slot}.alt nombra a la pareja o persona de la demo.`);
+    const people = (x: typeof inv) =>
+      "couple" in x ? [x.couple.partnerOne, x.couple.partnerTwo] : "shower" in x ? [...x.shower.parents, x.shower.babyName ?? ""].filter(Boolean) : [x.honoree.name];
+    const demoPeople = people(d);
+    const ownPeople = people(inv);
+    if ("shower" in inv && "shower" in d && inv.shower.parents.some((p) => d.shower.parents.includes(p))) error("shower.parents: siguen los nombres de la demo.");
+    // Cualquier texto (frases, firmas, textos alternativos de las fotos…)
+    // que todavía nombre a la pareja o persona de la demo.
+    const leftovers = demoPeople.filter((n) => n && !ownPeople.includes(n));
+    if (leftovers.length) {
+      walkStrings(inv, (path, value) => {
+        const found = leftovers.find((name) => containsWord(value, name));
+        if (found) error(`${path} nombra a la persona de la demo ("${found}").`);
+      });
     }
     if ("honoree" in inv && "honoree" in d && inv.honoree.name === d.honoree.name) error("honoree.name sigue siendo el de la demo.");
     if (inv.site.url === d.site.url) error("site.url sigue siendo la URL de la demo.");
@@ -190,4 +201,18 @@ function walkStrings(value: unknown, visit: (path: string, value: string) => voi
   else if (Array.isArray(value)) value.forEach((v, i) => walkStrings(v, visit, `${path}[${i}]`));
   else if (value && typeof value === "object")
     for (const [k, v] of Object.entries(value)) walkStrings(v, visit, path ? `${path}.${k}` : k);
+}
+
+// ¿`text` contiene `word` como palabra completa? ("Ana" no está en "Mariana").
+function containsWord(text: string, word: string): boolean {
+  const letter = /\p{L}/u;
+  let from = 0;
+  for (;;) {
+    const at = text.indexOf(word, from);
+    if (at < 0) return false;
+    const before = text[at - 1];
+    const after = text[at + word.length];
+    if ((!before || !letter.test(before)) && (!after || !letter.test(after))) return true;
+    from = at + 1;
+  }
 }
