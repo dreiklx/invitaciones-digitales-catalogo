@@ -13,8 +13,8 @@ import GalaPreview from "./gala/Preview";
 import { fontClasses as galaFonts } from "./gala/fonts";
 import AuroraPreview from "./aurora/Preview";
 import { fontClasses as auroraFonts } from "./aurora/fonts";
-import CameliaPreview from "./camelia/Preview";
-import { fontClasses as cameliaFonts } from "./camelia/fonts";
+import AguamarinaPreview from "./aguamarina/Preview";
+import { fontClasses as aguamarinaFonts } from "./aguamarina/fonts";
 import RivieraPreview from "./riviera/Preview";
 import { fontClasses as rivieraFonts } from "./riviera/fonts";
 import NubePreview from "./nube/Preview";
@@ -25,7 +25,7 @@ export const templatePreviews: Record<TemplateId, { Preview: ComponentType<{ inv
   tierra: { Preview: TierraPreview, fontClasses: tierraFonts },
   gala: { Preview: GalaPreview, fontClasses: galaFonts },
   aurora: { Preview: AuroraPreview, fontClasses: auroraFonts },
-  camelia: { Preview: CameliaPreview, fontClasses: cameliaFonts },
+  aguamarina: { Preview: AguamarinaPreview, fontClasses: aguamarinaFonts },
   riviera: { Preview: RivieraPreview, fontClasses: rivieraFonts },
   nube: { Preview: NubePreview, fontClasses: nubeFonts },
 };

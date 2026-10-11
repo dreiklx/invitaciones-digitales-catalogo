@@ -23,7 +23,7 @@ const MOODS: Record<TemplateId, { sky: string; horizon: string; ground: string; 
   tierra: { sky: "#e9cfb3", horizon: "#c48f62", ground: "#6b442c", deep: "#2e1d13", sun: "#ffd9ab", bokeh: "#fbe7cf" },
   gala: { sky: "#25252a", horizon: "#3a3833", ground: "#141416", deep: "#050506", sun: "#8a7444", bokeh: "#e3c98d" },
   aurora: { sky: "#e7dcf6", horizon: "#f3c6cf", ground: "#8a6cc0", deep: "#382858", sun: "#fff3f0", bokeh: "#ffffff" },
-  camelia: { sky: "#f3dcd5", horizon: "#dca7a2", ground: "#7a2a3c", deep: "#3a0f1a", sun: "#fff0ea", bokeh: "#ffe9e4" },
+  aguamarina: { sky: "#f3dcd5", horizon: "#dca7a2", ground: "#7a2a3c", deep: "#3a0f1a", sun: "#fff0ea", bokeh: "#ffe9e4" },
   riviera: { sky: "#b8d0ee", horizon: "#f2eee2", ground: "#2a5cae", deep: "#13295a", sun: "#fbe38a", bokeh: "#ffffff" },
   nube: { sky: "#d8e8f4", horizon: "#fbe7c6", ground: "#e8c7a6", deep: "#9a8270", sun: "#fff7df", bokeh: "#ffffff" },
 };

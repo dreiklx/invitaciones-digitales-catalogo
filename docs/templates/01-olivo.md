@@ -8,7 +8,7 @@ Rediseñado por completo el 2026-10-10 (del diseño botánico original solo
 quedan los colores). Una revista de arquitectura en verde olivo y lino:
 portada a dos columnas (bloque olivo | fotografía a toda la altura),
 nombres en una columna tipográfica alineada a la izquierda con el segundo
-en cursiva ("Elena / y Tomás"), la fecha como **ficha de tres cifras**
+en cursiva ("Don Ramón / y Doña Florinda"), la fecha como **ficha de tres cifras**
 (día · mes · año, con su rótulo), díptico de fotos, cuenta regresiva en
 franja, itinerario con línea de tiempo y un mosaico de fotos a sangre.
 Sin sombras, sin tarjetas, casi sin filetes; el único adorno es una hoja
@@ -57,16 +57,22 @@ con los nombres y la ficha de la fecha.
 Pedir al cliente: 4 verticales, 2 horizontales y 1 panorámica (o
 horizontal con aire arriba y abajo).
 
-**Demo — Elena & Tomás** (pareja ficticia; `public/plantillas/olivo/fotos/`,
-una sola sesión de Pexels en un olivar, de Igor La Prado, en color y en
-blanco y negro): portada = recostados en el pasto; díptico = las manos con
-el anillo + retrato de ella; mosaico = caminata por el olivar (alta), el
-abrazo entre olivos, el vestido al viento y él la lleva en brazos
-(panorámica). Hasta el 2026-10-10 la demo era "Ramón y Florinda" con
-fotos sin procedencia verificable que reproducían personajes de una serie
-de TV: se retiraron (ver la auditoría en `photo-map.md`). `npm run nueva`
-no copia los nombres (quedan en "REEMPLAZAR") y `npm run check` marca
-error si un texto de un cliente nombra a la pareja de la demo.
+**Demo — Don Ramón y Doña Florinda** (`public/plantillas/olivo/fotos/`,
+las 7 fotos de la carpeta del Escritorio "fotos plantilla olivo",
+convertidas a JPG sin agrandar; los originales no se tocaron): portada =
+el abrazo en el patio (2:3); díptico = la propuesta de rodillas (3:2) + la
+rosa (4:5); mosaico = el anillo (alta), la rosa en el patio, sentados y
+felices, y el anillo con Don Ramón celebrando (recortada a 16:9).
+**Derechos de imagen y de los personajes: PENDIENTES DE AUTORIZACIÓN**
+(procedencia, autor y licencia de las fotos sin verificar; personajes de
+TV reconocibles). Ningún texto debe sugerir que los actores, los
+personajes o sus titulares respaldan el servicio. Detalle en
+`photo-map.md`. Entre el 2026-10-11 (mañana) y el 2026-10-11 (tarde) la
+demo usó una sesión de Pexels ("Elena y Tomás"); se volvió a esta pareja
+por pedido del dueño del proyecto. `npm run nueva` no copia ni los
+nombres (quedan en "REEMPLAZAR") ni las fotos, y `npm run check` marca
+error si un texto de un cliente nombra a la pareja de la demo. El
+monograma quita el tratamiento ("Don", "Doña"…): R · F.
 
 ## Rasgos propios
 - La fecha como ficha de tres cifras (`DateSheet`): portada inicial,
@@ -103,5 +109,6 @@ error si un texto de un cliente nombra a la pareja de la demo.
   pantalla): rostros en el tercio superior.
 - Nombres muy largos bajan de tamaño solos (todo en `vw`), pero conviene
   revisarlos a 320 px.
-- Las fotos de la demo son de stock con personas identificables: ver la
-  auditoría en `photo-map.md`.
+- Las fotos de la demo muestran personajes y actores reconocibles con
+  derechos pendientes de autorización: ver `photo-map.md`.
+- Nombres con tratamiento ("Doña Florinda") son largos: revisados a 320 px.

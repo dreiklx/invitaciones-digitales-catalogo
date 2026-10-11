@@ -65,7 +65,7 @@ function Bars({ playing, className }: { playing: boolean; className: string }) {
   );
 }
 
-// Estrella de cuatro puntas (Aurora, Camelia).
+// Estrella de cuatro puntas (Aurora, Aguamarina).
 function Star({ className }: { className: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
@@ -136,7 +136,7 @@ function Deco(p: FaceProps) {
   );
 }
 
-// ─── 05 Camelia · "broche": gema tallada azul petróleo con filete champán ──
+// ─── 05 Aguamarina · "broche": gema tallada azul petróleo con filete champán ──
 const OCT = (cut: number) => `polygon(${cut}px 0, calc(100% - ${cut}px) 0, 100% ${cut}px, 100% calc(100% - ${cut}px), calc(100% - ${cut}px) 100%, ${cut}px 100%, 0 calc(100% - ${cut}px), 0 ${cut}px)`;
 function Broche(p: FaceProps) {
   const playing = p.state === "playing";

@@ -1,13 +1,13 @@
 import type { TemplateMeta } from "@/lib/invitation/types";
 
-// 05 · Camelia — quinceaños "Aguamarina" (rediseño 2026-10-11): azul
+// 05 · Aguamarina — quinceaños (rediseño 2026-10-11): azul
 // petróleo, perla, bruma aguamarina y oro champán; marcos tallados como una
 // joya, una tiara de línea fina y el nombre en cursiva. Ver
-// docs/templates/05-camelia.md.
-export const meta: TemplateMeta<"camelia"> = {
-  id: "camelia",
+// docs/templates/05-aguamarina.md.
+export const meta: TemplateMeta<"aguamarina"> = {
+  id: "aguamarina",
   number: "05",
-  name: "Camelia",
+  name: "Aguamarina",
   kind: "quinceanos",
   concept: "Quinceaños de joyería: azul petróleo, perla, aguamarina y oro champán.",
   highlights: ["Fotos en marcos tallados como una joya", "Una tiara de línea fina y su nombre en cursiva", "Programa de la noche y corte de honor"],

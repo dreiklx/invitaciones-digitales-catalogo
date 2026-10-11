@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { Photo, PhotoSlotSpec, Quote } from "@/lib/invitation/types";
-import { toRoman } from "@/lib/invitation/time";
 import Gate, { GateButton } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
@@ -20,8 +19,10 @@ import Countdown from "./Countdown";
 import { fontClasses } from "./fonts";
 
 // 03 · Gala — una noche de etiqueta. Negro profundo, dorado y plata;
-// monograma, abanicos art déco, marcos dorados dobles, fecha en números
-// romanos y retratos en blanco y negro. Todo centrado y simétrico.
+// monograma, abanicos art déco, marcos dorados dobles y retratos en blanco
+// y negro. Todo centrado y simétrico. La fecha va siempre legible ("13 de
+// noviembre de 2027", de `dates.long`); hasta el 2026-10-11 iba en números
+// romanos y era difícil de leer.
 
 // Abanico art déco.
 function Fan({ className = "" }: { className?: string }) {
@@ -147,7 +148,6 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
   const { content: c, photos, names, dates, meta } = inv;
   const ratio = (key: string) => (meta.photoSlots as Record<string, PhotoSlotSpec>)[key].ratio;
   const gallery = [photos.galeria1, photos.galeria2, photos.galeria3, photos.galeria4];
-  const roman = `${toRoman(dates.dayNumber)} · ${toRoman(dates.monthNumber)} · ${toRoman(Number(dates.year))}`;
 
   const cover = (
     <div className="flex h-full items-center justify-center bg-paper px-6 text-center">
@@ -164,7 +164,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
           <span className="my-1 block font-display text-2xl normal-case italic tracking-normal text-primary">&amp;</span>
           {names.two}
         </h1>
-        <p className="mt-6 text-xs uppercase tracking-[0.4em] text-muted">{roman}</p>
+        <p className="mt-6 font-display text-lg tracking-[0.06em] text-muted sm:text-xl">{dates.long}</p>
         <GateButton className="mt-8 border border-primary sm:mt-10 px-8 py-4 text-xs uppercase tracking-[0.35em] text-primary transition hover:bg-primary hover:text-on-primary min-[360px]:px-10">
           {c.welcome.buttonLabel}
         </GateButton>
@@ -196,8 +196,10 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
               {names.two}
             </h1>
             <Rule className="mt-5 short:mt-3 sm:mt-8" />
-            <p className="mt-4 whitespace-nowrap text-[13px] sm:mt-6 uppercase tracking-[0.25em] text-ink min-[360px]:text-sm min-[360px]:tracking-[0.45em]">{roman}</p>
-            <p className="mt-2 text-sm text-muted">{dates.weekdayLong}</p>
+            <p className="mt-4 text-balance font-display text-xl tracking-[0.06em] text-ink sm:mt-6 sm:text-2xl">{dates.long}</p>
+            <p className="mt-1.5 text-xs uppercase tracking-[0.3em] text-muted">
+              {dates.weekday} · {dates.time}
+            </p>
           </Reveal>
           <ScrollCue className="mx-auto mt-5 text-secondary sm:mt-10" circleClassName="border-primary/60" />
         </section>
@@ -448,7 +450,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
             <p className="mt-4 font-display text-4xl leading-tight text-ink sm:text-5xl">
               <span className="block sm:inline">{names.one}</span> <span className="block sm:inline">&amp; {names.two}</span>
             </p>
-            <p className="mt-4 whitespace-nowrap text-xs uppercase tracking-[0.3em] text-muted min-[360px]:tracking-[0.45em]">{roman}</p>
+            <p className="mt-4 font-display text-lg tracking-[0.06em] text-muted sm:text-xl">{dates.long}</p>
             <Fan className="mt-10 h-8 w-16 text-primary/70" />
             <MusicCredit music={c.music} className="mt-10 text-muted" />
           </Reveal>

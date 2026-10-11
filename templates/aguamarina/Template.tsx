@@ -20,7 +20,7 @@ import Countdown from "./Countdown";
 import { Gem, Sparkle, Tiara, XvRule } from "./ornaments";
 import { fontClasses } from "./fonts";
 
-// 05 · Camelia — quinceaños "Aguamarina" (rediseño 2026-10-11). Una joya:
+// 05 · Aguamarina — quinceaños (rediseño 2026-10-11). Una joya:
 // azul petróleo, perla, bruma aguamarina y oro champán; fotos en marcos
 // tallados como una esmeralda (esquinas biseladas, doble filete), una tiara
 // de línea fina, el nombre en Cormorant cursiva y filetes con rombos. Mucho
@@ -98,7 +98,7 @@ const rsvpStyles: RsvpStyles = {
   panel: "rounded-3xl border border-secondary/60 bg-surface/60 text-ink",
 };
 
-export default function CameliaTemplate({ inv }: { inv: ResolvedInvitation }) {
+export default function AguamarinaTemplate({ inv }: { inv: ResolvedInvitation }) {
   const { content: c, photos, names, dates, meta } = inv;
   const roman = toRoman(inv.honoree?.age ?? 15);
   const ratio = (key: string) => (meta.photoSlots as Record<string, PhotoSlotSpec>)[key].ratio;

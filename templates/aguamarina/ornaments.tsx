@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 
-// Ornamentos de Camelia: el marco tallado como una joya (esquinas biseladas
+// Ornamentos de Aguamarina: el marco tallado como una joya (esquinas biseladas
 // con doble filete champán), la tiara de línea fina, destellos y el filete
 // con los XV. Finos y pocos: el refinamiento está en el detalle.
 

@@ -48,11 +48,11 @@ const eventLabel: Record<EventKind, string> = {
   "cumpleanos-infantil": "Primer cumpleaños",
 };
 
-// "También creamos invitaciones para": el color de cada punto viene de un
+// "Creamos invitaciones para:": el color de cada punto viene de un
 // diseño afín.
 const events: [string, string][] = [
   ["Bodas", templateMetas.olivo.palette.primary],
-  ["Quinceaños", templateMetas.camelia.palette.primary],
+  ["Quinceaños", templateMetas.aguamarina.palette.primary],
   ["Baby showers", templateMetas.riviera.palette.primary],
   ["Primeros cumpleaños", templateMetas.nube.palette.accent],
   ["Cumpleaños infantiles", templateMetas.nube.palette.primary],
@@ -162,13 +162,12 @@ export default function Catalog() {
         })}
       </main>
 
-      {/* Más que bodas: tipos de evento (sin precios ni paquetes). */}
+      {/* "Creamos invitaciones para:": tipos de evento (sin precios ni paquetes). */}
       <section aria-labelledby="eventos" className="mx-auto max-w-7xl px-6 pt-14 sm:px-10 sm:pt-24">
         <Reveal className="grid grid-cols-1 gap-8 border-y border-line py-10 sm:gap-10 sm:border-x sm:px-12 sm:py-16 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Más que bodas</p>
-            <h2 id="eventos" className="mt-4 font-display text-4xl font-light leading-tight sm:text-5xl">
-              También creamos invitaciones <em>para:</em>
+            <h2 id="eventos" className="font-display text-4xl font-light leading-tight sm:text-5xl">
+              Creamos invitaciones <em>para:</em>
             </h2>
             <p className="mt-5 max-w-sm text-base leading-relaxed text-muted sm:text-lg">
               Cada celebración merece su propio diseño. Si su evento no está en la lista, también podemos crearlo.
@@ -209,27 +208,36 @@ export default function Catalog() {
       </section>
 
       {/* Pie oscuro: el logo del estudio está hecho para fondo oscuro (letras
-          blancas con brillo azul) y es su único lugar en todo el sitio. */}
+          blancas con brillo azul) y es su único lugar en todo el sitio (nunca
+          en una invitación). Enlaza al Instagram del estudio en otra pestaña. */}
       <footer className="bg-ink text-paper">
         <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 pb-[max(env(safe-area-inset-bottom),2.5rem)] pt-12 sm:flex-row sm:items-end sm:justify-between sm:px-10 sm:py-14">
           <div>
             <p className="font-display text-2xl italic">Invitaciones digitales</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-paper/65">Diseños para personalizar con sus datos, fotos y colores.</p>
             <p className="mt-4 max-w-sm text-xs leading-relaxed text-paper/50">
-              Las demostraciones usan nombres ficticios y fotos de stock con licencia de Pexels: las personas que aparecen no son clientes ni recomiendan este
+              Las demostraciones usan datos y fotos de ejemplo: las personas o personajes que aparecen no son clientes ni respaldan ni recomiendan este
               servicio.
             </p>
           </div>
           <div className="border-t border-paper/15 pt-6 sm:border-0 sm:pt-0 sm:text-right">
             <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-paper/50">Creado por</p>
-            <Image
-              src="/logos/farley-systems-and-icon-logo.png"
-              alt="Farley Systems"
-              width={1983}
-              height={793}
-              sizes="180px"
-              className="-ml-1.5 mt-2 h-14 w-auto sm:ml-auto sm:-mr-2 sm:h-16"
-            />
+            <a
+              href="https://www.instagram.com/farley.systems/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="-ml-1.5 mt-2 inline-block rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper sm:ml-0 sm:-mr-2"
+            >
+              <Image
+                src="/logos/farley-systems-and-icon-logo.png"
+                alt="Farley Systems"
+                width={1983}
+                height={793}
+                sizes="180px"
+                className="block h-14 w-auto sm:h-16"
+              />
+              <span className="sr-only"> en Instagram (se abre en una pestaña nueva)</span>
+            </a>
           </div>
         </div>
       </footer>

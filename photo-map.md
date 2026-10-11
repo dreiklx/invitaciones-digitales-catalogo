@@ -7,16 +7,17 @@ verdad en el código es `photoSlots` en `templates/<diseño>/meta.ts`; el
 componente `templates/shared/Frame.tsx` aplica esa proporción, así que **lo
 que dice la guía es exactamente lo que se ve, en teléfono y en escritorio**.
 
-Resumen de cantidades: Olivo 7 · Tierra 8 · Gala 6 · Aurora 7 · Camelia 6 ·
+Resumen de cantidades: Olivo 7 · Tierra 8 · Gala 6 · Aurora 7 · Aguamarina 6 ·
 Riviera 6 · Nube 6.
 
 ## Dónde van los archivos
 - Invitación de cliente: `public/images/` (nombres que indique
   `config/invitation.ts`; `npm run nueva` propone `portada.jpg`,
   `galeria-1.jpg`…).
-- Demos del catálogo: `public/plantillas/<diseño>/fotos/`, **todas con
-  fotos de stock de Pexels**, una sesión coherente por diseño (auditoría
-  abajo).
+- Demos del catálogo: `public/plantillas/<diseño>/fotos/`, una sesión
+  coherente por diseño: seis con fotos de stock de Pexels y **Olivo con
+  fotos aportadas por el dueño del proyecto, de derechos PENDIENTES DE
+  AUTORIZACIÓN** (auditoría abajo).
   `npm run placeholders` (imágenes abstractas para un diseño nuevo) nunca
   toca una carpeta `fotos/`. `npm run check` da error si una invitación de
   cliente sigue usando una foto de `/plantillas/`.
@@ -32,7 +33,7 @@ Riviera 6 · Nube 6.
   390 px. Las
   proporciones y la orientación de cada espacio están en la guía de cada
   diseño (`docs/templates/`).
-- Arcos, óvalos, círculos y marcos tallados (Riviera, Aurora, Nube, Camelia) recortan esquinas: sujeto al centro.
+- Arcos, óvalos, círculos y marcos tallados (Riviera, Aurora, Nube, Aguamarina) recortan esquinas: sujeto al centro.
 - Gala muestra todas las fotos en blanco y negro.
 - Optimizar con `npm run optimize-images` (endereza por EXIF, lado largo
   máx. 2400 px). Guardar los originales aparte (`/img`, en `.gitignore`).
@@ -60,10 +61,10 @@ Riviera 6 · Nube 6.
   de las personas que aparecen (derecho a la propia imagen, privacidad,
   publicidad), que Pexels no certifica. Esto no es una opinión jurídica:
   antes de publicitar el servicio conviene confirmarlo con un profesional.
-- **Medidas tomadas:** nombres ficticios en todas las demos; aviso visible
-  en cada demo y en el pie del catálogo ("las fotos son de stock con
-  licencia de Pexels; las personas que aparecen no son clientes ni
-  recomiendan este servicio"); ninguna foto se usa en un contexto ofensivo
+- **Medidas tomadas:** nombres ficticios en las demos de Pexels; aviso
+  visible en cada demo y en el pie del catálogo ("datos y fotos de
+  ejemplo; las personas o personajes que aparecen no son clientes ni
+  respaldan ni recomiendan este servicio"; no afirma ninguna licencia); ninguna foto se usa en un contexto ofensivo
   ni como testimonio; no se usan como logotipo ni en material impreso.
 - **Recomendación** (antes de una campaña comercial con estas demos): para
   quinceaños y bebés, reemplazar por sesiones propias con autorización
@@ -71,34 +72,47 @@ Riviera 6 · Nube 6.
   trabaje). Mientras tanto se conservan con el riesgo documentado.
 
 ### Fotos retiradas
-- **Olivo (hasta 2026-10-10):** 7 fotos de la carpeta del Escritorio
-  "fotos plantilla olivo". **Procedencia no verificable** (sin autor,
-  fuente ni licencia) y reproducían de forma reconocible a los personajes
-  Don Ramón y Doña Florinda de la serie *El Chavo del 8* (personajes y
-  actores reales con derechos propios que una licencia de foto no cubre).
-  Se reemplazaron por una sesión de Pexels y la pareja de la demo pasó de
-  "Ramón y Florinda" a **Elena y Tomás**. Los archivos viejos siguen en el
-  historial Git de este repositorio privado (no se reescribe) y los
-  originales siguen intactos en el Escritorio.
-- **Camelia (hasta 2026-10-10):** sesión de quinceañera en fucsia
+- **Olivo, sesión de Pexels (solo el 2026-10-11):** la sesión de Igor La
+  Prado en un olivar ("Elena y Tomás") se quitó por pedido del dueño del
+  proyecto, que pidió volver a Don Ramón y Doña Florinda (ver abajo). No
+  fue por un problema de licencia. Queda en el historial Git del
+  repositorio (commit `f3569cf`).
+- **Aguamarina, entonces Camelia (hasta 2026-10-10):** sesión de quinceañera en fucsia
   (pexels.com/photo/32274275 y siguientes): se cambió por la dirección
   fotográfica del rediseño (salón de fiesta, vestido aguamarina), no por un
   problema de licencia.
 
-### Olivo — Elena y Tomás (pareja adulta en un olivar)
-- **Autor:** Igor La Prado (@igor-la-prado-125324398) · **Plataforma:** Pexels · **Licencia:** Licencia de Pexels ("Free"), comprobada foto por foto en su página el 2026-10-11.
-- **Personas identificables:** sí, dos adultos con el rostro visible.
-- **Riesgo de que parezcan clientes o recomienden el servicio:** bajo-medio; nombres ficticios y aviso de demostración.
+### Olivo — Don Ramón y Doña Florinda (DERECHOS PENDIENTES DE AUTORIZACIÓN)
+- **Procedencia:** carpeta del Escritorio "fotos plantilla olivo",
+  aportada por el dueño del proyecto. **Autor, fuente y licencia: sin
+  verificar.** Las copias web se generaron sin modificar los originales
+  (PNG → JPG de calidad 82, sin agrandar; la panorámica, recortada a
+  16:9).
+- **Personas y personajes identificables:** sí. Reproducen de forma
+  reconocible a los personajes Don Ramón y Doña Florinda de la serie de
+  televisión *El Chavo del 8*: hay derechos de los personajes (de sus
+  titulares) y de imagen de los actores, que **deben considerarse
+  pendientes de autorización**. **No hay autorización comercial
+  verificada**; no afirmarlo en ningún lado.
+- **Riesgo:** **alto** si el catálogo se usa como publicidad. Medidas: el
+  aviso de demostración dice que las personas o personajes no son
+  clientes ni respaldan el servicio; ningún texto, metadato ni imagen para
+  compartir sugiere respaldo; no se usan en material impreso ni como
+  logotipo; `npm run nueva` nunca las copia a una invitación.
+- **Se conservan por decisión del dueño del proyecto (2026-10-11).** No
+  se eliminan sin su pedido. Antes de una campaña comercial: obtener
+  autorización por escrito o reemplazarlas.
 
-| Archivo | Espacio | Escena | Original |
+| Archivo | Espacio | Escena | Original (Escritorio) |
 |---|---|---|---|
-| `en-el-pasto.jpg` | `portada` 2:3 | Recostados en el pasto | https://www.pexels.com/photo/39117640/ |
-| `manos.jpg` | `historia` 3:2 | Manos con el anillo (B/N) | https://www.pexels.com/photo/39117639/ |
-| `retrato-novia.jpg` | `retrato` 4:5 | Retrato de ella (B/N) | https://www.pexels.com/photo/39117648/ |
-| `caminata-olivar.jpg` | `galeria1` 2:3 | Caminan por el olivar (B/N) | https://www.pexels.com/photo/39117644/ |
-| `abrazo-olivar.jpg` | `galeria2` 4:5 | Abrazo entre olivos | https://www.pexels.com/photo/39117643/ |
-| `vestido-al-viento.jpg` | `galeria3` 3:2 | El vestido al viento (B/N) | https://www.pexels.com/photo/39117645/ |
-| `en-brazos.jpg` | `galeria4` 16:9 | Él la lleva en brazos | https://www.pexels.com/photo/39117646/ |
+| `abrazo.jpg` | `portada` 2:3 | Abrazados en el patio | `ramon y florinda abrazandose 2;3.png` |
+| `propuesta.jpg` | `historia` 3:2 | Él, de rodillas, le propone matrimonio | `ramon proponiendo matrimonio 3;2.png` |
+| `rosa.jpg` | `retrato` 4:5 | Él le lanza una rosa | `don ramon tira la rosa 4;5 .png` |
+| `anillo-vertical.jpg` | `galeria1` 2:3 | Ella enseña el anillo | `enseñando el anillo 2;3.png` |
+| `patio.jpg` | `galeria2` 4:5 | Él le ofrece una rosa en el patio | `Romance cómica en el patio 4;5.png` |
+| `sentados.jpg` | `galeria3` 3:2 | Sentados en el patio, felices | `pareja feliz 3;2 .png` |
+| `anillo-horizontal.jpg` | `galeria4` 16:9 | Ella enseña el anillo y él celebra | `enseñando el anilo 3;2.png` |
+
 ### Tierra — Camila y Diego (pareja adulta en el campo)
 - **Autor:** Alexander Mass / Reborn Filmes (@rebornfilmes) · **Plataforma:** Pexels · **Licencia:** Licencia de Pexels ("Free"), comprobada foto por foto en su página el 2026-10-11.
 - **Personas identificables:** sí, dos adultos.
@@ -141,7 +155,7 @@ Riviera 6 · Nube 6.
 | `sobre-el-vestido.jpg` | `galeria3` 4:3 | Sonríe sobre el vestido | https://www.pexels.com/photo/31482017/ |
 | `salon.jpg` | `galeria4` 4:3 | En el salón | https://www.pexels.com/photo/31482023/ |
 | `con-sus-padres.jpg` | `cierre` 3:2 | Con dos adultos en el jardín | https://www.pexels.com/photo/31482022/ |
-### Camelia — Renata (quinceañera, vestido aguamarina y blanco, salón de fiesta)
+### Aguamarina (antes Camelia) — Renata (quinceañera, vestido aguamarina y blanco, salón de fiesta)
 - **Autor:** Juliano Astc (@juliano-astc-1623739) · **Plataforma:** Pexels · **Licencia:** Licencia de Pexels ("Free"), comprobada foto por foto en su página el 2026-10-11.
 - **Personas identificables:** sí; **probablemente una menor de edad** (quinceañera).
 - **Riesgo de que parezcan clientes o recomienden el servicio:** **medio**: igual que Aurora. Se conserva con nombre ficticio y aviso.

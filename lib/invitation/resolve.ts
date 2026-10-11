@@ -185,8 +185,13 @@ function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+// Inicial del nombre para monogramas, sin el tratamiento ("Don Ramón" → "R").
 function initial(name: string): string {
-  return name.trim().charAt(0).toUpperCase();
+  return name
+    .trim()
+    .replace(/^(don|doña|dña\.?|sr\.?|sra\.?|srta\.?|dr\.?|dra\.?)\s+/i, "")
+    .charAt(0)
+    .toUpperCase();
 }
 
 // 20270417T220000Z

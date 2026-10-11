@@ -1,18 +1,18 @@
-// Demo del diseño 05 · Camelia (quinceañera ficticia: Renata). También es
-// el punto de partida de una invitación nueva: `npm run nueva -- camelia`.
-// Guía: docs/templates/05-camelia.md.
+// Demo del diseño 05 · Aguamarina (quinceañera ficticia: Renata). También es
+// el punto de partida de una invitación nueva: `npm run nueva -- aguamarina`.
+// Guía: docs/templates/05-aguamarina.md.
 // Fotos: una sola sesión de quince años de stock en un salón de fiesta
-// (Pexels, Juliano Astc; licencia de Pexels) en public/plantillas/camelia/fotos/.
+// (Pexels, Juliano Astc; licencia de Pexels) en public/plantillas/aguamarina/fotos/.
 // Fuentes y advertencias de uso: photo-map.md.
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
 
-export const demo: InvitationOf<"camelia"> = {
-  template: "camelia",
+export const demo: InvitationOf<"aguamarina"> = {
+  template: "aguamarina",
 
   site: {
-    url: `${catalog.url}/plantillas/camelia`,
+    url: `${catalog.url}/plantillas/aguamarina`,
     locale: "es-CR",
     timeZone: "America/Costa_Rica",
   },
@@ -136,11 +136,11 @@ export const demo: InvitationOf<"camelia"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/camelia/fotos/vestido-aguamarina.jpg", alt: "Renata con su vestido aguamarina en el salón", position: "50% 20%" },
-    historia: { src: "/plantillas/camelia/fotos/vestido-blanco.jpg", alt: "Renata con su vestido blanco, sentada en el salón", position: "50% 30%" },
-    galeria1: { src: "/plantillas/camelia/fotos/salon-de-fiesta.jpg", alt: "Renata bajo las lámparas del salón", position: "50% 35%" },
-    galeria2: { src: "/plantillas/camelia/fotos/retrato.jpg", alt: "Retrato de Renata con su tiara", position: "50% 35%" },
-    galeria3: { src: "/plantillas/camelia/fotos/mirada.jpg", alt: "Renata mira hacia atrás con su vestido blanco", position: "50% 30%" },
-    galeria4: { src: "/plantillas/camelia/fotos/hacia-el-salon.jpg", alt: "Renata con su vestido aguamarina en la pista", position: "50% 30%" },
+    portada: { src: "/plantillas/aguamarina/fotos/vestido-aguamarina.jpg", alt: "Renata con su vestido aguamarina en el salón", position: "50% 20%" },
+    historia: { src: "/plantillas/aguamarina/fotos/vestido-blanco.jpg", alt: "Renata con su vestido blanco, sentada en el salón", position: "50% 30%" },
+    galeria1: { src: "/plantillas/aguamarina/fotos/salon-de-fiesta.jpg", alt: "Renata bajo las lámparas del salón", position: "50% 35%" },
+    galeria2: { src: "/plantillas/aguamarina/fotos/retrato.jpg", alt: "Retrato de Renata con su tiara", position: "50% 35%" },
+    galeria3: { src: "/plantillas/aguamarina/fotos/mirada.jpg", alt: "Renata mira hacia atrás con su vestido blanco", position: "50% 30%" },
+    galeria4: { src: "/plantillas/aguamarina/fotos/hacia-el-salon.jpg", alt: "Renata con su vestido aguamarina en la pista", position: "50% 30%" },
   },
 };

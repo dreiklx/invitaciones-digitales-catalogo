@@ -5,13 +5,13 @@
 
 // ─── Diseños disponibles ─────────────────────────────────────────────────
 
-// Catálogo: Bodas (Olivo, Tierra, Gala) · Quince años (Aurora, Camelia) ·
+// Catálogo: Bodas (Olivo, Tierra, Gala) · Quince años (Aurora, Aguamarina) ·
 // Bebés (Riviera, baby shower; Nube, primer cumpleaños).
 
 // Bodas: celebra una pareja (`couple`).
 export type WeddingTemplateId = "olivo" | "tierra" | "gala";
 // Quince años y cumpleaños: celebra una persona (`honoree`).
-export type HonoreeTemplateId = "aurora" | "camelia" | "nube";
+export type HonoreeTemplateId = "aurora" | "aguamarina" | "nube";
 // Baby shower: lo organizan los futuros padres (`shower`).
 export type ShowerTemplateId = "riviera";
 export type TemplateId = WeddingTemplateId | HonoreeTemplateId | ShowerTemplateId;
@@ -32,7 +32,7 @@ export type PhotoSlots = {
     | "galeria4";
   tierra: "portada" | "historia" | "retrato" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   gala: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
-  camelia: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
+  aguamarina: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
   riviera: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
   aurora: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   nube: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";

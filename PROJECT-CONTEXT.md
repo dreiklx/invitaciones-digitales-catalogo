@@ -17,14 +17,19 @@ publicado):
 - **2026-10-08 (4):** se agregaron Aurora (quinceaños) y Nube (cumpleaños
   de bebé/infantil): **siete diseños**.
 - **2026-10-10:** reorganización definitiva en **tres categorías**: Bodas
-  (Olivo, Tierra, Gala) · Quince años (Aurora, Camelia) · Bebés (Arrullo,
-  baby shower; Nube, primer cumpleaños). Camelia y Arrullo ocupan los
+  (Olivo, Tierra, Gala) · Quince años (Aurora, Camelia, hoy Aguamarina) · Bebés (Arrullo,
+  baby shower; Nube, primer cumpleaños). Camelia (hoy Aguamarina) y Arrullo ocupan los
   lugares de los antiguos diseños de boda Borgoña y Riviera; Olivo se
   rediseñó por completo.
-- **2026-10-11:** auditoría de fotos y derechos de imagen (Olivo cambió de
-  fotos y de pareja: Elena y Tomás); Camelia rediseñada ("Aguamarina");
+- **2026-10-11:** auditoría de fotos y derechos de imagen; Camelia
+  rediseñada en azul petróleo y aguamarina;
   **Riviera recuperada** del historial del catálogo como baby shower en
   el lugar de Arrullo; la categoría se llama **Quinceaños** (una palabra).
+- **2026-10-11 (2):** Olivo vuelve a **Don Ramón y Doña Florinda** con
+  las fotos originales del dueño (derechos **pendientes de autorización**);
+  **Camelia pasa a llamarse Aguamarina** (id `aguamarina`, redirecciones
+  permanentes desde `camelia` y `borgona`); Gala muestra la fecha legible;
+  el logo de Farley Systems enlaza a su Instagram.
 
 **No recuperar ni reintroducir datos de la boda original**, tampoco desde
 su historial Git antiguo (archivado fuera del proyecto; ver "Riesgos").
@@ -37,12 +42,14 @@ escaparate.
 ## Estado (2026-10-11)
 
 - Siete diseños completos en tres categorías: Bodas (Olivo, Tierra,
-  Gala), Quinceaños (Aurora, Camelia) y Bebés (Riviera, baby shower; Nube,
+  Gala), Quinceaños (Aurora, Aguamarina) y Bebés (Riviera, baby shower; Nube,
   primer cumpleaños), un catálogo en `/` con una sección por categoría (título,
   descripción, tipo de evento en cada tarjeta), transición hacia cada demo
-  y validación `npm run check`. **Todas las demos usan una sesión
-  coherente de stock de Pexels** con nombres ficticios y un aviso visible
-  de que son demostraciones (auditoría completa en photo-map.md).
+  y validación `npm run check`. Cada demo usa una sesión coherente: seis
+  de stock de Pexels con nombres ficticios y **Olivo con Don Ramón y Doña
+  Florinda, fotos aportadas por el dueño con derechos de imagen y de los
+  personajes PENDIENTES DE AUTORIZACIÓN**; todas con un aviso visible de
+  que son demostraciones (auditoría en photo-map.md).
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
   primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
@@ -81,7 +88,7 @@ escaparate.
 
 ## Stack
 
-Next.js 16.3 (App Router, Turbopack) · React 19.2 · TypeScript 5 ·
+Next.js 16.3.8 (App Router, Turbopack) · React 19.2 · TypeScript 5 ·
 Tailwind CSS v4 · `sharp` (imágenes) · `tsx` (scripts) · Vercel. Todo se
 prerenderiza estático. Next 16 cambia APIs: leer `node_modules/next/dist/docs/`
 antes de usar APIs de Next (ver `AGENTS.md`).
@@ -94,7 +101,7 @@ config/catalog.ts         ← URL, título y descripción del catálogo
 lib/invitation/
   types.ts                ← forma de los datos (contenido común + fotos por diseño)
   resolve.ts              ← invitación → valores listos (fechas, paleta, textos, enlaces)
-  time.ts                 ← fecha/hora con zona horaria, formatos, números romanos
+  time.ts                 ← fecha/hora con zona horaria, formatos, números romanos (solo el "XV")
   whatsapp.ts             ← mensajes del RSVP
   calendar.ts             ← archivo .ics
   share-image.tsx         ← tarjeta al compartir e ícono (next/og)
@@ -162,7 +169,7 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   invitación de cliente todavía nombra a la persona de la demo
   (palabra completa).
 - **`schedule` (programa del evento)**: opcional en el contenido común;
-  lo muestran Aurora (línea de tiempo), Camelia (filas sobre vino) y Nube
+  lo muestran Aurora (línea de tiempo), Aguamarina (línea con rombos) y Nube
   (tarjetas). Horas en
   24 h, validadas por `npm run check`.
 - **Tercera tipografía opcional** `--f-script` → clase `font-script`
@@ -204,7 +211,7 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   (términos del 15-11-2024): licencia de la foto ≠ derechos de imagen
   resueltos. Por eso: nombres ficticios, ningún uso como testimonio y un
   aviso visible en cada demo (`Shell.tsx`, solo con `isDemo`) y en el pie
-  del catálogo. Aurora, Camelia (quinceañeras) y Nube (bebé) muestran
+  del catálogo. Aurora, Aguamarina (quinceañeras) y Nube (bebé) muestran
   menores identificables: riesgo medio documentado; antes de una campaña
   comercial conviene reemplazarlas por sesiones propias con autorización
   firmada de los padres o tutores. No se usó ninguna imagen generada.
@@ -278,7 +285,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - `preload="none"`: el archivo no se descarga hasta ese toque.
 - **Una sola lógica, siete presentaciones**: `players.tsx` define la forma
   de cada diseño (`lino` Olivo, `ficha` Tierra, `deco` Gala, `destello`
-  Aurora, `broche` Camelia, `sello` Riviera, `globo` Nube); el diseño trae
+  Aurora, `broche` Aguamarina, `sello` Riviera, `globo` Nube); el diseño trae
   la suya en `meta.musicPlayer` y
   `music.player` la cambia.
 - Estado visual solo desde eventos nativos del `<audio>` (`playing`,
@@ -302,7 +309,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - "Desliza hacia abajo" con palabras + flecha (`ScrollCue`); tocarla avanza.
 - Botones con forma de botón y ≥ 48 px ("Cómo llegar" + "Se abre en Google Maps").
 - "Confirmar por WhatsApp" puede ir en dos líneas equilibradas (Tierra,
-  Gala y Camelia, con mayúsculas espaciadas, no cabían en una a 320-430 px
+  Gala y Aguamarina, con mayúsculas espaciadas, no cabían en una a 320-430 px
   y el texto se salía del botón). No achicar la letra para forzar una línea.
 - Visor: la foto empieza debajo de "Cerrar" y ambos respetan la zona segura
   del teléfono.
@@ -374,7 +381,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - Solución: esos textos pueden pasar a dos líneas (`text-center`,
   `text-balance`, `max-w-full`, `min-w-0`); los nombres gigantes tienen
   tamaño solo en `vw` y bajan un escalón si son largos (hoy: `longName` de
-  Camelia, más de 8 letras; Olivo, todo en `vw`); las cifras
+  Aguamarina, más de 8 letras; Olivo, todo en `vw`); las cifras
   de la cuenta regresiva de Gala llevan tope en `vw` (`min(rem, vw)`), así
   la letra agrandada no las saca de la fila.
 - Regla: un texto que no puede partirse (`whitespace-nowrap`, nombres
@@ -398,7 +405,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 ### Teléfono primero (revisión 2026-10-08, no revertir)
 Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
 - **La portada cabe en la primera pantalla** con "Desliza hacia abajo"
-  visible. En Tierra, Gala, Camelia y Riviera el ancho de la foto de
+  visible. En Tierra, Gala, Aguamarina y Riviera el ancho de la foto de
   portada en teléfono sale del alto de la pantalla
   (`w-[min(…,max(…,calc((100svh-Xrem)*ratio)))]`): la proporción sigue
   siendo la de `meta.ts`, solo cambia el tamaño. En Olivo, el alto de la
@@ -409,7 +416,7 @@ Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
   ancho < 1024 px; 320×568, o un teléfono con la barra del navegador
   abierta): las portadas se recomponen en vez de encogerse. "Desliza hacia
   abajo" pasa a una fila (flecha al lado del texto, mismo tamaño) y cada
-  diseño ajusta lo suyo: Gala y Riviera, márgenes; Camelia, la fecha en una
+  diseño ajusta lo suyo: Gala y Riviera, márgenes; Aguamarina, la fecha en una
   línea; Olivo, nombres un escalón más chicos; Tierra deja la foto pasar el borde (invita a bajar) y sube la
   flecha a la mitad de la foto (`ScrollCue stacked`). Medido a 320×568: el
   indicador queda a 20-60 px del borde en los 7 diseños.
@@ -439,7 +446,7 @@ Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
 para **fondo oscuro**: letras blancas con brillo azul):
 | Archivo | Tamaño | Forma | Uso |
 |---|---|---|---|
-| `farley-systems-and-icon-logo.png` | 1983×793 (contenido ≈ 3,2:1) | Horizontal: ícono + nombre | **Pie del catálogo**, sobre franja oscura, "Creado por", 56–64 px de alto |
+| `farley-systems-and-icon-logo.png` | 1983×793 (contenido ≈ 3,2:1) | Horizontal: ícono + nombre | **Pie del catálogo**, sobre franja oscura, "Creado por", 56–64 px de alto; enlaza a https://www.instagram.com/farley.systems/ en otra pestaña (`rel="noopener noreferrer"`, nombre accesible "Farley Systems en Instagram (se abre en una pestaña nueva)", foco visible) |
 | `farley-systems-logo.png` | 1983×793 (contenido ≈ 5:1) | Solo nombre | No se usa (repite al anterior) |
 | `farley-icon.png` | 1254×1254 (contenido ≈ 1,3:1) | Ícono "F" | No se usa |
 
@@ -479,7 +486,7 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
   nombre del evento es configurable: `event.name`/`article`; los textos de
   interfaz están en español). Otros eventos se harían como personalizados.
 - Música de las demos: solo hay 5 pistas con licencia verificada para 7
-  diseños; Tierra y Riviera comparten la de Satie, Gala y Camelia la de
+  diseños; Tierra y Riviera comparten la de Satie, Gala y Aguamarina la de
   Debussy. Cambiarlas requiere otra pista con licencia comprobada.
 - Microtextos de interfaz fijos en los componentes ("Cómo llegar",
   "Desliza hacia abajo", textos del RSVP…).
@@ -523,7 +530,9 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 
 - Decisiones comerciales con Fotolab (ver arriba).
 - Borrar `_anterior/` (ignorada por git; no está en el repositorio).
-- Fotos reales de demostración con licencia (o propias) para que el
-  catálogo muestre fotografía real.
+- **Derechos de las fotos de Olivo (Don Ramón y Doña Florinda): PENDIENTES
+  DE AUTORIZACIÓN.** Las demos con menores (Aurora, Aguamarina, Nube):
+  reemplazar por sesiones con autorización antes de una campaña.
+- Auditoría completa y propuestas no implementadas: `docs/auditoria.md`.
 - Probar audio y WhatsApp en un teléfono real con la primera invitación.
 - Si se ofrecerán otros eventos (baby showers, bautizos), revisar textos fijos.

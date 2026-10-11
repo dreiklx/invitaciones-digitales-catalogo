@@ -19,25 +19,28 @@ Contexto, arquitectura y decisiones: `PROJECT-CONTEXT.md`. Historial:
 
 | Categoría | N.º | Id | Nombre | Evento | Concepto | Demo | Guía |
 |---|---|---|---|---|---|---|---|
-| Bodas | 01 | `olivo` | Olivo | Boda | Editorial en olivo y lino (rediseño 2026-10-10) | Elena & Tomás | `docs/templates/01-olivo.md` |
+| Bodas | 01 | `olivo` | Olivo | Boda | Editorial en olivo y lino (rediseño 2026-10-10) | Don Ramón & Doña Florinda | `docs/templates/01-olivo.md` |
 | Bodas | 02 | `tierra` | Tierra | Boda | Revista en café y arcilla | Camila & Diego | `docs/templates/02-tierra.md` |
 | Bodas | 03 | `gala` | Gala | Boda | Noche de etiqueta, negro y dorado, fotos en blanco y negro | Isabella & Sebastián | `docs/templates/03-gala.md` |
 | Quinceaños | 04 | `aurora` | Aurora | Quinceaños | Lila de ensueño, espejo ovalado y caligrafía | Valentina | `docs/templates/04-aurora.md` |
-| Quinceaños | 05 | `camelia` | Camelia | Quinceaños | Joyería en azul petróleo, aguamarina y champán (rediseño 2026-10-11) | Renata | `docs/templates/05-camelia.md` |
+| Quinceaños | 05 | `aguamarina` | Aguamarina | Quinceaños | Joyería en azul petróleo, aguamarina y champán (rediseño 2026-10-11) | Renata | `docs/templates/05-aguamarina.md` |
 | Bebés | 06 | `riviera` | Riviera | Baby shower | Mediterráneo: cobalto, porcelana y limón (diseño original recuperado) | Natalia y Joaquín | `docs/templates/06-riviera.md` |
 | Bebés | 07 | `nube` | Nube | Primer cumpleaños | Fiesta en cielo celeste, banderines y globos | Emma | `docs/templates/07-nube.md` |
 
-Camelia ocupa el lugar del antiguo diseño de boda Borgoña
-(`/plantillas/borgona` redirige). Riviera volvió el 2026-10-11 como baby
+Aguamarina (llamada Camelia hasta el 2026-10-11) ocupa el lugar del
+antiguo diseño de boda Borgoña (`/plantillas/camelia` y
+`/plantillas/borgona` redirigen a `/plantillas/aguamarina`). Riviera volvió el 2026-10-11 como baby
 shower en el lugar que había ocupado Arrullo (`/plantillas/arrullo`
-redirige). Todas las demos usan nombres ficticios y fotos de stock de
-Pexels (auditoría de licencias y derechos de imagen en `photo-map.md`).
+redirige). Seis demos usan nombres ficticios y fotos de stock de Pexels; Olivo usa a
+Don Ramón y Doña Florinda con fotos aportadas por el dueño del proyecto,
+**con derechos de imagen y de los personajes pendientes de autorización**
+(auditoría en `photo-map.md`).
 
-**Quién celebra:** las bodas usan `couple` (dos nombres); Aurora, Camelia
+**Quién celebra:** las bodas usan `couple` (dos nombres); Aurora, Aguamarina
 y Nube usan `honoree` (`name`, `age` y opcional `ageLabel`, p. ej. "1
 añito" o "6 meses"); Riviera usa `shower` (`parents`, uno o dos nombres, y
 `babyName` solo si la familia quiere mostrarlo; ningún texto supone el
-sexo del bebé). Aurora, Camelia y Nube muestran además el **programa** del
+sexo del bebé). Aurora, Aguamarina y Nube muestran además el **programa** del
 evento (`schedule`: vals, brindis, pastel…), opcional.
 
 ## Dos modos del mismo proyecto
@@ -64,13 +67,13 @@ npm run dev            # http://localhost:3000
 2. `npm install`
 3. **Elegir el diseño** y crear el archivo de datos:
    ```bash
-   npm run nueva -- camelia     # olivo | tierra | gala | aurora | camelia | riviera | nube
+   npm run nueva -- aguamarina  # olivo | tierra | gala | aurora | aguamarina | riviera | nube
    ```
    Copia la demo de ese diseño a `config/invitation.ts`, con las fotos
    apuntando a `public/images/<espacio>.jpg` (`galeria1` → `galeria-1.jpg`).
    Los nombres de la pareja y los textos alternativos de las fotos quedan
-   en "REEMPLAZAR" (nunca se heredan de la demo: la de Olivo es Elena y
-   Tomás).
+   en "REEMPLAZAR" (nunca se heredan de la demo: la de Olivo es Don Ramón
+   y Doña Florinda).
 4. **Editar `config/invitation.ts`**: nombres (`couple` o `honoree`), `date`/`time`, lugares
    (enlaces "Compartir" de Google Maps, Waze opcional), textos, padres,
    aviso, vestimenta, regalos, RSVP (WhatsApp, fecha límite), colores
@@ -144,7 +147,7 @@ music: {
 - **Sin música:** `music: null` (no hay reproductor ni créditos).
 - **Estilo del reproductor:** cada diseño trae el suyo (`musicPlayer` en
   su `meta.ts`): Olivo `lino`, Tierra `ficha`, Gala `deco`, Aurora
-  `destello`, Camelia `broche`, Riviera `sello`, Nube `globo`. `player`
+  `destello`, Aguamarina `broche`, Riviera `sello`, Nube `globo`. `player`
   usa otro; toma los colores y letras del diseño.
 - **Licencia, antes de publicar:** solo audio que el cliente pueda usar en
   una web. Comprar una canción o tenerla en Spotify/YouTube **no** da ese
@@ -158,7 +161,7 @@ music: {
 |---|---|---|---|
 | `pachelbel-canon-macleod.mp3` | Pachelbel, Canon en re · Kevin MacLeod | CC BY 3.0 (atribución obligatoria) | Olivo |
 | `satie-gymnopedie-1.mp3` | Satie, Gymnopédie n.º 1 · Robin Alciatore (Musopen) | Dominio público | Tierra, Riviera |
-| `debussy-clair-de-lune.mp3` | Debussy, Clair de lune · Laurens Goedhart | Dominio público | Gala, Camelia |
+| `debussy-clair-de-lune.mp3` | Debussy, Clair de lune · Laurens Goedhart | Dominio público | Gala, Aguamarina |
 | `chopin-vals-op69-1.mp3` | Chopin, Vals op. 69 n.º 1 (Musopen) | CC0 | Aurora |
 | `cajita-musical-cuna.mp3` | Brahms, Canción de cuna (cajita musical, pdsounds.org) | Dominio público | Nube |
 
@@ -189,7 +192,7 @@ openingQuote: {
   copyright). `npm run check` avisa si a un versículo le falta la
   referencia o la traducción.
 - Demos: Olivo, Colosenses 3:14; Tierra, Cantares 8:7; Gala, Mateo 19:6
-  (Reina-Valera 1909). Aurora, Camelia, Riviera y Nube usan frases.
+  (Reina-Valera 1909). Aurora, Aguamarina, Riviera y Nube usan frases.
 
 ## Datos a pedir al cliente (todo de una vez)
 
@@ -209,8 +212,8 @@ openingQuote: {
 11. WhatsApp que recibe las confirmaciones, fecha límite, "¿de parte de quién?".
 12. Música con permiso de uso para web (y su licencia o atribución), o
     sin música.
-13. Aurora, Camelia y Nube: programa del evento (hora y momento: vals,
-    pastel…), o "no incluir". Camelia: también la corte de honor.
+13. Aurora, Aguamarina y Nube: programa del evento (hora y momento: vals,
+    pastel…), o "no incluir". Aguamarina: también la corte de honor.
 14. Cita, versículo (con referencia y traducción) o nada, para la apertura
     y el cierre.
 

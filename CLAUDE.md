@@ -9,7 +9,7 @@ Lee primero, en este orden:
 2. `project-log.md` — historial de sesiones (la más reciente primero).
 3. Si el trabajo es sobre un diseño ("vamos a usar la plantilla 3"):
    `docs/templates/<número>-<diseño>.md` (01-olivo, 02-tierra, 03-gala,
-   04-aurora, 05-camelia, 06-riviera, 07-nube).
+   04-aurora, 05-aguamarina, 06-riviera, 07-nube).
 4. `photo-map.md` si hay fotos de por medio (incluye la auditoría de
    licencias y derechos de imagen de las demos); `README.md` para el flujo de
    crear una invitación.

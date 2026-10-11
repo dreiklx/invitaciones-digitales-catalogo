@@ -5,7 +5,7 @@ import { gemClip, Tiara } from "./ornaments";
 
 // Miniatura del catálogo: retrato en el marco tallado, tiara, el nombre en
 // cursiva y los XV, sobre perla con bruma aguamarina.
-export default function CameliaPreview({ inv }: { inv: ResolvedInvitation }) {
+export default function AguamarinaPreview({ inv }: { inv: ResolvedInvitation }) {
   const { photos, names, dates, content } = inv;
   const roman = toRoman(inv.honoree?.age ?? 15);
   return (

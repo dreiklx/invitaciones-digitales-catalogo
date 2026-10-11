@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { ResolvedInvitation } from "@/lib/invitation/resolve";
-import { toRoman } from "@/lib/invitation/time";
 
 // Miniatura del catálogo: retrato en blanco y negro con doble marco dorado.
 export default function GalaPreview({ inv }: { inv: ResolvedInvitation }) {
@@ -18,9 +17,7 @@ export default function GalaPreview({ inv }: { inv: ResolvedInvitation }) {
       <p className="mt-[5cqw] font-display text-[8cqw] leading-[1.05] text-ink">
         {names.one} <span className="italic text-primary">&amp;</span> {names.two}
       </p>
-      <p className="mt-[3cqw] text-[2.6cqw] uppercase tracking-[0.45em] text-muted">
-        {toRoman(dates.dayNumber)} · {toRoman(dates.monthNumber)} · {toRoman(Number(dates.year))}
-      </p>
+      <p className="mt-[3cqw] font-display text-[4cqw] tracking-[0.06em] text-muted">{dates.long}</p>
     </div>
   );
 }

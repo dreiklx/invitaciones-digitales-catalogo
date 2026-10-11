@@ -1,8 +1,9 @@
-// Demo del diseño 01 · Olivo (pareja ficticia: Elena y Tomás). Fotos: una
-// sola sesión de stock en un olivar (Pexels, Igor La Prado; licencia de
-// Pexels) en public/plantillas/olivo/fotos/. Fuentes: photo-map.md. También es el punto de
-// partida de una invitación nueva: `npm run nueva -- olivo` copia este
-// archivo a config/invitation.ts. Guía: docs/templates/01-olivo.md.
+// Demo del diseño 01 · Olivo: Don Ramón y Doña Florinda, con las fotos de
+// la carpeta "fotos plantilla olivo" que aportó el dueño (copias web en
+// public/plantillas/olivo/fotos/). Reproducen personajes de una serie de
+// TV: derechos de imagen y de los personajes PENDIENTES DE AUTORIZACIÓN
+// (ver photo-map.md). Estos datos nunca se copian a una invitación nueva:
+// `npm run nueva -- olivo` deja los nombres y los `alt` en "REEMPLAZAR".
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
@@ -16,7 +17,7 @@ export const demo: InvitationOf<"olivo"> = {
     timeZone: "America/Costa_Rica",
   },
   event: { name: "boda", article: "la" },
-  couple: { partnerOne: "Elena", partnerTwo: "Tomás" },
+  couple: { partnerOne: "Don Ramón", partnerTwo: "Doña Florinda" },
   date: "2027-04-17",
   time: "16:00",
   durationHours: 6,
@@ -123,12 +124,12 @@ export const demo: InvitationOf<"olivo"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/olivo/fotos/en-el-pasto.jpg", alt: "Elena y Tomás recostados en el pasto, sonriendo", position: "40% 30%" },
-    historia: { src: "/plantillas/olivo/fotos/manos.jpg", alt: "Las manos de Elena y Tomás, con el anillo de compromiso", position: "50% 50%" },
-    retrato: { src: "/plantillas/olivo/fotos/retrato-novia.jpg", alt: "Retrato de Elena sonriendo", position: "50% 35%" },
-    galeria1: { src: "/plantillas/olivo/fotos/caminata-olivar.jpg", alt: "Elena y Tomás caminan por el olivar", position: "50% 50%" },
-    galeria2: { src: "/plantillas/olivo/fotos/abrazo-olivar.jpg", alt: "Tomás abraza a Elena entre los olivos", position: "50% 40%" },
-    galeria3: { src: "/plantillas/olivo/fotos/vestido-al-viento.jpg", alt: "El vestido de Elena al viento", position: "50% 40%" },
-    galeria4: { src: "/plantillas/olivo/fotos/en-brazos.jpg", alt: "Tomás lleva a Elena en brazos por el campo", position: "50% 40%" },
+    portada: { src: "/plantillas/olivo/fotos/abrazo.jpg", alt: "Don Ramón y Doña Florinda abrazados en el patio", position: "54% 12%" },
+    historia: { src: "/plantillas/olivo/fotos/propuesta.jpg", alt: "Don Ramón, de rodillas, le propone matrimonio a Doña Florinda", position: "50% 45%" },
+    retrato: { src: "/plantillas/olivo/fotos/rosa.jpg", alt: "Don Ramón le lanza una rosa a Doña Florinda", position: "50% 40%" },
+    galeria1: { src: "/plantillas/olivo/fotos/anillo-vertical.jpg", alt: "Doña Florinda enseña el anillo junto a Don Ramón", position: "50% 28%" },
+    galeria2: { src: "/plantillas/olivo/fotos/patio.jpg", alt: "Don Ramón le ofrece una rosa a Doña Florinda", position: "50% 30%" },
+    galeria3: { src: "/plantillas/olivo/fotos/sentados.jpg", alt: "Don Ramón y Doña Florinda sentados en el patio, felices", position: "50% 35%" },
+    galeria4: { src: "/plantillas/olivo/fotos/anillo-horizontal.jpg", alt: "Doña Florinda enseña el anillo y Don Ramón celebra", position: "50% 30%" },
   },
 };

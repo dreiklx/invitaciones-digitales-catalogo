@@ -1,9 +1,17 @@
-# Plantilla 05 · Camelia (quinceaños)
+# Plantilla 05 · Aguamarina (quinceaños)
 
-**Id en el config:** `template: "camelia"` · **Demo:** `/plantillas/camelia` ·
-**Código:** `templates/camelia/` · **Datos de ejemplo:** `templates/camelia/demo.ts`
+**Id en el config:** `template: "aguamarina"` · **Demo:** `/plantillas/aguamarina` ·
+**Código:** `templates/aguamarina/` · **Datos de ejemplo:** `templates/aguamarina/demo.ts`
 
-## Concepto: "Aguamarina" (rediseño del 2026-10-11)
+**Nombre:** hasta el 2026-10-11 se llamaba **Camelia** (y antes, en su
+lugar, estaba el diseño de boda Borgoña). El nombre visible y el id
+interno son iguales: `aguamarina`. `/plantillas/camelia` y
+`/plantillas/borgona` (y sus subrutas, como el calendario) redirigen de
+forma permanente a `/plantillas/aguamarina` en un solo salto
+(`next.config.ts`). Un `config/invitation.ts` viejo con
+`template: "camelia"` ya no compila: cambiarlo a `"aguamarina"`.
+
+## Concepto (rediseño del 2026-10-11)
 Un quinceaños de joyería: azul petróleo profundo, perla, bruma aguamarina
 y oro champán. Las fotos van en **marcos tallados como una esmeralda**
 (esquinas biseladas con doble filete champán), una **tiara de línea fina**
@@ -16,14 +24,14 @@ anterior (vino frambuesa, nombre gigante en bloque, información en filas
 de ficha, fotos en fucsia contra una pared de piedra) se sentía pesada y
 plana. Aurora se ve más refinada por su simetría, su único marco
 protagonista con doble filete, la luz suave de fondo, la letra delicada y
-los adornos finos. La nueva Camelia toma esas **virtudes** (aire, un marco
+los adornos finos. La nueva versión toma esas **virtudes** (aire, un marco
 protagonista, detalles finos) con una **identidad propia**: paleta de
 joyería, marco tallado en vez de óvalo, tiara en vez de estrellas, letra
 romana cursiva en vez de caligrafía, fondos azul petróleo con halo
 aguamarina. No se parece a Aurora (lila), Gala (negro y dorado) ni Riviera
 (cobalto y limón).
 
-## Paleta predeterminada (`templates/camelia/meta.ts`)
+## Paleta predeterminada (`templates/aguamarina/meta.ts`)
 | Token | Valor | Uso en este diseño |
 |---|---|---|
 | `background` | `#f7f6f1` | Perla: fondo de la página |
@@ -65,14 +73,14 @@ Los marcos tallados recortan las esquinas: rostro lejos de los bordes.
 Pedir al cliente: 4 verticales (retratos de cuerpo entero y medio cuerpo)
 y 2 cuadradas (o verticales con el rostro al centro).
 
-**Demo — Renata** (`public/plantillas/camelia/fotos/`, una sola sesión de
+**Demo — Renata** (`public/plantillas/aguamarina/fotos/`, una sola sesión de
 Pexels de Juliano Astc: vestido aguamarina y vestido blanco en un salón de
 fiesta con lámparas de araña). Personas identificables (probablemente una
 menor): ver la auditoría en `photo-map.md`.
 
 ## Rasgos propios
 - `Gem` (marco tallado con `clip-path`; `gap` = aire entre los dos
-  filetes), `Tiara`, `Sparkle` y `XvRule` en `templates/camelia/ornaments.tsx`.
+  filetes), `Tiara`, `Sparkle` y `XvRule` en `templates/aguamarina/ornaments.tsx`.
 - El nombre tiene tamaño solo en `vw` y baja un escalón si pasa de 8
   letras: no ensancha la página ni con la letra del sistema agrandada.
 - Cuenta regresiva: cuatro gemas con filete champán; las cifras con tope
@@ -93,5 +101,5 @@ menor): ver la auditoría en `photo-map.md`.
 - Frase de apertura propia de la quinceañera (no un versículo).
 
 ## Uso
-`npm run nueva -- camelia` → editar `config/invitation.ts` (nombre en
+`npm run nueva -- aguamarina` → editar `config/invitation.ts` (nombre en
 "REEMPLAZAR", edad, programa, corte de honor) → fotos → `npm run check`.

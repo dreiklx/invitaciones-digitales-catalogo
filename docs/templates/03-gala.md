@@ -5,9 +5,8 @@
 
 ## Concepto
 Una noche de etiqueta en negro profundo, dorado y plata. Lleva monograma
-con las iniciales, abanicos art déco, marcos dorados dobles, fecha en
-números romanos, retratos en **blanco y negro** y un programa en línea de
-tiempo. Todo va centrado y simétrico. Para bodas de noche, de salón, de
+con las iniciales, abanicos art déco, marcos dorados dobles, retratos en
+**blanco y negro** y un programa en línea de tiempo. Todo va centrado y simétrico. Para bodas de noche, de salón, de
 hotel o con etiqueta rigurosa.
 
 ## Paleta predeterminada (`templates/gala/meta.ts`)
@@ -59,7 +58,12 @@ recortadas a la proporción de cada marco.
 
 ## Rasgos propios
 - Monograma con las iniciales (`names.initials`) y brillo dorado lento (`gold-sheen`, respeta reducir movimiento).
-- Fecha en números romanos (`toRoman`) siempre acompañada de la fecha normal (para personas mayores).
+- Fecha **legible** en Cormorant con espaciado amplio ("13 de noviembre de
+  2027", `dates.long`) en la portada inicial, la portada (con el día y la
+  hora debajo) y el pie. Hasta el 2026-10-11 iba en números romanos
+  ("XIII · XI · MMXXVII"), difícil de leer para personas mayores; se
+  quitaron. Si se quieren romanos, solo como adorno y nunca en lugar de la
+  fecha.
 - Programa en línea de tiempo: un bloque por cada lugar de `locations`.
 
 ## En el teléfono

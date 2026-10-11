@@ -8,7 +8,7 @@ export const meta: TemplateMeta<"gala"> = {
   name: "Gala",
   kind: "boda",
   concept: "Lujo nocturno: negro, dorado y plata, con fotos en blanco y negro.",
-  highlights: ["Monograma y marcos dorados art déco", "Fecha en números romanos", "Retratos en blanco y negro"],
+  highlights: ["Monograma y marcos dorados art déco", "Programa en línea de tiempo", "Retratos en blanco y negro"],
   palette: {
     background: "#0c0c0e",
     surface: "#151518",

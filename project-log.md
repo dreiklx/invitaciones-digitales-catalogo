@@ -4,6 +4,37 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-11 (tarde) — Don Ramón y Doña Florinda, Aguamarina, fecha de Gala y auditoría
+
+### Qué se hizo
+- **Olivo:** vuelve a **Don Ramón y Doña Florinda** con las 7 fotos
+  originales de la carpeta del Escritorio (copiadas a JPG sin agrandar,
+  originales intactos), integradas en el diseño editorial actual. Derechos
+  de imagen y de los personajes **PENDIENTES DE AUTORIZACIÓN**
+  (photo-map.md). El monograma quita el tratamiento ("R · F").
+- **Avisos de demostración** (cada demo y pie del catálogo): ya no afirman
+  una licencia de Pexels; dicen que las personas o personajes no son
+  clientes ni respaldan el servicio.
+- **Gala:** fecha legible ("13 de noviembre de 2027", `dates.long`) en
+  portada inicial, portada, pie y miniatura, en lugar de números romanos.
+- **Camelia → Aguamarina:** nombre visible e id (`aguamarina`), carpetas,
+  ruta, fotos, guía `05-aguamarina.md`; `/plantillas/camelia` y
+  `/plantillas/borgona` redirigen (308) a `/plantillas/aguamarina`.
+- **Catálogo:** "Creamos invitaciones para:"; el logo de Farley Systems
+  enlaza a su Instagram (pestaña nueva, `noopener noreferrer`, nombre
+  accesible y foco visible).
+- **Seguridad:** `next` 16.3.8 (avisos, uno crítico en `next/og`),
+  `sharp` 0.35.5, `npm audit fix`. Producción: 0 vulnerabilidades.
+- **Auditoría y propuestas** (no implementadas): `docs/auditoria.md`.
+
+### Verificación
+- `check`, `typecheck`, `lint`, `build` sin errores.
+- Sin desplazamiento lateral: 320/360/390/430 (toques reales), 320 con
+  letra al 125 % y 1024/1366/1440/1920 (barra visible y rueda lateral):
+  72/72. Música en los 7. Foco del enlace de Instagram con Tab.
+- `npm run nueva -- olivo` y `-- aguamarina`: nombres y fotos en
+  "REEMPLAZAR"; `config/invitation.ts` restaurado a `null`.
+
 ## 2026-10-11 — Auditoría de fotos, Camelia "Aguamarina" y regreso de Riviera
 
 ### Qué se hizo
