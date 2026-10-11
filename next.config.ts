@@ -11,8 +11,10 @@ const nextConfig: NextConfig = {
   // los enlaces viejos de las demos siguen funcionando.
   async redirects() {
     return [
-      { source: "/plantillas/riviera/:path*", destination: "/plantillas/arrullo/:path*", permanent: true },
-      { source: "/plantillas/borgona/:path*", destination: "/plantillas/camelia/:path*", permanent: true },
+      { source: "/plantillas/riviera", destination: "/plantillas/arrullo", permanent: true },
+      { source: "/plantillas/riviera/:path+", destination: "/plantillas/arrullo/:path+", permanent: true },
+      { source: "/plantillas/borgona", destination: "/plantillas/camelia", permanent: true },
+      { source: "/plantillas/borgona/:path+", destination: "/plantillas/camelia/:path+", permanent: true },
     ];
   },
   // Invitación de un cliente: "/" muestra la página de su diseño
