@@ -118,14 +118,18 @@ del 2026-10-12 (noche).
 
 ### Orden recomendado (2026-10-12, noche)
 
-**Prioridad alta** (antes de mostrar el catálogo a más personas):
-P11 (probar en teléfonos reales), P1 (fotos con autorización), P9
-(tipografías del build sin depender de la red).
+**Hechas el 2026-10-12 (cierre):** P9 (tipografías locales; build
+comprobado sin red), P12 (página 404 en español) y P14 (`npm run
+test:cliente`). Además, "Volver al catálogo" en las demos (pedido del
+dueño; PROJECT-CONTEXT, "Navegación").
 
-**Prioridad media:** P14 (prueba automática de una invitación de
-cliente), P12 (página 404 en español), P13 (peso de las tipografías del
-catálogo), P15 (opciones del RSVP con flechas del teclado), P10 (nombres
-en la primera pantalla de escritorio: decide el dueño).
+**Prioridad alta** (antes de mostrar el catálogo a más personas):
+P11 (probar en teléfonos reales), P1 (fotos con autorización).
+
+**Prioridad media:** P13 (peso de las tipografías del catálogo; con los
+archivos locales variables bajó, medir de nuevo), P15 (opciones del RSVP
+con flechas del teclado), P10 (nombres en la primera pantalla de
+escritorio: decide el dueño).
 
 **Prioridad baja:** P16 (Waze en todos los lugares de las demos), P5
 (actualizar Next/React), P3 (registro único de diseños), P8 (borrar
@@ -216,7 +220,18 @@ en la primera pantalla de escritorio: decide el dueño).
 - **Riesgos:** perder algo que se quisiera consultar.
 - **¿Ahora?:** cuando el dueño lo confirme.
 
-### P9 · Tipografías de las imágenes para compartir sin depender de la red
+### P9 · Tipografías de las imágenes para compartir sin depender de la red — HECHA (2026-10-12, cierre)
+**Hecho:** no solo las imágenes: todo el build. Las 16 familias están en
+`fonts/<familia>/` (OFL, de Fontsource 5.3.0) con `next/font/local`, y
+next/og lee `.woff` locales. `npm run build:offline` (en `verify`) corta la
+red de Node y de Turbopack: la versión anterior falla ("Failed to fetch …
+from Google Fonts" y "No fonts are loaded" en los íconos); la actual
+compila sin ningún intento de conexión. Capturas antes/después de los
+ocho diseños y el catálogo: ≤ 1 % de píxeles distintos (suavizado). Al
+cambiar se encontró y corrigió una mezcla de letras entre diseños (todas
+las familias se llamaban `display`/`body`). Detalle: PROJECT-CONTEXT,
+"Tipografías locales".
+
 - **Problema:** si Google Fonts no responde durante el build, el build (y
   el despliegue) falla.
 - **Por qué sirve / beneficio:** despliegues más predecibles.
@@ -255,7 +270,12 @@ composición: revisarla con el dueño antes de cambiarla.
 - **Riesgos:** ninguno; si algo falla, aparece trabajo nuevo.
 - **¿Ahora?:** sí, antes de enviar el catálogo a más personas.
 
-### P12 · Página "no encontrada" en español — prioridad media
+### P12 · Página "no encontrada" en español — HECHA (2026-10-12, cierre)
+**Hecho:** `app/not-found.tsx` (estado 404, renderizada en el servidor,
+estilo neutro del catálogo, "Esta página no existe", "Volver al catálogo"
+o, en un cliente, "Ir a la invitación"). Pruebas en `catalog.spec.ts`,
+`responsive.spec.ts` (9 tamaños) y `tests/cliente/`.
+
 - **Problema observado:** un enlace mal copiado muestra la página 404 de
   Next en inglés, también en la invitación de un cliente (A12).
 - **Solución:** `app/not-found.tsx` sencillo, neutro (sin paleta de
@@ -283,7 +303,15 @@ composición: revisarla con el dueño antes de cambiarla.
   una carpeta por diseño (no hacerlo con una ruta dinámica).
 - **¿Ahora?:** después de P11 y P12.
 
-### P14 · Prueba automática de una invitación de cliente compilada — prioridad media
+### P14 · Prueba automática de una invitación de cliente compilada — HECHA (2026-10-12, cierre)
+**Hecho:** `npm run test:cliente` (en `verify`): copia el proyecto a
+`.pruebas-tmp/`, corre el `nueva` real, completa con datos ficticios,
+`check`, `build:offline`, Playwright en `tests/cliente/` (Olivo, Aurora y
+Arrullo) y borra la copia. Encontró que en un cliente las rutas de los
+otros diseños daban 404 con una página vacía que cargaba sus
+tipografías: corregido en `next.config.ts`. Queda fuera la variante con
+`music: null` (sigue probada solo a nivel de datos).
+
 - **Problema observado:** la separación demo/cliente (sin selector, sin
   aviso, fotos de demo en 404, `noindex`, vista sin música y sin secciones
   opcionales) se comprobó a mano el 2026-10-12 con `nueva -- nube`. Las

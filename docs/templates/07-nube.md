@@ -40,6 +40,7 @@ mantenerlos así (los fondos son claros).
 
 ## Tipografías
 Fredoka (títulos, nombre, números) + Nunito (texto).
+Archivos locales en `fonts/fredoka/`, `fonts/nunito/` (licencia OFL, `next/font/local` en `templates/nube/fonts.ts`): el build no usa Google Fonts (PROJECT-CONTEXT, "Tipografías locales").
 
 ## Estructura (orden)
 Portada (banderines, confeti, foto circular con la edad y su velita,
@@ -121,3 +122,7 @@ llamaba "Mateo" y pasó a **Emma** (2026-10-11) por coherencia.
 - Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
   `detalles`, `galeria`, `regalos`, `confirmar`, `programa`); el menú
   muestra solo las que existen según la configuración.
+- "Inicio" lleva a la portada de esta invitación. Solo en la demo: "←
+  Catálogo | Otros diseños" arriba a la izquierda y el bloque
+  "Demostración" al final del menú ("Ver otros diseños", "Volver al
+  catálogo"); la invitación de un cliente no los tiene.

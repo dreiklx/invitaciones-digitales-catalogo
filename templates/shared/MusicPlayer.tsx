@@ -176,9 +176,12 @@ export default function MusicPlayer({
         <span
           aria-hidden="true"
           data-music-hint
-          className="pointer-events-none absolute right-full top-1/2 mr-2 -translate-y-1/2 rounded-2xl bg-paper px-2.5 py-1.5 text-left text-[11px] font-semibold leading-tight text-ink shadow-lg ring-1 ring-line sm:hidden"
+          className={`pointer-events-none absolute rounded-2xl bg-paper px-2.5 py-1.5 text-left text-[11px] font-semibold leading-tight text-ink shadow-lg ring-1 ring-line sm:hidden ${
+            atTop ? "right-0 top-full mt-2" : "right-full top-1/2 mr-2 -translate-y-1/2"
+          }`}
         >
-          {/* Renglones cortos: en 320 px no llega al enlace "Diseños". */}
+          {/* Arriba (al abrir), DEBAJO del reproductor: a la izquierda chocaba
+              con "Catálogo | Diseños" de las demos. Renglones cortos. */}
           <span className="block">Música:</span>
           <span className="block whitespace-nowrap font-medium">toca para</span>
           <span className="block font-medium">pausar</span>

@@ -9,6 +9,7 @@
 !.yarn/versions
 
 # pruebas
+/.pruebas-tmp
 /coverage
 /test-results
 /playwright-report

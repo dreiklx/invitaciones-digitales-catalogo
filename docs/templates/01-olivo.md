@@ -31,6 +31,7 @@ natural y contemporáneo, no rústico.
 
 ## Tipografías
 Newsreader (titulares, ligera y en cursiva) + Manrope (texto).
+Archivos locales en `fonts/newsreader/`, `fonts/manrope/` (licencia OFL, `next/font/local` en `templates/olivo/fonts.ts`): el build no usa Google Fonts (PROJECT-CONTEXT, "Tipografías locales").
 
 ## Estructura (orden)
 Portada "Abrir invitación" (lino, monograma, nombres en columna, ficha de
@@ -124,3 +125,7 @@ monograma quita el tratamiento ("Don", "Doña"…): R · F.
 - Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
   `detalles`, `galeria`, `regalos`, `confirmar`); el menú
   muestra solo las que existen según la configuración.
+- "Inicio" lleva a la portada de esta invitación. Solo en la demo: "←
+  Catálogo | Otros diseños" arriba a la izquierda y el bloque
+  "Demostración" al final del menú ("Ver otros diseños", "Volver al
+  catálogo"); la invitación de un cliente no los tiene.

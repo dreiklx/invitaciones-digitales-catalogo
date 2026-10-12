@@ -52,9 +52,20 @@ Lee primero, en este orden:
   exige): para otro evento con la misma composición, crear un diseño
   nuevo en vez de recolorear uno existente.
 - Tras cambios relevantes: `npm run check`, `npm run typecheck`,
-  `npm run lint`, `npm test`, `npm run build` y `npm run test:e2e` (o todo
-  junto: `npm run verify`); revisión visual cuando aplique. Si una prueba
-  falla, corregir la causa; no bajar la cobertura.
+  `npm run lint`, `npm test`, `npm run build:offline` (build sin red),
+  `npm run test:e2e` y `npm run test:cliente` (invitación de cliente
+  generada y compilada), o todo junto: `npm run verify`; revisión visual
+  cuando aplique. Si una prueba falla, corregir la causa; no bajar la
+  cobertura.
+- Tipografías: solo locales (`fonts/<familia>/` con su `OFL.txt` +
+  `next/font/local`, constante con el nombre de la familia). Nunca
+  `next/font/google` ni descargas en el build. El `fonts.ts` de un diseño
+  lo importa solo su `Template.tsx` (las miniaturas usan
+  `templates/preview-fonts.ts`); si no, otras rutas precargan sus
+  tipografías (ver PROJECT-CONTEXT, "Tipografías locales").
+- Navegación de las demos: "Inicio" = portada de la invitación; "Volver
+  al catálogo" y "Otros diseños" solo en demos (pastilla de arriba y
+  bloque "Demostración" del menú). No mezclar sus funciones.
 - Cerrar cada tarea con commit y push normal a `origin/main` (salvo que
   el dueño diga lo contrario o haya un riesgo o bloqueo real). Nunca
   despliegues manuales con Vercel CLI para saltar el bloqueo de la

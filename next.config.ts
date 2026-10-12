@@ -33,9 +33,15 @@ const nextConfig: NextConfig = {
   async rewrites() {
     if (!invitation) return [];
     return {
+      // En orden: cada regla ve la ruta que dejó la anterior.
       beforeFiles: [
-        { source: "/", destination: `/plantillas/${invitation.template}` },
         { source: "/plantillas/:design/fotos/:path*", destination: "/no-disponible" },
+        // Los otros diseños no existen aquí: van a la página 404 (antes
+        // respondían 404 con una página vacía que cargaba las tipografías y
+        // la imagen al compartir de ese diseño). La carpeta del diseño
+        // elegido sigue: "/" la muestra y de ahí sale su imagen al compartir.
+        { source: `/plantillas/:path((?!${invitation.template}(?:/|$)).*)`, destination: "/no-disponible" },
+        { source: "/", destination: `/plantillas/${invitation.template}` },
       ],
       afterFiles: [],
       fallback: [],

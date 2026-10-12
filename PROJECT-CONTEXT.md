@@ -38,7 +38,10 @@ publicado):
   "Desliza hacia abajo" pasa a decir el gesto ("Desliza hacia arriba").
   Después: barra de navegación por secciones y selector "Otros diseños";
   auditoría integral con correcciones de capas, foco, confirmación y
-  privacidad de las invitaciones de clientes (`docs/auditoria.md`).
+  privacidad de las invitaciones de clientes (`docs/auditoria.md`);
+  tipografías locales (el build ya no usa Google Fonts), página 404 en
+  español, "Volver al catálogo" en las demos y prueba automática de una
+  invitación de cliente generada y compilada (`npm run test:cliente`).
 
 **No recuperar ni reintroducir datos de la boda original**, tampoco desde
 su historial Git antiguo (archivado fuera del proyecto; ver "Riesgos").
@@ -106,8 +109,9 @@ escaparate.
 
 Next.js 16.3.8 (App Router, Turbopack) · React 19.2 · TypeScript 5 ·
 Tailwind CSS v4 · `sharp` (imágenes) · `tsx` (scripts y `npm test` con
-el corredor de Node) · Playwright (solo desarrollo: `npm run test:e2e`) ·
-Vercel. Todo se
+el corredor de Node) · Playwright (solo desarrollo: `npm run test:e2e` y
+`npm run test:cliente`) · tipografías locales (`fonts/`, `next/font/local`;
+ver "Tipografías locales") · Vercel. Todo se
 prerenderiza estático. Next 16 cambia APIs: leer `node_modules/next/dist/docs/`
 antes de usar APIs de Next (ver `AGENTS.md`).
 
@@ -136,12 +140,16 @@ templates/
                             Countdown.tsx, Preview.tsx (+ ornamentos propios)
 app/
   page.tsx                ← catálogo
+  not-found.tsx           ← página 404 en español (catálogo y clientes)
   plantillas/<diseño>/    ← página, imagen al compartir y .ics de cada diseño
   layout.tsx, icon.tsx, apple-icon.tsx, opengraph-image.tsx, manifest.ts,
   calendario.ics/         ← metadatos y calendario de la invitación del cliente
 components/catalog/       ← página del catálogo; groups.ts = sus cuatro categorías
-scripts/                  ← check.ts, new-invitation.ts (+ lib/new-invitation.ts), placeholders.ts, optimize-images.mjs
+fonts/<familia>/          ← tipografías locales + OFL.txt (ver "Tipografías locales")
+scripts/                  ← check.ts, new-invitation.ts (+ lib/), test-cliente.ts (+ lib/test-invitation.ts),
+                            build-offline.mjs + block-network.cjs, placeholders.ts, optimize-images.mjs
 tests/unit/, tests/e2e/   ← `npm test` (Node) y `npm run test:e2e` (Playwright); playwright.config.ts
+tests/cliente/            ← `npm run test:cliente` (invitación de cliente generada); playwright.cliente.config.ts
 docs/templates/           ← una guía por diseño
 public/plantillas/<diseño>/ ← imágenes de demostración · public/images/, public/audio/ ← cliente
 public/logos/             ← logos del estudio (originales, sin modificar)
@@ -529,6 +537,90 @@ Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
   headless con emulación móvil por CDP, capturando la página por
   pantallas. El script es temporal, no está en el repo.
 
+### Tipografías locales (2026-10-12, no volver a Google Fonts)
+Hasta el 2026-10-12 el build bajaba las tipografías de Google Fonts
+(`next/font/google`, y `next/og` para las imágenes al compartir y los
+íconos): sin conexión, el build fallaba ("Failed to fetch … from Google
+Fonts") y las imágenes salían con otra letra sin avisar. Ahora:
+- **`fonts/<familia>/`**: solo los archivos que se usan, subconjunto
+  `latin` (todo el español), cada carpeta con su `OFL.txt` (las 16 familias
+  son SIL Open Font License 1.1). Origen: paquetes de Fontsource 5.3.0
+  (`@fontsource-variable/<familia>` y `@fontsource/<familia>`), que
+  publican en npm los mismos archivos de Google Fonts; no quedan como
+  dependencia. ~1,2 MB en total.
+- **Páginas:** `next/font/local` en `components/catalog/fonts.ts` y
+  `templates/<diseño>/fonts.ts`, con los mismos ejes y pesos que servía
+  Google: variables (`wght`) donde la familia lo es; Tierra usa el archivo
+  completo de Fraunces (`opsz` y `SOFT`, que usa en sus títulos); Bodoni,
+  DM Sans y Newsreader van sin `opsz` (como antes); Gilda, Italiana,
+  Pinyon Script, Tenor Sans y Gloock son de un solo peso. Comparadas con
+  capturas antes/después (catálogo y ocho diseños, 390 y 1366): sin
+  cambios salvo el suavizado (≤ 1 % de píxeles).
+- **El nombre de la constante es el nombre de la familia en el CSS**
+  (`const fredoka = localFont(…)`): con `display`/`body` en todos los
+  diseños, sus letras se mezclaban (Arrullo salía con la de Riviera).
+  `tests/unit/fonts.test.ts` lo exige.
+- **Precarga solo de lo propio** (cada demo baja solo sus tipografías:
+  Nube 67 KB, Olivo 144 KB, como con Google). Con archivos locales, el CSS
+  de cada fuente es diminuto y `cssChunking: graph` lo junta con el de
+  otras rutas; la página precarga las fuentes de todo lo que trae su CSS.
+  Por eso: `templates/<diseño>/fonts.ts` (con precarga) lo importa SOLO su
+  `Template.tsx`; las miniaturas del catálogo usan
+  `templates/preview-fonts.ts` (mismos archivos y nombres, sin precarga);
+  las del catálogo (`components/catalog/fonts.ts`) van sin precarga porque
+  también las usa la página 404, que está en el árbol de todas las rutas;
+  y los enlaces "Volver al catálogo" van con `prefetch={false}` (precargar
+  el catálogo bajaba ~800 KB en cada demo). Lo comprueban
+  `tests/unit/fonts.test.ts` y `tests/e2e/fonts.spec.ts` (cada demo
+  descarga solo sus tipografías y las aplica). Catálogo: ~660 KB de
+  fuentes en la primera carga (antes ~790 KB).
+- **Imágenes al compartir e íconos** (`lib/invitation/share-image.tsx`,
+  `loadFont`): leen `fonts/<familia>/<familia>-latin-400-normal.woff`
+  (next/og no lee woff2). Si falta, el build falla con un mensaje claro.
+- **Prueba sin red:** `npm run build:offline` (lo usa `npm run verify`)
+  corre el build con la red de Node cortada (`scripts/block-network.cjs`)
+  y un proxy inexistente para Turbopack. La versión anterior del proyecto
+  falla así; la actual compila sin ningún intento de conexión.
+- Limitación: solo el subconjunto `latin`; una letra fuera de él (p. ej.
+  ł, ő, č en un nombre) se ve con la letra de respaldo del sistema.
+- **Diseño nuevo:** agregar sus archivos en `fonts/<familia>/` (con
+  `OFL.txt` y el `.woff` 400 para las imágenes), su `fonts.ts` con
+  `localFont` y `meta.fonts` con el nombre de la familia.
+
+### Página 404 (2026-10-12)
+`app/not-found.tsx`: la usan las rutas que no existen y las que llaman a
+`notFound()`. Next responde 404 (no 200) y la renderiza en el servidor.
+Aspecto neutro del catálogo ("Error 404", "Esta página no existe", una
+línea de explicación y un botón), no la paleta de un diseño: no parece
+una invitación más. En el catálogo, "Volver al catálogo" (`/`); en la
+invitación de un cliente, "Ir a la invitación" (`/`), sin enlaces a las
+demos. `noindex`. Pruebas: `catalog.spec.ts`, `responsive.spec.ts` (9
+tamaños) y `tests/cliente/`.
+
+### Prueba de una invitación de cliente (2026-10-12)
+`npm run test:cliente [-- <diseño> …] [--conservar]`
+(`scripts/test-cliente.ts`; también dentro de `npm run verify`). Sin
+argumentos prueba Olivo, Aurora y Arrullo (pareja, festejada, baby
+shower). Por diseño: copia el proyecto a `.pruebas-tmp/cliente-<diseño>/`
+(dentro del proyecto e ignorada por git, TypeScript, ESLint y Vercel; sin
+`.git`, `.vercel`, `.env*`, `node_modules`, `.next` ni el lockfile, así
+usa el `node_modules` del proyecto), corre el `npm run nueva` real,
+completa los "REEMPLAZAR" con datos ficticios que no son de ninguna demo
+(`scripts/lib/test-invitation.ts`, probado en `tests/unit/`), crea fotos
+de prueba de la proporción de cada espacio, corre `npm run check` y
+`npm run build:offline`, la levanta y la revisa con Playwright
+(`tests/cliente/cliente.spec.ts`): nombres, fecha, noindex; sin selector,
+sin "Volver al catálogo", sin nombres, lugares, fotos ni enlaces de las
+demos (HTML y página); las rutas de los otros diseños y las fotos de las
+demos dan 404 y el optimizador las rechaza; calendario con los datos de
+prueba; 404 en español; barra con sus propias secciones (teléfono y
+escritorio) sin el bloque "Demostración"; la confirmación arma el
+WhatsApp con el número y el nombre de prueba (sin abrirlo) y muestra
+"¿No se abrió?". Al final borra la copia. `config/invitation.ts` no se
+toca. Encontró, al escribirla, que las rutas de los otros diseños
+respondían 404 con una página vacía que cargaba sus tipografías; ahora van
+a la 404 (`next.config.ts`).
+
 ## Marca del estudio (logos)
 
 `public/logos/` (originales, sin modificar; PNG con transparencia, hechos
@@ -553,6 +645,17 @@ Decisiones:
 
 ### Navegación (2026-10-12, no revertir sin el dueño)
 Dos navegaciones distintas, en lugares distintos, para que no se confundan:
+
+**Qué hace cada botón (2026-10-12, no mezclar):**
+- **Inicio** (barra y menú): la **portada de la invitación abierta**; en
+  el menú lo dice debajo ("Portada de la invitación"; en el catálogo,
+  "Principio del catálogo") y su nombre accesible es "Inicio: portada de
+  la invitación". Nunca lleva al catálogo.
+- **Secciones**: el menú con las secciones de esta invitación.
+- **Confirmar**: la sección de confirmación.
+- **Otros diseños** (solo demos): abre el selector con los ocho diseños.
+- **Volver al catálogo** (solo demos): la página con todos los diseños
+  (`/#disenos`, `CATALOG_HREF` en DesignsMenu.tsx).
 
 1. **Secciones de ESTA invitación** (`templates/shared/PageNav.tsx`), en
    todas las invitaciones (demos y clientes) y en el catálogo (sus
@@ -580,14 +683,23 @@ Dos navegaciones distintas, en lugares distintos, para que no se confundan:
    - Escritorio: al abrir "Secciones" el foco entra en la lista (en la
      sección actual); sacar el foco con Tab, Escape o un clic fuera lo
      cierran.
-2. **Otros diseños** (`templates/shared/DesignsMenu.tsx`), **solo en las
-   demos**: botón arriba a la izquierda ("Otros diseños"; "Diseños" por
-   debajo de 400 px, donde chocaba con el aviso de música), también sobre
-   la portada y desde el panel de secciones del teléfono ("Ver otros
-   diseños", separado bajo "Demostración"). Abre un panel con los ocho
-   diseños por categoría (foto de la portada, número, nombre, tipo de
-   evento, colores), marca el actual y lleva al catálogo completo. Usa la
-   paleta neutra del catálogo. Reemplaza al enlace "← Diseños".
+2. **Otros diseños y Volver al catálogo** (`templates/shared/DesignsMenu.tsx`),
+   **solo en las demos**, en dos lugares coherentes:
+   - **Arriba a la izquierda**, una sola pastilla con dos partes: "←
+     Catálogo" (enlace directo al catálogo) y "Otros diseños" ("Diseños"
+     por debajo de 400 px). Está también sobre la portada; se aparta al
+     bajar y vuelve al subir (no tapa fotos ni nombres al leer); ≥ 44 px.
+   - **Al final del menú de secciones** (panel del teléfono y menú de
+     escritorio), un bloque "Demostración" con "Ver otros diseños" y
+     "Volver al catálogo": así se llega desde cualquier punto sin subir.
+     No se agregó un cuarto botón a la barra (a 320 px la saturaba).
+   - El selector muestra los ocho diseños por categoría (foto de la
+     portada, número, nombre, tipo de evento, colores), marca el actual y
+     termina con el botón "Volver al catálogo". Usa la paleta neutra del
+     catálogo.
+   - En el teléfono, el aviso "Música: toca para pausar" va DEBAJO del
+     reproductor mientras se ve la portada (a su izquierda chocaba con la
+     pastilla).
 
 **Lista de secciones (centralizada):** `navSections()` en
 `lib/invitation/sections.ts` la arma desde la configuración: una sección en
@@ -672,8 +784,9 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 - Las pruebas automáticas usan Chrome de escritorio con emulación de
   teléfono: el gesto real de deslizar, el audio y WhatsApp se comprueban en
   un teléfono físico.
-- El catálogo precarga las fuentes de todos los diseños (22 archivos; las
-  necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
+- El catálogo precarga las fuentes de todos los diseños (las necesita para
+  las miniaturas). Cada demo precarga solo las suyas (2-4).
+- Tipografías solo en el subconjunto `latin` (ver "Tipografías locales").
 - Las demos usan fotos de stock (Pexels) con personas
   identificables, incluidos menores (quinceañeras, una bebé): no
   usarlas como testimonios ni en contextos que sugieran que esas personas

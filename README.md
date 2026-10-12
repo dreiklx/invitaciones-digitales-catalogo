@@ -124,12 +124,24 @@ formulario se reemplaza por un aviso con el WhatsApp de contacto.
 Cada invitación trae una barra para saltar a sus secciones (abajo en el
 teléfono: "Inicio", "Secciones" y "Confirmar"; arriba a la derecha en
 escritorio). **No se configura:** la lista sale sola de los datos
-(`lib/invitation/sections.ts`) y una sección en `null` no aparece. En las
-demos del catálogo, además, "Otros diseños" (arriba a la izquierda) abre
-un selector con los ocho diseños; **una invitación de cliente no lo
-tiene**. El catálogo usa la misma barra para sus categorías. Detalle,
-nombres de las secciones y cómo agregar una: PROJECT-CONTEXT,
-"Navegación".
+(`lib/invitation/sections.ts`) y una sección en `null` no aparece.
+
+| Botón | Lleva a |
+|---|---|
+| Inicio | La portada de la invitación abierta (nunca el catálogo) |
+| Secciones | El menú con las secciones de esta invitación |
+| Confirmar | La confirmación de asistencia |
+| Otros diseños (solo demos) | El selector con los ocho diseños por categoría |
+| Volver al catálogo (solo demos) | La página con todos los diseños |
+
+En las demos, "← Catálogo | Otros diseños" está arriba a la izquierda y se
+repite al final del menú de secciones ("Demostración"). **Una invitación
+de cliente no tiene ninguno de los dos.** El catálogo usa la misma barra
+para sus categorías. Detalle: PROJECT-CONTEXT, "Navegación".
+
+Una dirección que no existe muestra la página 404 en español ("Esta
+página no existe"; en el catálogo, "Volver al catálogo"; en una
+invitación, "Ir a la invitación").
 
 ## Colores
 
@@ -316,16 +328,26 @@ de un enlace: compartirlo solo después del despliegue final.
 | `npm run typecheck` | Tipos de rutas + TypeScript |
 | `npm run lint` | ESLint |
 | `npm run build` | Build de producción (incluye `check`) |
+| `npm run build:offline` | El mismo build SIN red (comprueba que no dependa de Google Fonts ni de otro servicio) |
 | `npm run optimize-images` | Comprime y endereza (EXIF) las fotos de `public/images/` |
 | `npm run placeholders` | Regenera las imágenes de demostración del catálogo |
 | `npm test` | Pruebas sin navegador (configuración, navegación y `nueva`), ~5 s |
 | `npm run test:e2e` | Pruebas en el navegador sobre el build (`npm run build` antes) |
-| `npm run verify` | Todo: lint, tipos, `npm test`, build (con `check`) y `test:e2e` |
+| `npm run test:cliente` | Genera, compila y prueba en el navegador una invitación de cliente de prueba (~2 min por diseño) |
+| `npm run verify` | Todo: lint, tipos, `npm test`, `build:offline` (con `check`), `test:e2e` y `test:cliente` |
 
 ## Pruebas
 
 Son del **repositorio del catálogo** (`config/invitation.ts = null`). En
-la copia de un cliente basta `npm run check` y la revisión manual.
+la copia de un cliente basta `npm run check` y la revisión manual; lo que
+debe cumplir toda invitación de cliente lo prueba `npm run test:cliente`
+desde aquí, sin tocar `config/invitation.ts`.
+
+**`npm run build:offline`**: `npm run build` con la red cortada (Node:
+`scripts/block-network.cjs`; Turbopack: un proxy que no existe). Si algo
+del build volviera a necesitar internet (p. ej. bajar tipografías), falla
+aquí. Las tipografías están en `fonts/` (ver PROJECT-CONTEXT,
+"Tipografías locales").
 
 **`npm test`** (Node + tsx, sin navegador; `tests/unit/`):
 - `config.test.ts`: `config/invitation.ts` en `null`; los ocho ids
@@ -355,9 +377,32 @@ la copia de un cliente basta `npm run check` y la revisión manual.
   y del diseño ("Nuestra espera", "Mi mensaje"); el selector "Otros
   diseños" no existe en una invitación de cliente y en las demos lista los
   ocho por categoría.
+- `fonts.test.ts`: nadie usa `next/font/google` ni descarga de Google
+  Fonts; cada archivo de `fonts/` declarado existe y tiene su `OFL.txt`;
+  cada diseño nombra sus familias como su tipografía (nombres únicos) y
+  tiene el `.woff` para las imágenes al compartir; las miniaturas usan los
+  mismos archivos sin precarga y el `fonts.ts` de un diseño solo lo
+  importa su `Template.tsx`.
+- `test-invitation.test.ts`: los datos de prueba de `test:cliente`
+  completan la invitación nueva de los ocho diseños, no repiten ningún
+  nombre, lugar, fecha ni WhatsApp de una demo y pasan la validación.
 
-**`npm run test:e2e`** (Playwright, `tests/e2e/`, 338 pruebas (9 se omiten a propósito: Tierra y Aguamarina
-ocultan el indicador en escritorio; la prueba de letra grande del selector es solo de teléfono), ~24 min;
+**`npm run test:cliente [-- <diseño> …] [--conservar]`** (Playwright,
+`tests/cliente/`, ~2 min por diseño; sin argumentos: Olivo, Aurora y
+Arrullo). Copia el proyecto a `.pruebas-tmp/` (sin `.git`, `.vercel`,
+`.env*`, `node_modules` ni `.next`), corre el `npm run nueva` real, lo
+completa con datos ficticios, crea fotos de prueba, corre `check` y
+`build:offline`, lo levanta y comprueba en el navegador (teléfono y
+escritorio) que la invitación funciona con sus datos (portada, nombres,
+barra con sus secciones, confirmación por WhatsApp con el número de
+prueba, calendario, 404 en español) y que NO expone nada de las demos:
+selector, "Volver al catálogo", nombres, lugares, fotos, rutas de otros
+diseños. Borra la copia al terminar (`--conservar` la deja para
+revisarla). Detalle: PROJECT-CONTEXT, "Prueba de una invitación de
+cliente".
+
+**`npm run test:e2e`** (Playwright, `tests/e2e/`, 358 pruebas (9 se omiten a propósito: Tierra y Aguamarina
+ocultan el indicador en escritorio; la prueba de letra grande del selector es solo de teléfono), ~18-25 min;
 necesita `npm run build` antes; levanta `next start` en el puerto 3210 o
 reutiliza uno abierto):
 - `responsive.spec.ts`: catálogo y ocho diseños en 320×568, 320×600,
@@ -411,11 +456,20 @@ reutiliza uno abierto):
   "Otros diseños" no queda encima del visor de fotos ni del panel de
   secciones, y Tab/Shift+Tab no sacan el foco del selector, del visor ni
   del panel; con la letra al 125 % a 320 px ningún texto sale de las
-  tarjetas del selector; la barra del catálogo salta a cada categoría.
+  tarjetas del selector; "Volver al catálogo" funciona desde la pastilla
+  de arriba (con teclado, ≥ 44 px) y desde el menú de secciones, y
+  "Inicio" (que dice "Portada de la invitación") vuelve a la portada de la
+  invitación abierta, no al catálogo; la barra del catálogo salta a cada
+  categoría y no tiene el bloque de las demos.
+- `fonts.spec.ts`: cada demo descarga solo las tipografías de su diseño
+  (ni las del catálogo ni las de otro) y el texto las usa.
 - `catalog.spec.ts`: el catálogo enlaza los ocho diseños y cada uno está
   en la sección de su categoría; cada página y
   su imagen para compartir responden, las rutas viejas redirigen (308) y
-  el logo enlaza a Instagram con `noopener`.
+  el logo enlaza a Instagram con `noopener`; una ruta que no existe
+  responde 404 con la página en español (renderizada en el servidor) y
+  "Volver al catálogo" lleva al catálogo (también en `responsive.spec.ts`,
+  9 tamaños, sin desbordar).
 
 **Navegador:** usa el Google Chrome instalado (no descarga nada). Sin
 Chrome: `npx playwright install chromium` y correr con
@@ -428,9 +482,9 @@ el paso, el ancho y las medidas (`docScrollWidth`, `clientWidth`,
 `panned`, elementos que sobresalen) y guarda captura y traza en
 `test-results/` (`npx playwright show-trace <archivo>`). Corregir la
 causa; no bajar la cobertura ni ocultar el desborde con CSS.
-**Sin cubrir aún:** la vista real de una invitación con `music: null` o
-sin citas (se prueba a nivel de datos, no en el navegador) y el audio en
-un teléfono físico.
+**Sin cubrir aún:** la vista en el navegador de una invitación con
+`music: null` o sin citas (se prueba a nivel de datos) y el audio en un
+teléfono físico.
 
 ## Qué no tocar en una invitación de diseño existente
 

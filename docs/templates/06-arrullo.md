@@ -57,6 +57,7 @@ Para un tono distinto basta `colors` en el config (p. ej. `primary`).
 
 ## Tipografías
 Gilda Display (titulares y cifras) + DM Sans (texto).
+Archivos locales en `fonts/gilda-display/`, `fonts/dm-sans/` (licencia OFL, `next/font/local` en `templates/arrullo/fonts.ts`): el build no usa Google Fonts (PROJECT-CONTEXT, "Tipografías locales").
 
 ## Estructura (orden)
 Portada "Abrir invitación" (guirnalda, arco con la luna, frase o nombre,
@@ -112,3 +113,7 @@ mesa de postres. Se descartaron las fotos de la sesión con el letrero
 - Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
   `detalles`, `galeria`, `regalos`, `confirmar`); el menú
   muestra solo las que existen según la configuración.
+- "Inicio" lleva a la portada de esta invitación. Solo en la demo: "←
+  Catálogo | Otros diseños" arriba a la izquierda y el bloque
+  "Demostración" al final del menú ("Ver otros diseños", "Volver al
+  catálogo"); la invitación de un cliente no los tiene.

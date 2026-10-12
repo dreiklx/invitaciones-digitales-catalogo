@@ -13,9 +13,11 @@
     "nueva": "tsx scripts/new-invitation.ts",
     "test": "tsx --test \"tests/unit/**/*.test.ts\"",
     "test:e2e": "playwright test",
-    "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run build:offline && npm run test:e2e && npm run test:cliente",
     "placeholders": "tsx scripts/placeholders.ts",
-    "optimize-images": "node scripts/optimize-images.mjs"
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "build:offline": "node scripts/build-offline.mjs",
+    "test:cliente": "tsx scripts/test-cliente.ts"
   },
   "dependencies": {
     "next": "16.3.8",

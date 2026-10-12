@@ -26,6 +26,7 @@ editoriales, de campo, de bodas al aire libre o en fincas.
 
 ## Tipografías
 Fraunces (titulares; usa sus ejes `opsz` y `SOFT`) + Instrument Sans (texto).
+Archivos locales en `fonts/fraunces/`, `fonts/instrument-sans/` (licencia OFL, `next/font/local` en `templates/tierra/fonts.ts`): el build no usa Google Fonts (PROJECT-CONTEXT, "Tipografías locales").
 
 ## Estructura (orden)
 Portada de revista (cabecera, nombres gigantes, foto pequeña, botón) →
@@ -113,3 +114,7 @@ Las fotos ya vienen recortadas a la proporción de su marco, así que el
 - Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
   `detalles`, `galeria`, `regalos`, `confirmar`); el menú
   muestra solo las que existen según la configuración.
+- "Inicio" lleva a la portada de esta invitación. Solo en la demo: "←
+  Catálogo | Otros diseños" arriba a la izquierda y el bloque
+  "Demostración" al final del menú ("Ver otros diseños", "Volver al
+  catálogo"); la invitación de un cliente no los tiene.

@@ -119,7 +119,7 @@ for (const [width, height] of [
         // sobre el formulario de confirmación el teléfono la aparta).
         await page.evaluate(() => window.scrollTo({ top: 1200, behavior: "instant" }));
         await expect(bar(page, mobile)).toHaveCSS("opacity", "1");
-        await bar(page, mobile).getByRole("button", { name: "Inicio", exact: true }).click();
+        await bar(page, mobile).getByRole("button", { name: "Inicio: portada de la invitación" }).click();
         await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 8000 }).toBeLessThan(5);
       });
 
@@ -220,6 +220,9 @@ for (const [width, height] of [
         await expect(viewer).toBeHidden();
 
         if (mobile) {
+          // Lejos del formulario de confirmación (sobre él la barra se aparta
+          // a propósito; en Riviera viene justo después de la galería).
+          await page.locator("#fecha").evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: "instant" }));
           await expect(bar(page, true)).toHaveCSS("opacity", "1");
           const sheet = await openMenu(page, true);
           expect(await triggerOnTop(), "«Otros diseños» sobre el panel de secciones").toBe(false);
@@ -272,9 +275,58 @@ for (const [width, height] of [
       await expect(page.getByRole("button", { name: /abrir invitación/i })).toBeVisible();
 
       await page.getByRole("button", { name: "Otros diseños" }).click();
-      await dialog.getByRole("link", { name: /volver al catálogo completo/i }).click();
+      await dialog.getByRole("link", { name: "Volver al catálogo" }).click();
       await expect(page).toHaveURL(/\/(#disenos)?$/, { timeout: 30_000 });
       await expect(page.locator('a[href="/plantillas/arrullo"]').first()).toBeAttached();
+    });
+
+    test("«Volver al catálogo»: directo desde arriba y desde el menú de secciones; «Inicio» es la portada", async ({ page }) => {
+      const catalogLoaded = async () => {
+        await expect(page).toHaveURL(/\/(#disenos)?$/, { timeout: 30_000 });
+        await expect(page.locator("#disenos")).toBeAttached();
+        await expect(page.locator("[data-designs-trigger]")).toHaveCount(0);
+      };
+
+      // 1. La pastilla de arriba: dos acciones con texto, ≥ 44 px, sobre la
+      //    portada y sin abrir la invitación.
+      await page.goto("/plantillas/gala");
+      const pill = page.locator("[data-designs-trigger]");
+      const back = pill.getByRole("link", { name: "Volver al catálogo" });
+      await expect(back).toBeVisible();
+      await expect(back).toContainText("Catálogo");
+      await expect(pill.getByRole("button", { name: "Otros diseños" })).toBeVisible();
+      for (const control of [back, pill.getByRole("button", { name: "Otros diseños" })]) {
+        const box = (await control.boundingBox())!;
+        expect(box.height, "zona táctil").toBeGreaterThanOrEqual(44);
+      }
+      // Teclado: se llega con Tab y tiene foco visible.
+      await back.focus();
+      expect(await back.evaluate((el) => getComputedStyle(el).outlineStyle !== "none" || getComputedStyle(el).boxShadow !== "none")).toBe(true);
+      await back.press("Enter");
+      await catalogLoaded();
+
+      // 2. Desde el menú de secciones, en medio de la invitación (la
+      //    pastilla de arriba se aparta al bajar).
+      await page.goto("/plantillas/nube");
+      await openInvitation(page);
+      await page.evaluate(() => window.scrollTo({ top: 1600, behavior: "instant" }));
+      await expect(bar(page, mobile)).toHaveCSS("opacity", "1");
+      const menu = await openMenu(page, mobile);
+      // "Inicio" dice que es la portada de esta invitación, no el catálogo.
+      await expect(menu.locator('[data-nav-item="inicio"]')).toContainText("Portada de la invitación");
+      await expect(menu.getByText("Demostración")).toBeVisible();
+      await expect(menu.getByRole("button", { name: "Ver otros diseños" })).toBeVisible();
+      await menu.getByRole("link", { name: "Volver al catálogo" }).click();
+      await catalogLoaded();
+
+      // 3. "Inicio" lleva a la portada de la invitación abierta (no al catálogo).
+      await page.goto("/plantillas/olivo");
+      await openInvitation(page);
+      await page.evaluate(() => window.scrollTo({ top: 1600, behavior: "instant" }));
+      await expect(bar(page, mobile)).toHaveCSS("opacity", "1");
+      await bar(page, mobile).getByRole("button", { name: "Inicio: portada de la invitación" }).click();
+      await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 10_000 }).toBeLessThan(5);
+      await expect(page).toHaveURL(/\/plantillas\/olivo$/);
     });
 
     test("«Otros diseños» con la letra del sistema agrandada: nada sale de las tarjetas a 320 px", async ({ browser }) => {
@@ -313,8 +365,13 @@ for (const [width, height] of [
         expect(h.y + h.height).toBeLessThanOrEqual(height);
         expect(overlaps(h, (await bar(page, mobile).boundingBox())!)).toBe(false);
       }
-      // No hay selector de diseños en el catálogo (ya es la lista completa).
+      // No hay selector de diseños ni "Volver al catálogo" en el catálogo (ya
+      // es la lista completa); su menú no trae el bloque de las demos.
       await expect(page.getByRole("button", { name: "Otros diseños" })).toHaveCount(0);
+      await expect(page.locator("[data-catalog-link]")).toHaveCount(0);
+      const menu = await openMenu(page, mobile);
+      await expect(menu.getByText("Demostración")).toHaveCount(0);
+      await expect(menu.locator('[data-nav-item="inicio"]')).toContainText("Principio del catálogo");
     });
   });
 }

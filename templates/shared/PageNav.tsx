@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { ArrowUpIcon, ChevronDownIcon, CloseIcon, GridIcon, MenuIcon } from "./icons";
+import { ArrowLeftIcon, ArrowUpIcon, ChevronDownIcon, CloseIcon, GridIcon, MenuIcon } from "./icons";
 import { trapFocus } from "./focus-trap";
 import { lockPageScroll } from "./scroll-lock";
-import { useDesignsMenu } from "./DesignsMenu";
+import { CATALOG_HREF, useDesignsMenu } from "./DesignsMenu";
 
 // Barra de navegación de la invitación (y del catálogo). Una sola lógica;
 // el aspecto lo pone cada diseño con `styles` (tokens de su paleta).
@@ -22,6 +23,10 @@ import { useDesignsMenu } from "./DesignsMenu";
 //   teclado la subiría sobre el formulario) y mientras el formulario de
 //   confirmación pasa por debajo de ella (tapaba "Confirmar por WhatsApp");
 //   vuelve al salir. El visor de fotos la cubre.
+// - "Inicio" = la portada de ESTA invitación (nunca el catálogo). En las
+//   demos, el menú termina con un bloque "Demostración": "Ver otros
+//   diseños" y "Volver al catálogo" (DesignsMenu.tsx). En una invitación de
+//   cliente ese bloque no existe.
 // - Secciones: `navSections()` (lib/invitation/sections.ts) dice cuáles
 //   existen según la configuración; aquí se descartan las que no están en
 //   la página (p. ej. la confirmación después del evento) y se ordenan
@@ -51,6 +56,7 @@ export default function PageNav({
   menuLabel = "Secciones",
   panelTitle = "Ir a una sección",
   ariaLabel = "Secciones de la invitación",
+  homeHint = "Portada de la invitación",
 }: {
   sections: Item[];
   styles: NavStyles;
@@ -58,6 +64,9 @@ export default function PageNav({
   menuLabel?: string;
   panelTitle?: string;
   ariaLabel?: string;
+  // Qué es "Inicio" aquí (se lee en el menú y en el nombre accesible del
+  // botón): la portada de ESTA invitación, no el catálogo.
+  homeHint?: string;
 }) {
   const [items, setItems] = useState<Item[]>([]);
   const [current, setCurrent] = useState<string | null>(null);
@@ -195,6 +204,39 @@ export default function PageNav({
   const barShown = shown && !overForm;
   const currentLabel = items.find((i) => i.id === current)?.label ?? "Inicio";
 
+  // Solo demos: las dos acciones que salen de esta invitación, separadas de
+  // sus secciones para que se entienda que llevan a otra página.
+  const demoBlock = (big: boolean) =>
+    designs && (
+      <div className={big ? "mx-6 mt-2 border-t-2 border-line pt-5" : "border-t border-line px-3 pb-3 pt-3"}>
+        <p className={`text-xs font-semibold uppercase tracking-[0.2em] text-muted ${big ? "" : "px-1"}`}>Demostración</p>
+        <div className={`mt-3 grid gap-2 ${big ? "grid-cols-1 min-[400px]:grid-cols-2" : "grid-cols-1"}`}>
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(null);
+              designs.open();
+            }}
+            className={`flex items-center justify-center gap-2 rounded-full border-2 border-ink/70 px-4 font-semibold ${big ? "min-h-12 text-base" : "min-h-11 text-sm"}`}
+          >
+            <GridIcon size={big ? 18 : 16} className="shrink-0" />
+            Ver otros diseños
+          </button>
+          <Link
+            href={CATALOG_HREF}
+            prefetch={false}
+            transitionTypes={["nav-back"]}
+            onClick={() => setOpen(null)}
+            data-catalog-link
+            className={`flex items-center justify-center gap-2 rounded-full border-2 border-ink/70 px-4 font-semibold ${big ? "min-h-12 text-base" : "min-h-11 text-sm"}`}
+          >
+            <ArrowLeftIcon size={big ? 18 : 16} className="shrink-0" />
+            Volver al catálogo
+          </Link>
+        </div>
+      </div>
+    );
+
   const list = (onPick: (id: string | null) => void, big: boolean) => (
     <ul className={big ? "divide-y divide-line" : "py-1"}>
       {[{ id: "", label: "Inicio" }, ...items].map((item) => {
@@ -212,7 +254,11 @@ export default function PageNav({
             >
               <span className="flex items-center gap-3">
                 <span aria-hidden="true" className={`h-2 w-2 flex-shrink-0 rounded-full ${active ? "bg-primary" : "bg-line"}`} />
-                {item.label}
+                <span>
+                  {item.label}
+                  {/* "Inicio" dice adónde lleva (no es el catálogo). */}
+                  {!item.id && <span className="block font-body text-xs font-normal text-muted">{homeHint}</span>}
+                </span>
               </span>
               {active && <span className="flex-shrink-0 font-body text-xs font-medium uppercase tracking-[0.15em] text-muted">Estás aquí</span>}
             </button>
@@ -235,7 +281,7 @@ export default function PageNav({
         inert={!barShown ? true : undefined}
       >
         <div className={`mx-auto flex max-w-md items-stretch gap-1 p-1.5 shadow-2xl ${styles.bar}`}>
-          <button type="button" onClick={() => go(null)} className={`flex min-h-12 flex-shrink-0 items-center justify-center gap-1.5 rounded-[inherit] px-3 text-sm font-semibold ${styles.item}`}>
+          <button type="button" onClick={() => go(null)} aria-label={`Inicio: ${homeHint.toLowerCase()}`} className={`flex min-h-12 flex-shrink-0 items-center justify-center gap-1.5 rounded-[inherit] px-3 text-sm font-semibold ${styles.item}`}>
             <ArrowUpIcon size={18} className="shrink-0" />
             Inicio
           </button>
@@ -286,24 +332,7 @@ export default function PageNav({
               </button>
             </div>
             {list(go, true)}
-            {designs && (
-              // Solo demos del catálogo: separado de las secciones de ESTA
-              // invitación para que se entienda que lleva a otro diseño.
-              <div className="mx-6 mt-2 border-t-2 border-line pt-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Demostración</p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOpen(null);
-                    designs.open();
-                  }}
-                  className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-ink/70 px-5 text-base font-semibold"
-                >
-                  <GridIcon size={18} />
-                  Ver otros diseños
-                </button>
-              </div>
-            )}
+            {demoBlock(true)}
           </div>
         </div>
       )}
@@ -318,7 +347,7 @@ export default function PageNav({
         inert={!(shown || open === "dropdown") ? true : undefined}
       >
         <nav aria-label={ariaLabel} className={`flex items-center gap-1 p-1 shadow-xl ${styles.bar}`}>
-          <button type="button" onClick={() => go(null)} className={`flex min-h-11 items-center gap-1.5 rounded-[inherit] px-3.5 text-sm font-semibold ${styles.item}`}>
+          <button type="button" onClick={() => go(null)} aria-label={`Inicio: ${homeHint.toLowerCase()}`} className={`flex min-h-11 items-center gap-1.5 rounded-[inherit] px-3.5 text-sm font-semibold ${styles.item}`}>
             <ArrowUpIcon size={16} />
             Inicio
           </button>
@@ -350,6 +379,7 @@ export default function PageNav({
           <div id={`${panelId}-menu`} data-page-nav="dropdown" className="absolute right-0 top-full mt-2 w-80 overflow-hidden rounded-2xl bg-paper text-ink shadow-2xl ring-1 ring-line">
             <p className="border-b border-line px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted">{panelTitle}</p>
             {list(go, false)}
+            {demoBlock(false)}
           </div>
         )}
       </div>

@@ -52,6 +52,30 @@ test("las rutas viejas redirigen de forma permanente en un salto", async ({ requ
   }
 });
 
+test("una ruta que no existe responde 404 en español y vuelve al catálogo", async ({ page, request }) => {
+  for (const path of ["/no-existe", "/plantillas/no-existe", "/plantillas"]) {
+    const res = await request.get(path, { maxRedirects: 0 });
+    expect(res.status(), path).toBe(404);
+    // Renderizada en el servidor (no una página vacía), sin el texto en inglés.
+    const text = (await res.text()).replace(/<[^>]+>/g, "");
+    expect(text, path).toContain("Esta página no existe");
+    expect(text, path).not.toContain("could not be found");
+  }
+  // Las rutas válidas siguen respondiendo.
+  for (const id of templateIds) expect((await request.get(`/plantillas/${id}`)).status(), id).toBe(200);
+
+  const res = await page.goto("/una/direccion/que/no/existe");
+  expect(res?.status()).toBe(404);
+  await expect(page).toHaveTitle(/Página no encontrada/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Esta página no existe");
+  const back = page.getByRole("link", { name: "Volver al catálogo" });
+  await expect(back).toHaveAttribute("href", "/");
+  expect((await back.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await back.click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator("#disenos")).toBeAttached();
+});
+
 test("el logo del estudio enlaza a su Instagram de forma segura", async ({ page }) => {
   await page.goto("/");
   const link = page.locator('footer a[href="https://www.instagram.com/farley.systems/"]');

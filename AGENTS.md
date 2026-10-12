@@ -33,7 +33,10 @@ Aplica a cualquier agente (Claude Code, Codex…). CLAUDE.md lo resume.
 
 ## Al terminar (en la MISMA tarea, sin que se pida aparte)
 1. Implementar, probar y corregir lo encontrado (`npm run verify`: lint,
-   tipos, `npm test`, build y `npm run test:e2e`; ver README, "Pruebas").
+   tipos, `npm test`, build sin red (`build:offline`), `npm run test:e2e`
+   y `npm run test:cliente`; ver README, "Pruebas"). Si se toca algo que
+   llega a la invitación de un cliente (Shell, rutas, `next.config.ts`,
+   `nueva`), `test:cliente` es obligatorio.
    En cambios visuales, también mirar capturas: las pruebas miden
    desbordes y posiciones, no si algo se ve bien.
 2. Actualizar los `.md` pertinentes: evaluar como mínimo

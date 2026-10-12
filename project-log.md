@@ -4,6 +4,53 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-12 (cierre) — Tipografías locales, 404 en español, prueba de cliente y "Volver al catálogo"
+
+### Qué se hizo
+- **Sin Google Fonts en el build (P9):** 16 familias en `fonts/<familia>/`
+  (subconjunto latin, OFL, de Fontsource 5.3.0) con `next/font/local`;
+  next/og lee `.woff` locales. `npm run build:offline` (en `verify`) corta
+  la red de Node y de Turbopack: la versión anterior falla así ("Failed to
+  fetch … from Google Fonts"); la nueva compila sin intentar conectarse.
+  Encontrado y corregido al cambiar: (1) todas las familias se llamaban
+  `display`/`body` y se mezclaban entre diseños; (2) con el CSS de fuentes
+  diminuto, las demos precargaban tipografías ajenas (Nube bajaba 828 KB):
+  `preview-fonts.ts` para las miniaturas, catálogo y 404 sin precarga y
+  `prefetch={false}` en "Volver al catálogo". Ahora cada demo baja solo
+  las suyas (Nube 67 KB, Olivo 144 KB); el catálogo, ~660 KB (antes ~790).
+  Capturas antes/después de catálogo y ocho diseños: misma letra.
+  La imagen al compartir del catálogo dice ahora "Bodas · Quinceaños ·
+  Bebés · Aniversarios" con los ocho colores (decía "Cumpleaños" y tenía
+  siete puntos).
+- **404 en español (P12):** `app/not-found.tsx`, estado 404, estilo neutro
+  del catálogo, "Volver al catálogo" (en un cliente, "Ir a la invitación").
+- **Prueba de una invitación de cliente (P14):** `npm run test:cliente`
+  copia el proyecto a `.pruebas-tmp/`, corre el `nueva` real, completa
+  con datos ficticios, `check`, `build:offline`, Playwright
+  (`tests/cliente/`) con Olivo, Aurora y Arrullo, y borra la copia.
+  Encontró que las rutas de los otros diseños daban 404 con una página
+  vacía que cargaba sus tipografías: ahora van a la 404 (`next.config.ts`).
+- **Navegación de las demos:** pastilla "← Catálogo | Otros diseños"
+  arriba a la izquierda y bloque "Demostración" ("Ver otros diseños",
+  "Volver al catálogo") al final del menú de secciones (teléfono y
+  escritorio); "Inicio" dice "Portada de la invitación"; el selector
+  termina con un botón "Volver al catálogo". En el teléfono, el aviso de
+  la música va debajo del reproductor al abrir (chocaba con la pastilla).
+  Nada de esto existe en una invitación de cliente.
+
+### Verificación
+- `npm run verify` limpio: lint, tipos, `npm test` 159/159,
+  `build:offline`, `npm run test:e2e` 349 pasadas y 9 omitidas a propósito
+  (358) en 18 min, y `npm run test:cliente` (Olivo, Aurora,
+  Arrullo: 8/8 cada uno). Nuevas: `fonts.test.ts`, `test-invitation.test.ts`,
+  `fonts.spec.ts`, 404 (catálogo y 9 tamaños), "Volver al catálogo" e
+  "Inicio", `tests/cliente/`.
+- Revisión visual: catálogo y ocho diseños antes/después de las fuentes,
+  imágenes al compartir e íconos, pastilla a 320/390/1366, panel y menú
+  de secciones, selector, 404 a 390 y 1366, invitación de cliente
+  generada y compilada.
+- Pendiente manual: teléfonos reales (P11).
+
 ## 2026-10-12 (noche) — Auditoría integral: capas, foco, RSVP y privacidad de clientes
 
 ### Qué se hizo

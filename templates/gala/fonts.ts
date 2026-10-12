@@ -1,7 +1,15 @@
-import { Bodoni_Moda, Tenor_Sans } from "next/font/google";
+import localFont from "next/font/local";
 
+// Tipografías del diseño, desde archivos del proyecto (fonts/, licencia OFL
+// en cada carpeta): el build no consulta Google Fonts. En un módulo aparte
+// para que solo se precarguen en las páginas donde se usan.
+// El nombre de cada constante es el nombre de la familia en el CSS: debe ser
+// el de la tipografía (no "display"/"body"), o las de distintos diseños se
+// mezclan en el catálogo y en las demos.
 // Didona de alto contraste + versalitas elegantes para etiquetas y textos.
-const display = Bodoni_Moda({ variable: "--f-display", subsets: ["latin"], style: ["normal", "italic"] });
-const body = Tenor_Sans({ variable: "--f-body", subsets: ["latin"], weight: "400" });
+// Bodoni sin el eje `opsz`, como se veía cuando venía de Google Fonts.
 
-export const fontClasses = `${display.variable} ${body.variable}`;
+const bodoniModa = localFont({ variable: "--f-display", src: [{ path: "../../fonts/bodoni-moda/bodoni-moda-latin-wght-normal.woff2", style: "normal" }, { path: "../../fonts/bodoni-moda/bodoni-moda-latin-wght-italic.woff2", style: "italic" }], weight: "400 900", adjustFontFallback: "Times New Roman" });
+const tenorSans = localFont({ variable: "--f-body", src: [{ path: "../../fonts/tenor-sans/tenor-sans-latin-400-normal.woff2", style: "normal" }], weight: "400", adjustFontFallback: "Arial" });
+
+export const fontClasses = `${bodoniModa.variable} ${tenorSans.variable}`;

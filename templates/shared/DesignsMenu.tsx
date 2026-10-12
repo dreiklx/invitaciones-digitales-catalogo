@@ -7,13 +7,18 @@ import { ArrowLeftIcon, ArrowRightIcon, CloseIcon, GridIcon } from "./icons";
 import { trapFocus } from "./focus-trap";
 import { lockPageScroll } from "./scroll-lock";
 
-// "Otros diseños": SOLO en las demos del catálogo (Shell.tsx lo monta
-// cuando `inv.isDemo`; una invitación de cliente nunca lo recibe y, además,
-// en el proyecto de un cliente las rutas de los otros diseños dan 404).
-// - Botón fijo arriba a la izquierda (donde estaba "← Diseños"): se aparta
-//   al bajar y vuelve al subir, como antes. Es la navegación ENTRE diseños;
-//   la de las secciones de la invitación es PageNav.tsx (abajo en el
-//   teléfono, arriba a la derecha en escritorio).
+// "Otros diseños" y "Volver al catálogo": SOLO en las demos del catálogo
+// (Shell.tsx lo monta cuando `inv.isDemo`; una invitación de cliente nunca
+// lo recibe y, además, en el proyecto de un cliente las rutas de los otros
+// diseños dan 404).
+// - Una pastilla fija arriba a la izquierda con dos partes: "← Catálogo"
+//   (vuelve a la página con todos los diseños) y "Otros diseños" (abre el
+//   selector). Se aparta al bajar y vuelve al subir. Es la navegación ENTRE
+//   diseños; la de las secciones de ESTA invitación es PageNav.tsx (abajo
+//   en el teléfono, arriba a la derecha en escritorio), cuyo menú repite
+//   las dos acciones en un bloque "Demostración" (así se llega desde
+//   cualquier punto sin subir). "Inicio" de esa barra es la portada de la
+//   invitación, nunca el catálogo.
 // - Abre un panel con los ocho diseños por categoría (Bodas, Quinceaños,
 //   Bebés, Aniversarios), cada uno con la foto de su portada, número,
 //   nombre, tipo de evento y colores; marca el que se está viendo, y lleva
@@ -31,6 +36,12 @@ export type DesignCard = {
 };
 
 export type DesignGroup = { title: string; designs: DesignCard[] };
+
+// Destino de "Volver al catálogo": la lista de diseños del catálogo.
+// Sus enlaces van con prefetch={false}: el enlace de arriba se ve siempre y
+// precargar el catálogo bajaba las tipografías de los ocho diseños (~800
+// KB) en cada demo.
+export const CATALOG_HREF = "/#disenos";
 
 const DesignsContext = createContext<{ open: () => void } | null>(null);
 
@@ -102,24 +113,41 @@ export default function DesignsMenu({
 
   return (
     <DesignsContext.Provider value={value}>
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={open}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        aria-label="Otros diseños"
+      <nav
+        aria-label="Demostración"
         data-designs-trigger
-        className={`fixed left-3 top-3 z-[80] inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-xs font-semibold uppercase tracking-[0.16em] backdrop-blur-md transition duration-300 sm:left-5 sm:top-5 ${
-          hidden && !isOpen ? "pointer-events-none -translate-y-16 opacity-0 focus-visible:pointer-events-auto focus-visible:translate-y-0 focus-visible:opacity-100" : "translate-y-0 opacity-100"
+        className={`fixed left-3 top-3 z-[80] flex items-stretch rounded-full p-0.5 text-xs font-semibold uppercase tracking-[0.14em] backdrop-blur-md transition duration-300 motion-reduce:transition-none sm:left-5 sm:top-5 ${
+          hidden && !isOpen ? "pointer-events-none -translate-y-16 opacity-0 focus-within:pointer-events-auto focus-within:translate-y-0 focus-within:opacity-100" : "translate-y-0 opacity-100"
         } ${triggerClassName}`}
       >
-        <GridIcon size={16} />
-        {/* Angosto: "Diseños" (con "Otros" chocaba con el aviso de la música
-            a 320–390 px); el nombre accesible es siempre "Otros diseños". */}
-        <span className="min-[400px]:hidden">Diseños</span>
-        <span className="hidden min-[400px]:inline">Otros diseños</span>
-      </button>
+        <Link
+          href={CATALOG_HREF}
+          prefetch={false}
+          transitionTypes={["nav-back"]}
+          aria-label="Volver al catálogo"
+          data-catalog-link
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-full pl-3 pr-3 transition hover:bg-current/10"
+        >
+          <ArrowLeftIcon size={15} className="shrink-0" />
+          Catálogo
+        </Link>
+        <span aria-hidden="true" className="my-2.5 w-px bg-current opacity-25" />
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={open}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          aria-label="Otros diseños"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-full pl-3 pr-3.5 uppercase transition hover:bg-current/10"
+        >
+          <GridIcon size={15} className="shrink-0" />
+          {/* Angosto: "Diseños" (con "Otros" chocaba con el aviso de la música
+              a 320–390 px); el nombre accesible es siempre "Otros diseños". */}
+          <span className="min-[400px]:hidden">Diseños</span>
+          <span className="hidden min-[400px]:inline">Otros diseños</span>
+        </button>
+      </nav>
 
       {children}
 
@@ -199,9 +227,14 @@ export default function DesignsMenu({
             </div>
 
             <div className="border-t border-line px-5 py-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] sm:px-8 sm:py-4">
-              <Link href="/#disenos" transitionTypes={["nav-back"]} className="inline-flex min-h-12 items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] underline-offset-4 hover:underline">
+              <Link
+                href={CATALOG_HREF}
+                prefetch={false}
+                transitionTypes={["nav-back"]}
+                className="inline-flex min-h-12 items-center gap-2 rounded-full border-2 border-ink/70 px-5 text-sm font-semibold uppercase tracking-[0.18em] transition hover:bg-surface"
+              >
                 <ArrowLeftIcon size={16} />
-                Volver al catálogo completo
+                Volver al catálogo
               </Link>
             </div>
           </div>

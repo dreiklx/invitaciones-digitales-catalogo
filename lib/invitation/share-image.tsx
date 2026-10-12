@@ -2,39 +2,42 @@
 // pestaña. Se generan en el build con los nombres, la fecha y la paleta de
 // cada invitación: no se diseñan a mano por cliente.
 
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { ImageResponse } from "next/og";
 import type { ResolvedInvitation } from "./resolve";
 
 export const shareImageSize = { width: 1200, height: 630 };
 
-// Descarga una tipografía de Google Fonts (TTF) para next/og. Sin internet
-// en el build devuelve null y la imagen se genera con la tipografía por
-// defecto en vez de fallar.
-export async function loadGoogleFont(family: string, text?: string): Promise<ArrayBuffer | null> {
+// Tipografía para next/og desde los archivos del proyecto (fonts/<familia>/,
+// licencia OFL): el build no consulta Google Fonts. next/og no lee woff2, por
+// eso cada familia trae además su 400 en woff. Si falta el archivo, el build
+// falla con un mensaje claro (antes, sin internet, la imagen salía con otra
+// letra sin avisar).
+export async function loadFont(family: string, style: "normal" | "italic" = "normal"): Promise<ArrayBuffer> {
+  const slug = family.toLowerCase().replace(/ /g, "-");
+  const file = path.join(process.cwd(), "fonts", slug, `${slug}-latin-400-${style}.woff`);
   try {
-    const query = `family=${family.replace(/ /g, "+")}${text ? `&text=${encodeURIComponent(text)}` : ""}`;
-    const css = await fetch(`https://fonts.googleapis.com/css2?${query}`).then((res) => res.text());
-    const url = css.match(/src: url\((https:[^)]+)\) format\('(opentype|truetype)'\)/)?.[1];
-    return url ? await fetch(url).then((res) => res.arrayBuffer()) : null;
+    const data = await readFile(file);
+    return data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer;
   } catch {
-    return null;
+    throw new Error(`Falta la tipografía "${family}" para las imágenes al compartir: ${path.relative(process.cwd(), file)} (ver PROJECT-CONTEXT, "Tipografías").`);
   }
 }
 
-type Font = { name: string; data: ArrayBuffer; weight: 400; style: "normal" };
+type Font = { name: string; data: ArrayBuffer; weight: 400; style: "normal" | "italic" };
 
-async function fonts(display: string, body: string, text: string): Promise<Font[]> {
-  const [d, b] = await Promise.all([loadGoogleFont(display, text), loadGoogleFont(body, text)]);
+async function fonts(display: string, body: string): Promise<Font[]> {
+  const [d, b] = await Promise.all([loadFont(display), loadFont(body)]);
   return [
-    d && { name: "Display", data: d, weight: 400 as const, style: "normal" as const },
-    b && { name: "Body", data: b, weight: 400 as const, style: "normal" as const },
-  ].filter((f): f is Font => f !== null);
+    { name: "Display", data: d, weight: 400, style: "normal" },
+    { name: "Body", data: b, weight: 400, style: "normal" },
+  ];
 }
 
 export async function invitationShareImage(inv: ResolvedInvitation): Promise<ImageResponse> {
   const { palette: c, names, dates } = inv;
   const eyebrow = inv.content.welcome.eyebrow;
-  const text = `${eyebrow}${names.joined}${dates.display}`;
   const namesSize = Math.min(96, Math.floor(1500 / names.joined.length));
   const line = { width: 70, height: 2, background: c.secondary, opacity: 0.8 };
 
@@ -87,7 +90,7 @@ export async function invitationShareImage(inv: ResolvedInvitation): Promise<Ima
         </div>
       </div>
     ),
-    { ...shareImageSize, fonts: await fonts(inv.meta.fonts.display, inv.meta.fonts.body, text) }
+    { ...shareImageSize, fonts: await fonts(inv.meta.fonts.display, inv.meta.fonts.body) }
   );
 }
 
@@ -98,7 +101,7 @@ export async function monogramIcon(
   family: string,
   size: number
 ): Promise<ImageResponse> {
-  const font = await loadGoogleFont(family, initials);
+  const font = await loadFont(family);
   return new ImageResponse(
     (
       <div
@@ -122,7 +125,7 @@ export async function monogramIcon(
     {
       width: size,
       height: size,
-      fonts: font ? [{ name: "Display", data: font, weight: 400, style: "normal" }] : [],
+      fonts: [{ name: "Display", data: font, weight: 400, style: "normal" }],
     }
   );
 }

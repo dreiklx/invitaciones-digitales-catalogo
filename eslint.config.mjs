@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Archivos de la arquitectura anterior, pendientes de borrar (ver project-log.md).
     "_anterior/**",
+    // Copias temporales de las pruebas (npm run test:cliente).
+    ".pruebas-tmp/**",
   ]),
 ]);
 

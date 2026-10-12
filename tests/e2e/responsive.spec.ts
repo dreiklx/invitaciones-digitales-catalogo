@@ -34,6 +34,22 @@ for (const [width, height] of [...MOBILE_SIZES, ...DESKTOP_SIZES]) {
   });
 }
 
+// Página 404 en los 9 tamaños.
+test.describe("página 404", () => {
+  for (const [width, height] of [...MOBILE_SIZES, ...DESKTOP_SIZES]) {
+    test(`sin desplazamiento lateral a ${width}×${height}`, async ({ browser }) => {
+      const ctx = await browser.newContext(viewport(width, height));
+      const page = await ctx.newPage();
+      expect((await page.goto("/no-existe"))?.status()).toBe(404);
+      await expectNoHorizontalOverflow(page, width, "404");
+      // El botón se ve entero en la primera pantalla.
+      const box = (await page.getByRole("link", { name: "Volver al catálogo" }).boundingBox())!;
+      expect(box.y + box.height).toBeLessThanOrEqual(height);
+      await ctx.close();
+    });
+  }
+});
+
 // Letra del sistema agrandada (personas mayores) en el teléfono más angosto.
 test.describe("320px con letra al 125 %", () => {
   test.use(viewport(320));

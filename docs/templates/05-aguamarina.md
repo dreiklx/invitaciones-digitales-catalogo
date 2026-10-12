@@ -47,6 +47,7 @@ aguamarina. No se parece a Aurora (lila), Gala (negro y dorado) ni Riviera
 
 ## Tipografías
 Cormorant Garamond (nombre, titulares en cursiva y cifras) + Jost (texto).
+Archivos locales en `fonts/cormorant-garamond/`, `fonts/jost/` (licencia OFL, `next/font/local` en `templates/aguamarina/fonts.ts`): el build no usa Google Fonts (PROJECT-CONTEXT, "Tipografías locales").
 
 ## Estructura (orden)
 Portada "Abrir invitación" (azul petróleo con halo, marco fino, tiara,
@@ -110,3 +111,7 @@ menor): ver la auditoría en `photo-map.md`.
 - Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
   `detalles`, `galeria`, `regalos`, `confirmar`, `programa`); el menú
   muestra solo las que existen según la configuración.
+- "Inicio" lleva a la portada de esta invitación. Solo en la demo: "←
+  Catálogo | Otros diseños" arriba a la izquierda y el bloque
+  "Demostración" al final del menú ("Ver otros diseños", "Volver al
+  catálogo"); la invitación de un cliente no los tiene.

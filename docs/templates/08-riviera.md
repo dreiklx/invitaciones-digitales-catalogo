@@ -58,6 +58,7 @@ hero: { eyebrow: "Renovamos nuestros votos", title: "Diez años después" },
 
 ## Tipografías
 Gloock (titulares con carácter) + DM Sans (texto).
+Archivos locales en `fonts/gloock/`, `fonts/dm-sans/` (licencia OFL, `next/font/local` en `templates/riviera/fonts.ts`): el build no usa Google Fonts (PROJECT-CONTEXT, "Tipografías locales").
 
 ## Estructura (orden)
 Portada (bandas de azulejo, arco con foto y sol, nombres, línea de
@@ -123,3 +124,7 @@ pareja, evento, lugares…: todo lo que diga "REEMPLAZAR") → fotos →
 - Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
   `detalles`, `galeria`, `regalos`, `confirmar`); el menú
   muestra solo las que existen según la configuración.
+- "Inicio" lleva a la portada de esta invitación. Solo en la demo: "←
+  Catálogo | Otros diseños" arriba a la izquierda y el bloque
+  "Demostración" al final del menú ("Ver otros diseños", "Volver al
+  catálogo"); la invitación de un cliente no los tiene.

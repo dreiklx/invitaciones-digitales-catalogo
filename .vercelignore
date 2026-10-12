@@ -3,4 +3,6 @@ _anterior
 docs
 .env*
 tests
+playwright.cliente.config.ts
 playwright.config.ts
+.pruebas-tmp

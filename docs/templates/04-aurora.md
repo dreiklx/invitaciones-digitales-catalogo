@@ -33,6 +33,7 @@ evitan el rosa chicle típico de los quinceaños.
 ## Tipografías
 Italiana (títulos y "XV") + Pinyon Script (el nombre, clase `font-script`)
 + Figtree (texto, fechas y horas: los números de Italiana se leen mal).
+Archivos locales en `fonts/italiana/`, `fonts/pinyon-script/`, `fonts/figtree/` (licencia OFL, `next/font/local` en `templates/aurora/fonts.ts`): el build no usa Google Fonts (PROJECT-CONTEXT, "Tipografías locales").
 
 ## Estructura (orden)
 Portada (luces, destellos, "XV" de contorno, "Mis XV años", nombre en
@@ -110,3 +111,7 @@ sus padres. El lila del vestido es el de la paleta.
 - Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
   `detalles`, `galeria`, `regalos`, `confirmar`, `programa`); el menú
   muestra solo las que existen según la configuración.
+- "Inicio" lleva a la portada de esta invitación. Solo en la demo: "←
+  Catálogo | Otros diseños" arriba a la izquierda y el bloque
+  "Demostración" al final del menú ("Ver otros diseños", "Volver al
+  catálogo"); la invitación de un cliente no los tiene.

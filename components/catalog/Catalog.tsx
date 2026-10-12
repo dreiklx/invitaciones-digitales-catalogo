@@ -233,6 +233,7 @@ export default function Catalog() {
         menuLabel="Categorías"
         panelTitle="Ir a una categoría"
         ariaLabel="Categorías del catálogo"
+        homeHint="Principio del catálogo"
       />
     </div>
   );
