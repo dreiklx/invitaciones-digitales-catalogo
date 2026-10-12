@@ -1,6 +1,6 @@
 import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
-import Gate, { GateButton } from "../shared/Gate";
+import Gate, { GateButton, GateMusicNote } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
 import Frame from "../shared/Frame";
@@ -111,6 +111,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
         <GateButton className="mt-8 rounded-full bg-accent px-9 py-4 font-display text-lg font-semibold text-on-accent shadow-lg shadow-accent/30 transition hover:brightness-105">
           {c.welcome.buttonLabel}
         </GateButton>
+        {c.music && <GateMusicNote className="mt-3" />}
       </div>
     </div>
   );
@@ -120,7 +121,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Cielo con la foto en un círculo y la edad. En teléfono el tamaño
             de la foto sale del alto de la pantalla para que todo quepa. */}
-        <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-primary/35 px-6 pb-14 pt-20 text-center sm:pb-20 sm:pt-20">
+        <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-primary/35 px-6 pb-14 pt-20 text-center sm:pb-20 sm:pt-20 lg:overflow-clip">
           <Bunting id="hero" className="absolute inset-x-0 top-0" />
           <FallingConfetti />
           <Star className="twinkle absolute left-[12%] top-[22%] w-4 text-secondary sm:w-6" />
@@ -146,7 +147,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
             <p className="mt-2 font-display text-xl text-ink/80 sm:text-2xl">¡Cumple {ageText}!</p>
             <p className="mx-auto mt-4 w-fit whitespace-nowrap rounded-full bg-paper px-5 py-2 font-display text-base text-ink shadow-sm sm:text-lg">{dates.weekdayLong}</p>
           </Reveal>
-          <ScrollCue className="relative mx-auto mt-5 text-ink sm:mt-8" circleClassName="border-ink/40 bg-paper/50" />
+          <ScrollCue className="relative mx-auto mt-5 text-ink sm:mt-8 lg:bg-paper/70" circleClassName="border-ink/40 bg-paper/50" />
           <CloudEdge id="hero" className="absolute inset-x-0 -bottom-px text-paper" />
         </section>
 
@@ -270,7 +271,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
                       <div className={`mx-auto mt-6 grid max-w-sm grid-cols-1 gap-3 ${l.wazeUrl ? "sm:grid-cols-2" : ""}`}>
                         <a href={l.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-ink px-4 py-3 font-display text-lg font-medium text-paper transition hover:bg-ink/85">
                           <PinIcon size={18} />
-                          Cómo llegar
+                          Abrir en Google Maps
                         </a>
                         {l.wazeUrl && (
                           <a href={l.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-paper px-4 py-3 font-display text-lg font-medium text-ink transition hover:bg-surface">
@@ -278,7 +279,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
                           </a>
                         )}
                       </div>
-                      <p className="mt-2 text-xs text-ink/70">{l.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+                      {l.wazeUrl && <p className="mt-2 text-xs text-ink/70">Las dos aplicaciones te llevan al mismo lugar.</p>}
                     </div>
                   </article>
                 </Reveal>

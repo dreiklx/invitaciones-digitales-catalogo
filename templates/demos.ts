@@ -7,7 +7,8 @@ import { demo as tierra } from "./tierra/demo";
 import { demo as gala } from "./gala/demo";
 import { demo as aurora } from "./aurora/demo";
 import { demo as aguamarina } from "./aguamarina/demo";
+import { demo as arrullo } from "./arrullo/demo";
 import { demo as riviera } from "./riviera/demo";
 import { demo as nube } from "./nube/demo";
 
-export const demos: Record<TemplateId, Invitation> = { olivo, tierra, gala, aurora, aguamarina, riviera, nube };
+export const demos: Record<TemplateId, Invitation> = { olivo, tierra, gala, aurora, aguamarina, arrullo, nube, riviera };

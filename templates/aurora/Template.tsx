@@ -1,7 +1,7 @@
 import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
 import { toRoman } from "@/lib/invitation/time";
-import Gate, { GateButton } from "../shared/Gate";
+import Gate, { GateButton, GateMusicNote } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
 import Frame from "../shared/Frame";
@@ -82,6 +82,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
         <GateButton className="mt-10 rounded-full bg-primary px-9 py-4 text-sm font-semibold uppercase tracking-[0.22em] text-on-primary shadow-lg shadow-primary/30 transition hover:bg-accent">
           {c.welcome.buttonLabel}
         </GateButton>
+        {c.music && <GateMusicNote className="mt-3" />}
       </div>
     </div>
   );
@@ -91,7 +92,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Espejo ovalado con el XV detrás. En teléfono el ancho del retrato
             sale del alto de la pantalla para que todo quepa sin desplazar. */}
-        <section className="aurora-glow relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pb-8 pt-16 text-center sm:pb-12 sm:pt-20">
+        <section className="aurora-glow relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pb-8 pt-16 text-center sm:pb-12 sm:pt-20 lg:overflow-clip">
           <SparkleField className="text-primary/45" />
           <Reveal variant="fade" className="relative">
             <p className="text-xs font-semibold uppercase tracking-[0.4em] text-primary">{c.hero.eyebrow}</p>
@@ -114,7 +115,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
               <span className="h-px w-6 bg-current opacity-40 sm:w-10" />
             </div>
           </Reveal>
-          <ScrollCue className="relative mx-auto mt-5 text-primary sm:mt-8" circleClassName="border-primary/50 bg-paper/40" />
+          <ScrollCue className="relative mx-auto mt-5 text-primary sm:mt-8 lg:bg-paper/70" circleClassName="border-primary/50 bg-paper/40" />
         </section>
 
         {c.openingQuote && (
@@ -241,7 +242,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
                     <div className={`mx-auto mt-6 grid max-w-sm grid-cols-1 gap-3 ${l.wazeUrl ? "sm:grid-cols-2" : ""}`}>
                       <a href={l.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-base font-semibold text-on-primary transition hover:bg-accent">
                         <PinIcon size={18} />
-                        Cómo llegar
+                        Abrir en Google Maps
                       </a>
                       {l.wazeUrl && (
                         <a href={l.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center rounded-full border-2 border-primary/40 px-4 py-3 text-base font-semibold text-primary transition hover:border-primary">
@@ -249,7 +250,7 @@ export default function AuroraTemplate({ inv }: { inv: ResolvedInvitation }) {
                         </a>
                       )}
                     </div>
-                    <p className="mt-2 text-xs text-muted">{l.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+                    {l.wazeUrl && <p className="mt-2 text-xs text-muted">Las dos aplicaciones te llevan al mismo lugar.</p>}
                   </article>
                 </Reveal>
               ))}

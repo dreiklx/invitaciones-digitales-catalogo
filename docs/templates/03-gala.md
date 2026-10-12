@@ -68,7 +68,7 @@ recortadas a la proporción de cada marco.
 
 ## En el teléfono
 - El retrato enmarcado de la portada se achica según el alto de la
-  pantalla, para que nombres, fechas y "Desliza hacia abajo" quepan sin
+  pantalla, para que nombres, fechas y "Desliza hacia arriba" quepan sin
   desplazar (también en 320×600).
 - Nombres en dos líneas: "Isabella" / "& Sebastián". Desde 640 px el "&"
   va en su propia línea.

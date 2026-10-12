@@ -5,19 +5,20 @@
 
 // ─── Diseños disponibles ─────────────────────────────────────────────────
 
-// Catálogo: Bodas (Olivo, Tierra, Gala) · Quince años (Aurora, Aguamarina) ·
-// Bebés (Riviera, baby shower; Nube, primer cumpleaños).
+// Catálogo: Bodas (Olivo, Tierra, Gala) · Quinceaños (Aurora, Aguamarina) ·
+// Bebés (Arrullo, baby shower; Nube, primer cumpleaños) · Aniversarios
+// (Riviera).
 
-// Bodas: celebra una pareja (`couple`).
-export type WeddingTemplateId = "olivo" | "tierra" | "gala";
+// Bodas y aniversarios: celebra una pareja (`couple`).
+export type CoupleTemplateId = "olivo" | "tierra" | "gala" | "riviera";
 // Quince años y cumpleaños: celebra una persona (`honoree`).
 export type HonoreeTemplateId = "aurora" | "aguamarina" | "nube";
 // Baby shower: lo organizan los futuros padres (`shower`).
-export type ShowerTemplateId = "riviera";
-export type TemplateId = WeddingTemplateId | HonoreeTemplateId | ShowerTemplateId;
+export type ShowerTemplateId = "arrullo";
+export type TemplateId = CoupleTemplateId | HonoreeTemplateId | ShowerTemplateId;
 
 // Tipo de celebración de cada diseño (categoría del catálogo y textos).
-export type EventKind = "boda" | "quinceanos" | "baby-shower" | "cumpleanos-infantil";
+export type EventKind = "boda" | "quinceanos" | "baby-shower" | "cumpleanos-infantil" | "aniversario";
 
 // Espacios de fotografía de cada diseño. Cada uno tiene una proporción fija
 // (ver `templates/<diseño>/meta.ts` y `docs/templates/`).
@@ -33,6 +34,7 @@ export type PhotoSlots = {
   tierra: "portada" | "historia" | "retrato" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   gala: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
   aguamarina: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
+  arrullo: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
   riviera: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
   aurora: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4" | "cierre";
   nube: "portada" | "historia" | "galeria1" | "galeria2" | "galeria3" | "galeria4";
@@ -105,7 +107,7 @@ export type Location = {
   wazeUrl?: string;
 };
 
-// Pareja (bodas), en el orden en que se muestra ("Uno & Dos").
+// Pareja (bodas y aniversarios), en el orden en que se muestra ("Uno & Dos").
 export type Couple = {
   partnerOne: string;
   partnerTwo: string;
@@ -178,7 +180,7 @@ export type InvitationContent = {
 
   hero: {
     eyebrow: string;
-    // Frase grande de la portada en los diseños que la tienen (Riviera:
+    // Frase grande de la portada en los diseños que la tienen (Arrullo:
     // "Un bebé en camino" cuando no se muestra el nombre del bebé).
     title?: string;
   };
@@ -302,7 +304,7 @@ export type InvitationContent = {
 
 // Una invitación = contenido común + quién celebra + diseño elegido + sus fotos.
 export type InvitationOf<T extends TemplateId> = InvitationContent &
-  (T extends WeddingTemplateId ? { couple: Couple } : T extends ShowerTemplateId ? { shower: Shower } : { honoree: Honoree }) & {
+  (T extends CoupleTemplateId ? { couple: Couple } : T extends ShowerTemplateId ? { shower: Shower } : { honoree: Honoree }) & {
     template: T;
     photos: Record<PhotoSlots[T], Photo>;
   };
@@ -322,7 +324,7 @@ export type PhotoSlotSpec = {
 
 // Presentaciones del reproductor de música (templates/shared/players.tsx).
 // Cada diseño trae la suya; `music.player` la reemplaza.
-export type MusicPlayerStyle = "lino" | "ficha" | "deco" | "destello" | "broche" | "sello" | "globo";
+export type MusicPlayerStyle = "lino" | "ficha" | "deco" | "destello" | "broche" | "sello" | "puntada" | "globo";
 
 export type TemplateMeta<T extends TemplateId = TemplateId> = {
   id: T;

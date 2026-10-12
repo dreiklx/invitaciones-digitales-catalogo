@@ -1,14 +1,14 @@
-// Sin desplazamiento lateral: catálogo y siete diseños en 8 anchos, antes y
-// después de abrir la invitación y a lo largo de toda la página.
+// Sin desplazamiento lateral: catálogo y ocho diseños en 9 pantallas, antes
+// y después de abrir la invitación y a lo largo de toda la página.
 
 import { expect, test } from "@playwright/test";
-import { DESKTOP_WIDTHS, MOBILE_WIDTHS, expectNoHorizontalOverflow, openInvitation, scrollThrough, templateIds, viewport } from "./helpers";
+import { DESKTOP_SIZES, MOBILE_SIZES, expectNoHorizontalOverflow, openInvitation, scrollThrough, templateIds, viewport } from "./helpers";
 
 const routes = ["/", ...templateIds.map((id) => `/plantillas/${id}`)];
 
-for (const width of [...MOBILE_WIDTHS, ...DESKTOP_WIDTHS]) {
-  test.describe(`${width}px`, () => {
-    test.use(viewport(width));
+for (const [width, height] of [...MOBILE_SIZES, ...DESKTOP_SIZES]) {
+  test.describe(`${width}×${height}`, () => {
+    test.use(viewport(width, height));
 
     for (const route of routes) {
       test(`sin desplazamiento lateral: ${route}`, async ({ page }) => {

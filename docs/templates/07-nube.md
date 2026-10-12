@@ -87,7 +87,7 @@ llamaba "Mateo" y pasó a **Emma** (2026-10-11) por coherencia.
 
 ## En el teléfono
 - La foto circular de la portada se achica según el alto de la pantalla
-  para que nombre, edad, fecha y "Desliza hacia abajo" quepan sin desplazar.
+  para que nombre, edad, fecha y "Desliza hacia arriba" quepan sin desplazar.
 - La insignia de edad queda sobre el borde de la foto, abajo a la derecha.
 - Botones de lugar uno debajo del otro hasta 640 px.
 - La galería en burbujas es la misma en todos los tamaños (dos columnas).

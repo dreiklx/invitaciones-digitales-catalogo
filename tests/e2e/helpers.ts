@@ -2,14 +2,17 @@ import { expect, type Page } from "@playwright/test";
 
 export { templateIds } from "../../templates/registry";
 
-// Anchos de pantalla que se revisan (teléfonos y escritorios).
-export const MOBILE_WIDTHS = [320, 360, 390, 430];
-export const DESKTOP_WIDTHS = [1024, 1366, 1440, 1920];
-const HEIGHTS: Record<number, number> = { 320: 640, 360: 740, 390: 844, 430: 932, 1024: 768, 1366: 768, 1440: 900, 1920: 1080 };
+// Pantallas que se revisan (ancho × alto). 320 × 568 es un iPhone SE
+// antiguo; 320 × 600, uno angosto con la barra del navegador abierta.
+export type Size = [width: number, height: number];
+export const MOBILE_SIZES: Size[] = [[320, 568], [320, 600], [360, 740], [390, 844], [430, 932]];
+export const DESKTOP_SIZES: Size[] = [[1024, 768], [1366, 768], [1440, 900], [1920, 1080]];
+const HEIGHTS: Record<number, number> = Object.fromEntries([...MOBILE_SIZES, ...DESKTOP_SIZES].reverse());
 
-export function viewport(width: number) {
+// Teléfono: pantalla táctil (puntero "coarse"), como en un celular real.
+export function viewport(width: number, height = HEIGHTS[width] ?? 800) {
   const mobile = width < 900;
-  return { viewport: { width, height: HEIGHTS[width] ?? 800 }, isMobile: mobile, hasTouch: mobile, deviceScaleFactor: mobile ? 2 : 1 };
+  return { viewport: { width, height }, isMobile: mobile, hasTouch: mobile, deviceScaleFactor: mobile ? 2 : 1 };
 }
 
 type Overflow = {

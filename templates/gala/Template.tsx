@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { Photo, PhotoSlotSpec, Quote } from "@/lib/invitation/types";
-import Gate, { GateButton } from "../shared/Gate";
+import Gate, { GateButton, GateMusicNote } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
 import Frame from "../shared/Frame";
@@ -151,7 +151,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
 
   const cover = (
     <div className="flex h-full items-center justify-center bg-paper px-6 text-center">
-      <div className="relative flex w-full max-w-md flex-col items-center px-4 py-10 sm:px-10 sm:py-14">
+      <div className="relative flex w-full max-w-md flex-col items-center px-4 py-10 short:py-7 sm:px-10 sm:py-14">
         <span className="pointer-events-none absolute inset-0 border border-primary/50" aria-hidden="true" />
         <span className="pointer-events-none absolute inset-2 border border-primary/20" aria-hidden="true" />
         <Fan className="h-10 w-20 text-primary" />
@@ -168,6 +168,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
         <GateButton className="mt-8 border border-primary sm:mt-10 px-8 py-4 text-xs uppercase tracking-[0.35em] text-primary transition hover:bg-primary hover:text-on-primary min-[360px]:px-10">
           {c.welcome.buttonLabel}
         </GateButton>
+        {c.music && <GateMusicNote className="mt-3" />}
       </div>
     </div>
   );
@@ -176,13 +177,13 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
     <Shell inv={inv} fontClasses={fontClasses} backClassName="bg-paper/70 text-secondary border border-primary/30">
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Retrato y nombres */}
-        <section className="relative overflow-hidden px-6 pb-12 pt-16 text-center sm:pb-16 sm:pt-28">
+        <section className="relative overflow-hidden px-6 pb-12 pt-16 text-center sm:pb-16 sm:pt-28 lg:overflow-clip">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-[60%] bg-[radial-gradient(ellipse_at_top,rgba(201,164,92,0.14),transparent_65%)]" aria-hidden="true" />
           <Reveal variant="fade">
             <p className="text-xs uppercase tracking-[0.4em] text-secondary">{c.hero.eyebrow}</p>
           </Reveal>
           {/* Teléfono: el ancho del retrato sale del alto de la pantalla, para
-              que nombres, fecha y "Desliza hacia abajo" quepan sin desplazar. */}
+              que nombres, fecha y el indicador para seguir quepan sin desplazar. */}
           <Reveal variant="scale" delay={120} className="mx-auto mt-5 w-[min(78%,max(8.5rem,calc((100svh-31rem)*0.75)))] max-w-sm sm:mt-10 sm:w-[78%]">
             <Gilded>
               <BwFrame photo={photos.portada} ratio={ratio("portada")} sizes="(min-width: 640px) 384px, 78vw" priority />
@@ -201,7 +202,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
               {dates.weekday} · {dates.time}
             </p>
           </Reveal>
-          <ScrollCue className="mx-auto mt-5 text-secondary sm:mt-10" circleClassName="border-primary/60" />
+          <ScrollCue className="mx-auto mt-5 text-secondary sm:mt-10 lg:bg-paper/80" circleClassName="border-primary/60" />
         </section>
 
         {c.openingQuote && <GalaQuote quote={c.openingQuote} />}
@@ -238,7 +239,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
                   <div className={`mx-auto mt-5 grid max-w-xs grid-cols-1 gap-3 sm:flex sm:max-w-none sm:flex-wrap sm:justify-center ${l.wazeUrl ? "min-[360px]:grid-cols-[1fr_auto]" : ""}`}>
                     <a href={l.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2 bg-primary px-5 py-3 text-xs uppercase tracking-[0.2em] text-on-primary transition hover:brightness-110 sm:px-6 sm:tracking-[0.25em]">
                       <PinIcon size={18} />
-                      Cómo llegar
+                      Abrir en Google Maps
                     </a>
                     {l.wazeUrl && (
                       <a href={l.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center border border-secondary/50 px-6 py-3 text-xs uppercase tracking-[0.2em] text-ink transition hover:border-secondary sm:tracking-[0.25em]">
@@ -246,7 +247,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
                       </a>
                     )}
                   </div>
-                  <p className="mt-2 text-xs text-muted">{l.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+                  {l.wazeUrl && <p className="mt-2 text-xs text-muted">Las dos aplicaciones te llevan al mismo lugar.</p>}
                 </Reveal>
               ))}
             </div>

@@ -76,7 +76,7 @@ sus padres. El lila del vestido es el de la paleta.
 
 ## En el teléfono
 - El óvalo de la portada se achica según el alto de la pantalla para que
-  nombre, fecha y "Desliza hacia abajo" quepan sin desplazar.
+  nombre, fecha y "Desliza hacia arriba" quepan sin desplazar.
 - La tira de cabina va debajo de la foto grande, centrada e inclinada; en
   escritorio, al lado.
 - Botones de lugar uno debajo del otro hasta 640 px (en dos columnas

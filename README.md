@@ -1,8 +1,9 @@
 # Invitaciones digitales — catálogo de diseños
 
-Proyecto interno para producir invitaciones digitales. Contiene **siete
-diseños** en tres categorías — **Bodas** (3), **Quinceaños** (2) y
-**Bebés** (2: baby shower y primer cumpleaños) — que comparten las
+Proyecto interno para producir invitaciones digitales. Contiene **ocho
+diseños** en cuatro categorías — **Bodas** (3), **Quinceaños** (2),
+**Bebés** (2: baby shower y primer cumpleaños) y **Aniversarios** (1) —
+que comparten las
 mismas funciones (portada,
 cuenta regresiva, lugares con Maps/Waze, calendario, aviso, vestimenta,
 regalos, galería, música, confirmación por WhatsApp…) y un **catálogo**
@@ -24,21 +25,25 @@ Contexto, arquitectura y decisiones: `PROJECT-CONTEXT.md`. Historial:
 | Bodas | 03 | `gala` | Gala | Boda | Noche de etiqueta, negro y dorado, fotos en blanco y negro | Isabella & Sebastián | `docs/templates/03-gala.md` |
 | Quinceaños | 04 | `aurora` | Aurora | Quinceaños | Lila de ensueño, espejo ovalado y caligrafía | Valentina | `docs/templates/04-aurora.md` |
 | Quinceaños | 05 | `aguamarina` | Aguamarina | Quinceaños | Joyería en azul petróleo, aguamarina y champán (rediseño 2026-10-11) | Renata | `docs/templates/05-aguamarina.md` |
-| Bebés | 06 | `riviera` | Riviera | Baby shower | Mediterráneo: cobalto, porcelana y limón (diseño original recuperado) | Natalia y Joaquín | `docs/templates/06-riviera.md` |
+| Bebés | 06 | `arrullo` | Arrullo | Baby shower | Papelería en crema, salvia y mantequilla, con luna y banderines (recuperado 2026-10-12) | Natalia y Joaquín | `docs/templates/06-arrullo.md` |
 | Bebés | 07 | `nube` | Nube | Primer cumpleaños | Fiesta en cielo celeste, banderines y globos | Emma | `docs/templates/07-nube.md` |
+| Aniversarios | 08 | `riviera` | Riviera | Aniversario o renovación de votos | Mediterráneo: cobalto, porcelana y limón (identidad original) | Elena & Tomás | `docs/templates/08-riviera.md` |
 
 Aguamarina (llamada Camelia hasta el 2026-10-11) ocupa el lugar del
 antiguo diseño de boda Borgoña (`/plantillas/camelia` y
-`/plantillas/borgona` redirigen a `/plantillas/aguamarina`). Riviera volvió el 2026-10-11 como baby
-shower en el lugar que había ocupado Arrullo (`/plantillas/arrullo`
-redirige). Seis demos usan nombres ficticios y fotos de stock de Pexels; Olivo usa a
+`/plantillas/borgona` redirigen a `/plantillas/aguamarina`). El baby
+shower volvió a ser **Arrullo** el 2026-10-12 (paleta crema, salvia y
+mantequilla, con las mismas fotos) y **Riviera** se conservó con su
+identidad como diseño de aniversario (ver su guía). Siete demos usan
+nombres ficticios y fotos de stock de Pexels; Olivo usa a
 Don Ramón y Doña Florinda con fotos aportadas por el dueño del proyecto,
 **con derechos de imagen y de los personajes pendientes de autorización**
 (auditoría en `photo-map.md`).
 
-**Quién celebra:** las bodas usan `couple` (dos nombres); Aurora, Aguamarina
+**Quién celebra:** las bodas y Riviera (aniversarios) usan `couple` (dos
+nombres); Aurora, Aguamarina
 y Nube usan `honoree` (`name`, `age` y opcional `ageLabel`, p. ej. "1
-añito" o "6 meses"); Riviera usa `shower` (`parents`, uno o dos nombres, y
+añito" o "6 meses"); Arrullo usa `shower` (`parents`, uno o dos nombres, y
 `babyName` solo si la familia quiere mostrarlo; ningún texto supone el
 sexo del bebé). Aurora, Aguamarina y Nube muestran además el **programa** del
 evento (`schedule`: vals, brindis, pastel…), opcional.
@@ -67,7 +72,7 @@ npm run dev            # http://localhost:3000
 2. `npm install`
 3. **Elegir el diseño** y crear el archivo de datos:
    ```bash
-   npm run nueva -- aguamarina  # olivo | tierra | gala | aurora | aguamarina | riviera | nube
+   npm run nueva -- aguamarina  # olivo | tierra | gala | aurora | aguamarina | arrullo | nube | riviera
    ```
    Crea `config/invitation.ts` a partir de la demo del diseño **sin sus
    datos**: conserva la estructura (secciones, rótulos, programa,
@@ -130,17 +135,23 @@ No guarda datos: arma el mensaje y abre WhatsApp al número de
 `rsvp.whatsappNumber` (`506` + número, sin espacios ni `+`); el invitado
 solo presiona Enviar. Pregunta "¿de parte de quién?" (en bodas, por
 defecto los dos nombres; `referrerOptions: []` lo quita; con un solo
-festejado no se pregunta salvo que se den opciones), individual o grupo
-(`minGroupSize`/`maxGroupSize`) y nombres. `allowDecline` agrega "¿No
-podrás asistir?". En las demos del catálogo no abre WhatsApp: muestra el
-mensaje que llegaría.
+festejado no se pregunta salvo que se den opciones), quiénes van ("Solo
+yo" o "Varias personas", con `minGroupSize`/`maxGroupSize`) y nombres.
+`allowDecline` agrega "¿No podrás asistir?" con su propio botón ("Avisar
+por WhatsApp que no asistiré") y un mensaje que no se confunde con una
+confirmación. Bajo cada botón se avisa que falta presionar Enviar en
+WhatsApp; después de abrir WhatsApp aparece "¿No se abrió? Toca aquí". En
+las demos del catálogo no abre WhatsApp: muestra el mensaje que llegaría.
 
 ## Música
 
 Opcional. **Empieza al tocar "Abrir invitación"** (ese toque es el permiso
 que piden los navegadores) y después el reproductor la pausa y la reanuda.
 Antes de ese toque no suena ni se descarga nada. Si el navegador no la deja
-sonar, el reproductor queda en "Toca para escuchar".
+sonar, el reproductor queda en "Toca para escuchar". La portada avisa antes
+de tocar: "Con música: podrás pausarla cuando quieras". En el teléfono el
+reproductor es solo una forma con ▶/❚❚: la primera vez que suena aparece
+unos segundos a su lado "Música: toca para pausar".
 
 ```ts
 music: {
@@ -155,7 +166,8 @@ music: {
 - **Sin música:** `music: null` (no hay reproductor ni créditos).
 - **Estilo del reproductor:** cada diseño trae el suyo (`musicPlayer` en
   su `meta.ts`): Olivo `lino`, Tierra `ficha`, Gala `deco`, Aurora
-  `destello`, Aguamarina `broche`, Riviera `sello`, Nube `globo`. `player`
+  `destello`, Aguamarina `broche`, Arrullo `puntada`, Nube `globo`,
+  Riviera `sello`. `player`
   usa otro; toma los colores y letras del diseño.
 - **Licencia, antes de publicar:** solo audio que el cliente pueda usar en
   una web. Comprar una canción o tenerla en Spotify/YouTube **no** da ese
@@ -168,7 +180,7 @@ music: {
 | Archivo | Obra · intérprete | Licencia | Demo |
 |---|---|---|---|
 | `pachelbel-canon-macleod.mp3` | Pachelbel, Canon en re · Kevin MacLeod | CC BY 3.0 (atribución obligatoria) | Olivo |
-| `satie-gymnopedie-1.mp3` | Satie, Gymnopédie n.º 1 · Robin Alciatore (Musopen) | Dominio público | Tierra, Riviera |
+| `satie-gymnopedie-1.mp3` | Satie, Gymnopédie n.º 1 · Robin Alciatore (Musopen) | Dominio público | Tierra, Arrullo, Riviera |
 | `debussy-clair-de-lune.mp3` | Debussy, Clair de lune · Laurens Goedhart | Dominio público | Gala, Aguamarina |
 | `chopin-vals-op69-1.mp3` | Chopin, Vals op. 69 n.º 1 (Musopen) | CC0 | Aurora |
 | `cajita-musical-cuna.mp3` | Brahms, Canción de cuna (cajita musical, pdsounds.org) | Dominio público | Nube |
@@ -220,16 +232,16 @@ openingQuote: {
   copyright). `npm run check` avisa si a un versículo le falta la
   referencia o la traducción.
 - Demos: Olivo, Colosenses 3:14; Tierra, Cantares 8:7; Gala, Mateo 19:6
-  (Reina-Valera 1909). Aurora, Aguamarina, Riviera y Nube usan frases.
+  (Reina-Valera 1909). Aurora, Aguamarina, Arrullo, Nube y Riviera usan frases.
 
 ## Datos a pedir al cliente (todo de una vez)
 
-1. Diseño elegido (01–07) y, si quieren, ajuste de colores.
-2. Nombres como deben aparecer y en qué orden (bodas); nombre y edad de
+1. Diseño elegido (01–08) y, si quieren, ajuste de colores.
+2. Nombres como deben aparecer y en qué orden (bodas y aniversarios); nombre y edad de
    quien celebra (quinceaños, cumpleaños); o quiénes invitan al baby
    shower y si quieren mostrar el nombre del bebé.
 3. Fecha, hora de inicio y duración aproximada (`event.name`: "boda",
-   "fiesta de quince años", "primer cumpleaños"…).
+   "fiesta de quince años", "primer cumpleaños", "renovación de votos"…).
 4. Lugar(es): nombre, dirección corta, enlace de Google Maps (y Waze), hora de cada uno.
 5. Fotos según la guía del diseño (cantidad y orientación de cada espacio).
 6. Frases de apertura/cierre (o las del diseño) y pie de foto.
@@ -251,7 +263,7 @@ openingQuote: {
 - [ ] `npm run typecheck`, `npm run lint`, `npm run build` sin errores.
 - [ ] Escritorio, 390 px y 320 px: rostros bien encuadrados (`position`), sin nada cortado.
 - [ ] Confirmación probada: llega a WhatsApp el mensaje con los nombres.
-- [ ] "Cómo llegar" abre el lugar correcto; el calendario tiene fecha, hora y lugares correctos.
+- [ ] "Abrir en Google Maps" y "Abrir en Waze" abren el lugar correcto; el calendario tiene fecha, hora y lugares correctos.
 - [ ] `site.url` con la URL final; al pegar el enlace en WhatsApp aparece la tarjeta.
 - [ ] Teléfono real: tocar "Abrir invitación" y confirmar que suena la
       música; pausarla y reanudarla desde el reproductor.
@@ -301,27 +313,33 @@ Son del **repositorio del catálogo** (`config/invitation.ts = null`). En
 la copia de un cliente basta `npm run check` y la revisión manual.
 
 **`npm test`** (Node + tsx, sin navegador; `tests/unit/`):
-- `config.test.ts`: `config/invitation.ts` en `null`; los siete ids
+- `config.test.ts`: `config/invitation.ts` en `null`; los ocho ids
   coinciden en registro, demos y meta; cada diseño tiene sus archivos y
-  sus tres rutas, y no sobran rutas; las redirecciones viejas llegan a un
+  sus tres rutas, y no sobran rutas; cada diseño está en una sola
+  categoría del catálogo, ninguna queda vacía y la numeración (01–08)
+  sigue el orden; ningún diseño repite paleta (fondo, principal,
+  secundario) ni reproductor (así Arrullo no vuelve a tomar los colores
+  de Riviera); las redirecciones viejas llegan a un
   diseño en un salto; cada demo pasa la validación, se resuelve con una
   fecha válida y legible, y su calendario tiene la hora correcta; la
   fecha no cambia con la zona horaria de la máquina; existen todas las
   fotos y la música, y no sobran fotos; funciona con `music`, citas y
   secciones opcionales en `null`; ninguna pista pasa de 7 MB y todas
   tienen crédito.
-- `nueva.test.ts`: con los siete diseños, la invitación nueva no contiene
+- `nueva.test.ts`: con los ocho diseños, la invitación nueva no contiene
   personas, lugares ni fotos de **ninguna** demo (tampoco en los
   comentarios del archivo); conserva la estructura y las citas genéricas;
   `check` solo pide completar los "REEMPLAZAR" y, completados, no da
   errores; el archivo generado es TypeScript válido; el comando escribe
   con `--salida` sin tocar `config/invitation.ts` ni las demos.
 
-**`npm run test:e2e`** (Playwright, `tests/e2e/`, 146 pruebas, ~10 min;
+**`npm run test:e2e`** (Playwright, `tests/e2e/`, 264 pruebas (8 se omiten a propósito: Tierra y Aguamarina
+ocultan el indicador en escritorio), ~15 min;
 necesita `npm run build` antes; levanta `next start` en el puerto 3210 o
 reutiliza uno abierto):
-- `responsive.spec.ts`: catálogo y siete diseños en 320, 360, 390, 430,
-  1024, 1366, 1440 y 1920 px (teléfono con toque; escritorio con barra de
+- `responsive.spec.ts`: catálogo y ocho diseños en 320×568, 320×600,
+  360×740, 390×844, 430×932, 1024×768, 1366×768, 1440×900 y 1920×1080
+  (teléfono táctil; escritorio con barra de
   desplazamiento visible), antes de abrir, al abrir y recorriendo toda la
   página; también 320 px con la letra al 125 %. Falla si el documento o
   el body son más anchos que la pantalla, si la página se puede desplazar
@@ -332,12 +350,27 @@ reutiliza uno abierto):
   ni se descarga antes de abrir; al abrir suena de verdad (el tiempo de
   reproducción avanza, sin error de carga); el reproductor pausa (el
   tiempo se detiene) y reanuda, y sigue sonando al recorrer la página;
-  la fecha larga y los nombres de la configuración aparecen; el
+  la portada avisa que habrá música y, en el teléfono, aparece el aviso
+  "Música: toca para pausar"; la fecha larga y los nombres de la
+  configuración aparecen; el
   calendario `.ics` responde con la hora correcta y existe el enlace de
-  Google Calendar; la galería abre y cierra (Escape y "Cerrar") sin
-  desbordar; la confirmación valida el nombre, muestra el mensaje y
-  "No podrás asistir" también; "Diseños" vuelve al catálogo.
-- `catalog.spec.ts`: el catálogo enlaza los siete diseños, cada página y
+  Google Calendar; la galería dice "Toca una foto…" ("Haz clic…" con
+  mouse), abre y cierra (Escape y "Cerrar") sin desbordar y la página
+  queda donde estaba; la confirmación ("Solo yo") valida el nombre,
+  muestra el mensaje con el aviso de Enviar, y "No podrás asistir" valida
+  y arma un aviso que dice "no podré asistir" (no "confirmar");
+  "Diseños" vuelve al catálogo.
+- `scroll-cue.spec.ts`: el indicador para seguir leyendo en los ocho
+  diseños. Teléfono (5 tamaños, puntero táctil): dice "Desliza hacia
+  arriba" con la mano animada hacia arriba (nunca "Desliza hacia abajo"),
+  queda entero en la primera pantalla, no tapa los nombres ni el
+  reproductor, el aviso de la música no tapa "Diseños", y tocarlo avanza
+  y lo oculta. Con "reducir movimiento" la mano queda quieta. Escritorio
+  (4 tamaños): dice "Desplázate hacia abajo", está a la vista y se oculta
+  al usar la rueda. Portada: "Abrir invitación" (≥ 44 px) y el aviso de
+  música caben enteros en los 9 tamaños.
+- `catalog.spec.ts`: el catálogo enlaza los ocho diseños y cada uno está
+  en la sección de su categoría; cada página y
   su imagen para compartir responden, las rutas viejas redirigen (308) y
   el logo enlaza a Instagram con `noopener`.
 

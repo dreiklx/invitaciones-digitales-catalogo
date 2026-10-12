@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { quoteCitation, type ResolvedInvitation, type ResolvedLocation } from "@/lib/invitation/resolve";
 import { toRoman } from "@/lib/invitation/time";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
-import Gate, { GateButton } from "../shared/Gate";
+import Gate, { GateButton, GateMusicNote } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
 import Frame from "../shared/Frame";
@@ -57,7 +57,7 @@ function Place({ location }: { location: ResolvedLocation }) {
         <div className={`mt-6 grid w-full max-w-sm grid-cols-1 gap-3 ${location.wazeUrl ? "min-[400px]:grid-cols-2" : ""}`}>
           <a href={location.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium uppercase tracking-[0.14em] text-on-primary transition hover:brightness-110">
             <PinIcon size={18} />
-            Cómo llegar
+            Abrir en Google Maps
           </a>
           {location.wazeUrl && (
             <a href={location.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center rounded-full border border-primary/40 px-5 py-3 text-sm font-medium uppercase tracking-[0.14em] text-primary transition hover:border-primary">
@@ -65,7 +65,7 @@ function Place({ location }: { location: ResolvedLocation }) {
             </a>
           )}
         </div>
-        <p className="mt-2 text-xs text-muted">{location.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+        {location.wazeUrl && <p className="mt-2 text-xs text-muted">Las dos aplicaciones te llevan al mismo lugar.</p>}
       </article>
     </Gem>
   );
@@ -124,6 +124,7 @@ export default function AguamarinaTemplate({ inv }: { inv: ResolvedInvitation })
         <GateButton className="mt-9 rounded-full border border-secondary px-9 py-4 text-[13px] font-medium uppercase tracking-[0.3em] text-secondary transition hover:bg-secondary hover:text-primary">
           {c.welcome.buttonLabel}
         </GateButton>
+        {c.music && <GateMusicNote className="mt-3" />}
       </div>
     </div>
   );
@@ -132,8 +133,8 @@ export default function AguamarinaTemplate({ inv }: { inv: ResolvedInvitation })
     <Shell inv={inv} fontClasses={fontClasses} backClassName="bg-paper/85 text-primary border border-secondary/50">
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Portada: teléfono = todo centrado (el ancho del retrato sale del
-            alto de la pantalla para que nombre, XV, fecha y "Desliza hacia
-            abajo" quepan); escritorio = retrato a la izquierda y texto a la
+            alto de la pantalla para que nombre, XV, fecha y el indicador
+            para seguir quepan); escritorio = retrato a la izquierda y texto a la
             derecha. Bruma aguamarina arriba, perla abajo. */}
         <section className="relative overflow-hidden bg-gradient-to-b from-surface via-paper to-paper px-6 pb-10 pt-16 text-center sm:pt-20 lg:flex lg:min-h-screen lg:items-center lg:py-20">
           <Sparkle className="twinkle absolute left-[8%] top-[14%] h-3 w-3 text-secondary" />

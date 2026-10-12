@@ -1,4 +1,4 @@
-// Configuración de los siete diseños: ids, rutas, demos, fechas, archivos y
+// Configuración de los ocho diseños: ids, rutas, demos, fechas, archivos y
 // secciones opcionales. `npm test` (sin navegador).
 
 import { describe, it } from "node:test";
@@ -14,6 +14,7 @@ import { buildCalendarFile } from "../../lib/invitation/calendar";
 import { validateInvitation } from "../../lib/invitation/validate";
 import { zonedTimeToUtc } from "../../lib/invitation/time";
 import type { Invitation } from "../../lib/invitation/types";
+import { catalogGroups } from "../../components/catalog/groups";
 
 const root = process.cwd();
 const publicDir = path.join(root, "public");
@@ -46,6 +47,27 @@ describe("registro de diseños", () => {
   it("no hay rutas de diseños que no estén en el registro", () => {
     const dirs = readdirSync(path.join(root, "app", "plantillas")).filter((d) => statSync(path.join(root, "app", "plantillas", d)).isDirectory());
     assert.deepEqual(dirs.sort(), [...templateIds].sort());
+  });
+
+  it("cada diseño está en una sola categoría del catálogo y ninguna queda vacía", () => {
+    for (const id of templateIds) {
+      const groups = catalogGroups.filter((g) => g.kinds.includes(templateMetas[id].kind));
+      assert.equal(groups.length, 1, `${id} (${templateMetas[id].kind}) está en ${groups.length} categorías`);
+    }
+    for (const g of catalogGroups) assert.ok(templateIds.some((id) => g.kinds.includes(templateMetas[id].kind)), `${g.title} no tiene diseños`);
+    // El orden del catálogo sigue el de las categorías y los números 01, 02…
+    const order = catalogGroups.flatMap((g) => templateIds.filter((id) => g.kinds.includes(templateMetas[id].kind)));
+    assert.deepEqual(order, templateIds);
+    assert.deepEqual(templateIds.map((id) => templateMetas[id].number), templateIds.map((_, i) => String(i + 1).padStart(2, "0")));
+  });
+
+  it("cada diseño tiene su propia paleta y su propio reproductor", () => {
+    for (const key of ["background", "primary", "secondary"] as const) {
+      const values = templateIds.map((id) => templateMetas[id].palette[key].toLowerCase());
+      assert.equal(new Set(values).size, values.length, `palette.${key} repetida: ${values.join(", ")}`);
+    }
+    const players = templateIds.map((id) => templateMetas[id].musicPlayer);
+    assert.equal(new Set(players).size, players.length, `reproductor repetido: ${players.join(", ")}`);
   });
 
   it("las redirecciones viejas llegan a un diseño que existe, en un solo salto", async () => {

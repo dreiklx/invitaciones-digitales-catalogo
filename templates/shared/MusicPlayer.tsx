@@ -39,9 +39,25 @@ export default function MusicPlayer({
   const [covering, setCovering] = useState(false);
   // < lg, mientras se ve la portada (justo al abrir, cuando empieza la
   // música) va arriba a la derecha: abajo tapaba fecha, nombres o
-  // "Desliza hacia abajo" en teléfonos bajos. Al bajar vuelve a su lugar,
+  // el indicador para seguir en teléfonos bajos. Al bajar vuelve a su lugar,
   // sobre la barra de confirmar.
   const [atTop, setAtTop] = useState(true);
+  // < sm el reproductor es solo una forma con ▶/❚❚: la primera vez que suena
+  // aparece unos segundos a su lado "Música · toca para pausar", para que se
+  // entienda qué es y cómo se detiene sin tener que adivinarlo.
+  const [hint, setHint] = useState<"pending" | "shown" | "done">("pending");
+
+  useEffect(() => {
+    if (state !== "playing" || hint !== "pending") return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- se muestra una sola vez, al empezar a sonar.
+    setHint("shown");
+  }, [state, hint]);
+
+  useEffect(() => {
+    if (hint !== "shown") return;
+    const t = setTimeout(() => setHint("done"), 6000);
+    return () => clearTimeout(t);
+  }, [hint]);
 
   useEffect(() => {
     const onScroll = () => setAtTop(window.scrollY < window.innerHeight * 0.5);
@@ -113,6 +129,7 @@ export default function MusicPlayer({
   const toggle = () => {
     const audio = audioRef.current;
     if (!audio || state === "error") return;
+    if (hint === "shown") setHint("done");
     if (state === "playing" || state === "loading") {
       audio.pause();
       settle("paused");
@@ -155,6 +172,18 @@ export default function MusicPlayer({
       >
         <variant.Face state={state} title={music.title} artist={music.artist} />
       </button>
+      {hint === "shown" && (
+        <span
+          aria-hidden="true"
+          data-music-hint
+          className="pointer-events-none absolute right-full top-1/2 mr-2 -translate-y-1/2 rounded-2xl bg-paper px-2.5 py-1.5 text-left text-[11px] font-semibold leading-tight text-ink shadow-lg ring-1 ring-line sm:hidden"
+        >
+          {/* Renglones cortos: en 320 px no llega al enlace "Diseños". */}
+          <span className="block">Música:</span>
+          <span className="block whitespace-nowrap font-medium">toca para</span>
+          <span className="block font-medium">pausar</span>
+        </span>
+      )}
     </div>
   );
 }

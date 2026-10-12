@@ -7,13 +7,13 @@ const nextConfig: NextConfig = {
     // sin esto, cada página precargaba las tipografías de los cinco diseños.
     cssChunking: { type: "graph", requestCost: 2000 },
   },
-  // Diseños renombrados (2026-10-10: Borgoña → Camelia; 2026-10-11: Arrullo
-  // volvió a ser Riviera y Camelia pasó a llamarse Aguamarina): los enlaces
-  // viejos de las demos siguen funcionando, siempre en un solo salto.
+  // Diseños renombrados (2026-10-10: Borgoña → Camelia; 2026-10-11: Camelia
+  // pasó a llamarse Aguamarina): los enlaces viejos de las demos siguen
+  // funcionando, siempre en un solo salto. /plantillas/arrullo volvió a ser
+  // una página propia (baby shower) el 2026-10-12; Riviera sigue en
+  // /plantillas/riviera (aniversarios).
   async redirects() {
     return [
-      { source: "/plantillas/arrullo", destination: "/plantillas/riviera", permanent: true },
-      { source: "/plantillas/arrullo/:path+", destination: "/plantillas/riviera/:path+", permanent: true },
       { source: "/plantillas/camelia", destination: "/plantillas/aguamarina", permanent: true },
       { source: "/plantillas/camelia/:path+", destination: "/plantillas/aguamarina/:path+", permanent: true },
       { source: "/plantillas/borgona", destination: "/plantillas/aguamarina", permanent: true },

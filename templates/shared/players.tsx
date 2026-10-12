@@ -180,7 +180,7 @@ function Destello(p: FaceProps) {
   );
 }
 
-// ─── 06 Riviera · "sello": sello postal con borde perforado ──────────────
+// ─── 08 Riviera · "sello": sello postal con borde perforado ──────────────
 function Sello(p: FaceProps) {
   const playing = p.state === "playing";
   return (
@@ -191,6 +191,25 @@ function Sello(p: FaceProps) {
           <Glyph state={p.state} />
           <span aria-hidden="true" className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full border-2 border-paper bg-secondary" />
         </span>
+      </span>
+      <Caption {...p} titleClass="font-display text-base text-primary" statusClass="text-muted" />
+    </>
+  );
+}
+
+// ─── 06 Arrullo · "puntada": botón de tela salvia con puntada y una luna ──
+function Puntada(p: FaceProps) {
+  const playing = p.state === "playing";
+  return (
+    <>
+      <span className="relative flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-full bg-surface shadow-[0_12px_28px_-14px_color-mix(in_srgb,var(--c-text)_55%,transparent)] ring-1 ring-line">
+        <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-primary text-on-primary">
+          <span aria-hidden="true" className={`absolute inset-[3px] rounded-full border-[1.5px] border-dashed border-on-primary/60 ${playing ? "player-spin" : ""}`} />
+          <Glyph state={p.state} />
+        </span>
+        <svg aria-hidden="true" viewBox="0 0 20 20" className={`absolute -right-1.5 -top-1.5 h-5 w-5 text-secondary drop-shadow-sm ${playing ? "twinkle" : ""}`}>
+          <path d="M12.5 2.5a7.5 7.5 0 1 0 5 12.6 6.3 6.3 0 0 1-5-12.6Z" fill="currentColor" />
+        </svg>
       </span>
       <Caption {...p} titleClass="font-display text-base text-primary" statusClass="text-muted" />
     </>
@@ -238,6 +257,11 @@ export const players: Record<MusicPlayerStyle, Variant> = {
     position: STANDARD_POSITION,
     button: "flex items-center gap-3 rounded-full sm:bg-paper sm:py-1 sm:pl-1 sm:pr-5 sm:shadow-lg sm:ring-1 sm:ring-primary/15",
     Face: Sello,
+  },
+  puntada: {
+    position: STANDARD_POSITION,
+    button: "flex items-center gap-3 rounded-full sm:bg-paper sm:py-1 sm:pl-1 sm:pr-5 sm:shadow-lg sm:ring-1 sm:ring-line",
+    Face: Puntada,
   },
   broche: {
     position: STANDARD_POSITION,

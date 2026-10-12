@@ -15,6 +15,8 @@ import AuroraPreview from "./aurora/Preview";
 import { fontClasses as auroraFonts } from "./aurora/fonts";
 import AguamarinaPreview from "./aguamarina/Preview";
 import { fontClasses as aguamarinaFonts } from "./aguamarina/fonts";
+import ArrulloPreview from "./arrullo/Preview";
+import { fontClasses as arrulloFonts } from "./arrullo/fonts";
 import RivieraPreview from "./riviera/Preview";
 import { fontClasses as rivieraFonts } from "./riviera/fonts";
 import NubePreview from "./nube/Preview";
@@ -26,6 +28,7 @@ export const templatePreviews: Record<TemplateId, { Preview: ComponentType<{ inv
   gala: { Preview: GalaPreview, fontClasses: galaFonts },
   aurora: { Preview: AuroraPreview, fontClasses: auroraFonts },
   aguamarina: { Preview: AguamarinaPreview, fontClasses: aguamarinaFonts },
+  arrullo: { Preview: ArrulloPreview, fontClasses: arrulloFonts },
   riviera: { Preview: RivieraPreview, fontClasses: rivieraFonts },
   nube: { Preview: NubePreview, fontClasses: nubeFonts },
 };

@@ -103,3 +103,19 @@ export function GateButton({ className = "", children }: { className?: string; c
     </button>
   );
 }
+
+// Línea bajo "Abrir invitación" cuando hay música: avisa ANTES de tocar
+// que va a sonar (abrirla en un lugar público sin saberlo sorprende) y que
+// se puede pausar. Hereda el color de la portada.
+export function GateMusicNote({ className = "" }: { className?: string }) {
+  return (
+    <p className={`flex items-center justify-center gap-1.5 text-[13px] leading-snug opacity-85 ${className}`}>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
+        <path d="M9 18V5l11-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="17" cy="16" r="3" />
+      </svg>
+      Con música: podrás pausarla cuando quieras.
+    </p>
+  );
+}

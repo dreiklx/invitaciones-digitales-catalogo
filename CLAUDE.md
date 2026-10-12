@@ -2,14 +2,14 @@
 
 Lee primero, en este orden:
 
-1. `PROJECT-CONTEXT.md` — qué es el proyecto (catálogo de 7 diseños de
-   invitación en tres categorías: Bodas, Quinceaños y Bebés), estado, arquitectura y decisiones, plantilla vs.
+1. `PROJECT-CONTEXT.md` — qué es el proyecto (catálogo de 8 diseños de
+   invitación en cuatro categorías: Bodas, Quinceaños, Bebés y Aniversarios), estado, arquitectura y decisiones, plantilla vs.
    personalizada, reglas que no se deben revertir, limitaciones, riesgos
    y pendientes.
 2. `project-log.md` — historial de sesiones (la más reciente primero).
 3. Si el trabajo es sobre un diseño ("vamos a usar la plantilla 3"):
    `docs/templates/<número>-<diseño>.md` (01-olivo, 02-tierra, 03-gala,
-   04-aurora, 05-aguamarina, 06-riviera, 07-nube).
+   04-aurora, 05-aguamarina, 06-arrullo, 07-nube, 08-riviera).
 4. `photo-map.md` si hay fotos de por medio (incluye la auditoría de
    licencias y derechos de imagen de las demos); `README.md` para el flujo de
    crear una invitación.
@@ -35,8 +35,13 @@ Lee primero, en este orden:
 - Precios y acuerdos comerciales: **PENDIENTE DE DEFINICIÓN CON FOTOLAB**.
   No fijarlos ni documentarlos como decisión.
 - No sobreingenierizar: no es un SaaS ni un CMS.
-- Cambios visuales: revisar escritorio, 390 px y 320 px, y las reglas de
-  usabilidad para personas mayores.
+- Cambios visuales: revisar escritorio, 390 px y 320 px (también 320×568:
+  la portada no se desplaza), y las reglas de usabilidad para personas
+  mayores. Las instrucciones dicen el gesto, no la dirección del
+  contenido ("Desliza hacia arriba" en el teléfono; ver PROJECT-CONTEXT).
+- Cada diseño conserva su paleta y su reproductor propios (una prueba lo
+  exige): para otro evento con la misma composición, crear un diseño
+  nuevo en vez de recolorear uno existente.
 - Tras cambios relevantes: `npm run check`, `npm run typecheck`,
   `npm run lint`, `npm test`, `npm run build` y `npm run test:e2e` (o todo
   junto: `npm run verify`); revisión visual cuando aplique. Si una prueba

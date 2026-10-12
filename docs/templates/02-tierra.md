@@ -30,7 +30,7 @@ Fraunces (titulares; usa sus ejes `opsz` y `SOFT`) + Instrument Sans (texto).
 ## Estructura (orden)
 Portada de revista (cabecera, nombres gigantes, foto pequeña, botón) →
 portada de la invitación (cabecera, nombres, ficha Fecha/Lugar y foto
-grande con "Desliza hacia abajo") → cita grande → **Capítulo I** historia
+grande con "Desliza hacia arriba") → cita grande → **Capítulo I** historia
 (foto + letra capital + cita) → familias en tres columnas → **El día**
 (bloque café: fecha monumental, calendario, cuenta regresiva con filetes,
 lugares en filas) → **Capítulo II** galería → **Capítulo III** detalles
@@ -76,11 +76,15 @@ Las fotos ya vienen recortadas a la proporción de su marco, así que el
 
 ## En el teléfono
 - La foto de portada se alinea a la derecha y su ancho sale del alto de la
-  pantalla, para que "Desliza hacia abajo" (sobre la foto) se vea sin
+  pantalla, para que "Desliza hacia arriba" (sobre la foto) se vea sin
   desplazar. En teléfonos altos ocupa todo el ancho. En teléfonos bajos
   (320×568) la foto pasa el borde de la pantalla a propósito y la flecha
   sube a la mitad de la foto: con fotos reales, revisar que no tape el
   rostro (subir el rostro con `position`).
+- Portada inicial en teléfonos bajos (320×568 y 320×600): nombres, foto y
+  márgenes más chicos para que "Abrir invitación" y el aviso de música
+  queden enteros (antes el botón terminaba a 599 px: la portada no se
+  desplaza, así que no se podía tocar entero).
 - Las fotos se descubren como una cortina; el recorte va en un elemento
   interno (ver "Teléfono primero" en `PROJECT-CONTEXT.md`).
 - El retrato junto al RSVP solo se muestra en escritorio.

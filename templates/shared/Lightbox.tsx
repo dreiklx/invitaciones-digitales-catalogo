@@ -3,13 +3,17 @@
 import Image from "next/image";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Photo } from "@/lib/invitation/types";
-import { CloseIcon } from "./icons";
+import { CloseIcon, ExpandIcon } from "./icons";
 import { lockPageScroll } from "./scroll-lock";
 
 // Visor de fotos de la galería. Cada diseño compone su galería como quiera
 // y envuelve cada foto en <LightboxItem index={i}>. Botón "Cerrar" con
 // texto (no una ✕ suelta) y sin anterior/siguiente: más claro para
-// personas mayores. Escape cierra; el foco vuelve a la foto tocada.
+// personas mayores. Escape cierra; el foco vuelve a la foto tocada y la
+// página queda donde estaba.
+// Encima de la galería, una línea dice que las fotos se abren (en el
+// teléfono no hay cursor de lupa que lo sugiera); `hintClassName` la alinea
+// con el diseño.
 
 const LightboxContext = createContext<(index: number, from: HTMLElement) => void>(() => {});
 
@@ -17,11 +21,16 @@ export function LightboxProvider({
   photos,
   overlayClassName,
   closeClassName,
+  hintClassName = "justify-center",
+  hint = true,
   children,
 }: {
   photos: Photo[];
   overlayClassName: string;
   closeClassName: string;
+  hintClassName?: string;
+  // false: el diseño pone <GalleryHint> en otro lugar (Olivo, junto al título).
+  hint?: boolean;
   children: ReactNode;
 }) {
   const [active, setActive] = useState<number | null>(null);
@@ -31,7 +40,9 @@ export function LightboxProvider({
 
   const close = useCallback(() => {
     setActive(null);
-    returnFocus.current?.focus();
+    // Sin desplazar: si la foto es más alta que la pantalla (o está a medio
+    // aparecer), focus() movía la página al cerrar el visor.
+    returnFocus.current?.focus({ preventScroll: true });
   }, []);
 
   useEffect(() => {
@@ -53,6 +64,7 @@ export function LightboxProvider({
 
   return (
     <LightboxContext.Provider value={openAt}>
+      {hint && <GalleryHint className={`mt-6 sm:mt-8 ${hintClassName}`} />}
       {children}
       {/* Teléfono: la foto empieza debajo de "Cerrar" (antes podía quedar
           tapada en pantallas bajas) y todo respeta la zona segura. */}
@@ -73,6 +85,17 @@ export function LightboxProvider({
         </div>
       )}
     </LightboxContext.Provider>
+  );
+}
+
+// "Toca una foto para verla en grande" ("Haz clic…" con mouse).
+export function GalleryHint({ className = "" }: { className?: string }) {
+  return (
+    <p data-gallery-hint className={`flex items-center gap-2 text-sm font-medium ${className}`}>
+      <ExpandIcon size={16} className="shrink-0" />
+      <span className="pointer-fine:hidden">Toca una foto para verla en grande.</span>
+      <span className="hidden pointer-fine:inline">Haz clic en una foto para verla en grande.</span>
+    </p>
   );
 }
 

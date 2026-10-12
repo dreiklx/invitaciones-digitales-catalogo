@@ -1,12 +1,15 @@
-// Catálogo: enlaces a los siete diseños, rutas viejas y enlace del estudio.
+// Catálogo: enlaces a los ocho diseños por categoría, rutas viejas y enlace
+// del estudio.
 
 import { expect, test } from "@playwright/test";
 import nextConfig from "../../next.config";
 import { templateIds, viewport } from "./helpers";
+import { catalogGroups } from "../../components/catalog/groups";
+import { templateMetas } from "../../templates/registry";
 
 test.use(viewport(390));
 
-test("el catálogo enlaza los siete diseños y cada uno responde", async ({ page, request }) => {
+test("el catálogo enlaza los ocho diseños y cada uno responde", async ({ page, request }) => {
   const response = await page.goto("/");
   expect(response?.status()).toBe(200);
   for (const id of templateIds) {
@@ -16,6 +19,17 @@ test("el catálogo enlaza los siete diseños y cada uno responde", async ({ page
     const og = await request.get(`/plantillas/${id}/opengraph-image`);
     expect(og.status(), `${id} imagen al compartir`).toBe(200);
     expect(og.headers()["content-type"]).toContain("image/");
+  }
+});
+
+test("cada diseño aparece en su categoría, con el tipo de evento", async ({ page }) => {
+  await page.goto("/");
+  for (const group of catalogGroups) {
+    const section = page.locator(`section#${group.id}`);
+    await expect(section.getByRole("heading", { level: 2, name: group.title })).toBeVisible();
+    const ids = templateIds.filter((id) => group.kinds.includes(templateMetas[id].kind));
+    for (const id of ids) await expect(section.locator(`article#${id}`), `${id} en ${group.title}`).toBeAttached();
+    await expect(section.locator("article")).toHaveCount(ids.length);
   }
 });
 

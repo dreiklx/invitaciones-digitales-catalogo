@@ -1,6 +1,6 @@
 import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec, Quote } from "@/lib/invitation/types";
-import Gate, { GateButton } from "../shared/Gate";
+import Gate, { GateButton, GateMusicNote } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
 import Frame from "../shared/Frame";
@@ -100,26 +100,30 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
   const gallery = [photos.galeria1, photos.galeria2, photos.galeria3, photos.galeria4];
   const place = inv.locations[0];
 
+  // Teléfonos bajos (`short:`, 320 × 568): nombres, foto y márgenes más
+  // chicos para que "Abrir invitación" quede entero en la pantalla (la
+  // portada no se desplaza).
   const cover = (
-    <div className="flex h-full flex-col bg-paper px-6 pb-8 pt-16 text-ink sm:px-12 sm:pb-12 sm:pt-12">
+    <div className="flex h-full flex-col bg-paper px-6 pb-8 pt-16 text-ink short:pb-5 sm:px-12 sm:pb-12 sm:pt-12">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink/25 pb-3 text-[11px] uppercase tracking-[0.25em] text-muted sm:text-xs">
         <span>{c.welcome.eyebrow}</span>
         <span className="whitespace-nowrap font-display text-sm normal-case italic tracking-normal">{dates.long}</span>
       </div>
-      <div className="flex flex-1 flex-col justify-center gap-6 py-6 sm:flex-row sm:items-center sm:gap-12">
-        <h1 className="font-display text-[clamp(3.6rem,19vw,10rem)] font-light leading-[0.85] tracking-tight [font-variation-settings:'opsz'_144,'SOFT'_50] sm:flex-1">
+      <div className="flex flex-1 flex-col justify-center gap-6 py-6 short:gap-3 short:py-3 sm:flex-row sm:items-center sm:gap-12">
+        <h1 className="font-display text-[clamp(3.6rem,19vw,10rem)] short:text-[clamp(2.8rem,15vw,10rem)] font-light leading-[0.85] tracking-tight [font-variation-settings:'opsz'_144,'SOFT'_50] sm:flex-1">
           {names.one}
           <span className="block italic text-accent">&amp; {names.two}</span>
         </h1>
-        <div className="ml-auto w-[58%] max-w-[300px] sm:w-[32%]">
+        <div className="ml-auto w-[58%] max-w-[300px] short:w-[42%] sm:w-[32%]">
           <Frame photo={photos.portada} ratio={ratio("portada")} sizes="(min-width: 640px) 300px, 58vw" priority />
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 border-t border-ink/25 pt-5 sm:flex-row sm:justify-between">
+      <div className="flex flex-col items-center gap-4 border-t border-ink/25 pt-5 short:gap-2 short:pt-3 sm:flex-row sm:justify-between">
         <p className="text-sm text-muted">{dates.weekdayLong}</p>
         <GateButton className="bg-primary px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-primary transition hover:bg-accent">
           {c.welcome.buttonLabel}
         </GateButton>
+        {c.music && <GateMusicNote className="-mt-1 sm:mt-0" />}
       </div>
     </div>
   );
@@ -154,7 +158,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
                 </dl>
               </Reveal>
               {/* Teléfono: el ancho de la foto sale del alto de la pantalla, para
-                  que "Desliza hacia abajo" se vea sin desplazar. */}
+                  que el indicador para seguir se vea sin desplazar. */}
               <Reveal variant="curtain" className="relative ml-auto w-[min(100%,max(13rem,calc((100svh-25rem)*0.8)))] sm:w-full lg:col-span-5">
                 <Frame photo={photos.portada} ratio={ratio("portada")} sizes="(min-width: 1024px) 460px, 100vw" priority />
                 {/* Teléfono bajo: la foto sigue debajo del borde (invita a bajar) y la
@@ -264,7 +268,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
                       <div className={`grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:justify-end ${l.wazeUrl ? "min-[360px]:grid-cols-[1fr_auto]" : ""}`}>
                         <a href={l.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2 bg-on-primary px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-primary transition hover:bg-secondary">
                           <PinIcon size={18} />
-                          Cómo llegar
+                          Abrir en Google Maps
                         </a>
                         {l.wazeUrl && (
                           <a href={l.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center border border-on-primary/50 px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] transition hover:bg-on-primary/10">
@@ -272,7 +276,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
                           </a>
                         )}
                       </div>
-                      <p className="text-xs text-on-primary/70">{l.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+                      {l.wazeUrl && <p className="text-xs text-on-primary/70">Las dos aplicaciones te llevan al mismo lugar.</p>}
                     </div>
                   </div>
                 </Reveal>

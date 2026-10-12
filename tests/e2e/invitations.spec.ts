@@ -27,11 +27,16 @@ for (const width of [390, 1366]) {
           page.on("response", (r) => r.url().includes("/audio/") && audioResponses.push(r.status()));
 
           await page.goto(`/plantillas/${id}`);
+          // La portada avisa que habrá música antes de tocar el botón.
+          await expect(page.getByText("Con música: podrás pausarla cuando quieras.")).toBeVisible();
           await page.waitForTimeout(800);
           expect((await audioState(page)).paused, "no debe sonar antes de abrir").toBe(true);
           expect(audioResponses, "no debe descargar el audio antes de abrir").toEqual([]);
 
           await openInvitation(page);
+          // Teléfono: al empezar a sonar, un aviso breve (6 s) dice qué es y
+          // cómo se pausa. Se busca enseguida: después ya no está.
+          if (width < 900) await expect(page.locator("[data-music-hint]")).toHaveText(/música:\s*toca para\s*pausar/i);
           // Suena de verdad: el tiempo de reproducción avanza.
           await expect.poll(async () => (await audioState(page)).time, { timeout: 15_000 }).toBeGreaterThan(0.5);
           const playing = await audioState(page);
@@ -84,21 +89,37 @@ for (const width of [390, 1366]) {
           await expect(page.locator('a[href*="calendar.google.com"]').first()).toBeAttached();
         });
 
-        test("galería: abre y cierra la foto en grande", async ({ page }) => {
+        test("galería: dice que las fotos se abren; abre y cierra la foto en grande", async ({ page }) => {
           await page.goto(`/plantillas/${id}`);
           await openInvitation(page);
           const item = page.getByRole("button", { name: /^Ver en grande/ }).first();
-          await item.scrollIntoViewIfNeeded();
+          // Sin animación (html tiene scroll-behavior: smooth): con varias
+          // pruebas en paralelo el desplazamiento suave seguía en curso al
+          // medir la posición.
+          await item.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+          const hint = page.locator("[data-gallery-hint]").first();
+          await expect(hint).toBeVisible();
+          await expect(hint).toHaveText(width < 900 ? "Toca una foto para verla en grande." : "Haz clic en una foto para verla en grande.", { useInnerText: true });
+          // Posición de la página con el visor abierto: al cerrarlo (Escape o
+          // "Cerrar") debe quedar igual. Se mide ya abierto porque el clic de
+          // Playwright puede desplazar la página si algo flotante tapa la foto.
+          const scrollY = () => page.evaluate(() => window.scrollY);
           await item.click();
           const dialog = page.getByRole("dialog");
           await expect(dialog).toBeVisible();
           await expectNoHorizontalOverflow(page, width, "galería abierta");
+          let before = await scrollY();
           await page.keyboard.press("Escape");
           await expect(dialog).toBeHidden();
+          expect(Math.abs((await scrollY()) - before), "Escape movió la página").toBeLessThan(4);
           await item.click();
           await expect(dialog).toBeVisible();
+          before = await scrollY();
           await dialog.getByRole("button", { name: "Cerrar" }).click();
           await expect(dialog).toBeHidden();
+          // Al cerrar, la página sigue donde estaba.
+          await page.waitForTimeout(300);
+          expect(Math.abs((await scrollY()) - before), "«Cerrar» movió la página").toBeLessThan(4);
           await expectNoHorizontalOverflow(page, width, "galería cerrada");
         });
 
@@ -110,12 +131,15 @@ for (const width of [390, 1366]) {
 
           const referrer = page.getByRole("radiogroup", { name: /de parte de quién/i });
           if (await referrer.count()) await referrer.getByRole("radio").first().click();
-          await page.getByRole("radio", { name: "Individual" }).click();
+          // Las opciones dicen quién va, no "Individual"/"Grupo".
+          await expect(page.getByRole("radiogroup", { name: "¿Quiénes van a asistir?" })).toBeVisible();
+          await page.getByRole("radio", { name: /^Solo yo/ }).click();
           const submit = page.getByRole("button", { name: /confirmar por whatsapp/i });
           await submit.click();
           await expect(page.getByText("Escribe tu nombre y apellido.")).toBeVisible();
 
           await page.getByRole("textbox", { name: "Nombre y apellido" }).fill("Persona de Prueba");
+          await expect(submit.locator("xpath=following-sibling::p[1]")).toContainText("Enviar");
           await submit.click();
           // En la demo se muestra el mensaje en lugar de abrir WhatsApp.
           await expect(page.getByRole("status").filter({ hasText: "Persona de Prueba" })).toBeVisible();
@@ -123,9 +147,16 @@ for (const width of [390, 1366]) {
 
           if (inv.rsvp?.allowDecline) {
             await page.getByRole("button", { name: /no podrás asistir/i }).click();
+            const declineButton = page.getByRole("button", { name: /avisar por whatsapp que no asistiré/i });
+            await declineButton.click();
+            await expect(page.getByText("Escribe tu nombre y apellido.")).toBeVisible();
             await page.locator("#declineName").fill("Otra Persona");
-            await page.getByRole("button", { name: /avisar por whatsapp/i }).click();
-            await expect(page.getByRole("status").filter({ hasText: "Otra Persona" })).toBeVisible();
+            await declineButton.click();
+            const declined = page.getByRole("status").filter({ hasText: "Otra Persona" });
+            await expect(declined).toBeVisible();
+            // El aviso no debe parecer una confirmación.
+            await expect(declined).toContainText("no podré asistir");
+            await expect(declined).not.toContainText("confirmar");
             await expectNoHorizontalOverflow(page, width, "tras avisar que no asiste");
           }
         });
@@ -133,7 +164,9 @@ for (const width of [390, 1366]) {
         test("regreso al catálogo", async ({ page }) => {
           await page.goto(`/plantillas/${id}`);
           await page.getByRole("link", { name: "Diseños" }).click();
-          await expect(page).toHaveURL(/\/(#disenos)?$/);
+          // Con muchas pruebas en paralelo el servidor local puede tardar en
+          // responder la navegación (siempre ocurre; ver project-log).
+          await expect(page).toHaveURL(/\/(#disenos)?$/, { timeout: 30_000 });
           await expect(page.locator(`a[href="/plantillas/${id}"]`).first()).toBeAttached();
         });
       });

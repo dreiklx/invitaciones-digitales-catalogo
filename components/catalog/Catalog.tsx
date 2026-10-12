@@ -2,16 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import { paletteStyle, resolveInvitation } from "@/lib/invitation/resolve";
-import type { EventKind, Palette, TemplateId } from "@/lib/invitation/types";
+import type { Palette, TemplateId } from "@/lib/invitation/types";
 import { templateIds, templateMetas } from "@/templates/registry";
 import { templatePreviews } from "@/templates/previews";
 import { demos } from "@/templates/demos";
 import Reveal from "@/templates/shared/Reveal";
 import { ArrowDownIcon, ArrowRightIcon } from "@/templates/shared/icons";
 import { catalogFonts } from "./fonts";
+import { catalogGroups as groups, eventLabel } from "./groups";
 
 // Catálogo público: "/" cuando config/invitation.ts es null. Presenta los
-// siete diseños en tres categorías (Bodas, Quinceaños, Bebés) como un
+// ocho diseños en cuatro categorías (Bodas, Quinceaños, Bebés,
+// Aniversarios) como un
 // estudio de invitaciones
 // (no un panel): poca palabra, mucho aire y las miniaturas como
 // protagonistas. Al tocar un
@@ -31,31 +33,16 @@ const neutral: Palette = {
   line: "#d9d2c5",
 };
 
-// Las tres categorías del catálogo; cada diseño entra por su `kind`
-// (meta.ts): 3 bodas + 2 quinceaños + 2 bebés. La categoría se llama
-// "Quinceaños", en una sola palabra (decisión del dueño, 2026-10-11).
-const groups: { id: string; title: string; text: string; kinds: EventKind[] }[] = [
-  { id: "bodas", title: "Bodas", text: "Tres estilos para el día del sí: editorial en olivo y lino, revista en tonos tierra y noche de gala.", kinds: ["boda"] },
-  { id: "quinceanos", title: "Quinceaños", text: "Dos fiestas para sus XV: una de ensueño en lila y otra de joyería en azul petróleo y aguamarina.", kinds: ["quinceanos"] },
-  { id: "bebes", title: "Bebés", text: "Para esperar su llegada con un baby shower y para celebrar su primer añito.", kinds: ["baby-shower", "cumpleanos-infantil"] },
-];
-
-// Tipo de evento que se muestra en cada tarjeta.
-const eventLabel: Record<EventKind, string> = {
-  boda: "Boda",
-  quinceanos: "Quinceaños",
-  "baby-shower": "Baby shower",
-  "cumpleanos-infantil": "Primer cumpleaños",
-};
 
 // "Creamos invitaciones para:": el color de cada punto viene de un
 // diseño afín.
 const events: [string, string][] = [
   ["Bodas", templateMetas.olivo.palette.primary],
   ["Quinceaños", templateMetas.aguamarina.palette.primary],
-  ["Baby showers", templateMetas.riviera.palette.primary],
+  ["Baby showers", templateMetas.arrullo.palette.primary],
   ["Primeros cumpleaños", templateMetas.nube.palette.accent],
   ["Cumpleaños infantiles", templateMetas.nube.palette.primary],
+  ["Aniversarios", templateMetas.riviera.palette.primary],
   ["Otros eventos", neutral.secondary],
 ];
 
@@ -82,13 +69,13 @@ export default function Catalog() {
 
       <section className="mx-auto max-w-7xl px-6 pb-14 pt-6 sm:px-10 sm:pb-32 sm:pt-20">
         <Reveal variant="fade">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Bodas · Quinceaños · Bebés</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Bodas · Quinceaños · Bebés · Aniversarios</p>
         </Reveal>
         <Reveal delay={120}>
           <h1 className="mt-5 font-display text-[3.4rem] font-light leading-[0.95] tracking-tight min-[400px]:text-6xl sm:mt-6 sm:text-8xl lg:text-[8.5rem]">
-            Siete diseños,
+            Ocho diseños,
             <br />
-            tres <em className="font-normal">celebraciones.</em>
+            cuatro <em className="font-normal">celebraciones.</em>
           </h1>
         </Reveal>
         <div className="mt-7 grid grid-cols-1 gap-8 sm:mt-14 sm:gap-10 md:grid-cols-12">
@@ -146,7 +133,9 @@ export default function Catalog() {
               <Reveal className="grid grid-cols-1 gap-x-10 gap-y-3 border-t-2 border-ink pb-6 pt-5 sm:pb-8 sm:pt-6 md:grid-cols-12 md:items-end">
                 <div className="md:col-span-6">
                   <p className="font-display text-lg italic text-muted sm:text-xl">
-                    {templateMetas[ids[0]].number} — {templateMetas[ids[ids.length - 1]].number} · {ids.length} diseños
+                    {ids.length > 1
+                      ? `${templateMetas[ids[0]].number} — ${templateMetas[ids[ids.length - 1]].number} · ${ids.length} diseños`
+                      : `${templateMetas[ids[0]].number} · 1 diseño`}
                   </p>
                   <h2 id={`grupo-${group.id}`} className="mt-1 font-display text-5xl font-light leading-none sm:text-7xl">
                     {group.title}
@@ -237,6 +226,11 @@ export default function Catalog() {
                 className="block h-14 w-auto sm:h-16"
               />
               <span className="sr-only"> en Instagram (se abre en una pestaña nueva)</span>
+              {/* Visible: sin esto el logo no parecía un enlace. */}
+              <span aria-hidden="true" className="mt-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-paper/70 sm:justify-end">
+                Ver en Instagram
+                <ArrowRightIcon size={14} className="-rotate-45" />
+              </span>
             </a>
           </div>
         </div>

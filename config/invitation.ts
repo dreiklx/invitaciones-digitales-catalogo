@@ -5,8 +5,9 @@
 //          ("/" + demos en /plantillas/<diseño>).
 //
 // Para crear una invitación: `npm run nueva -- <diseño>` reemplaza este
-// archivo por los datos de la demo de ese diseño (olivo, tierra, gala,
-// riviera, borgona, aurora, nube) y se editan aquí. Guía: README.md y
+// archivo por una copia de la demo de ese diseño, sin sus datos (olivo,
+// tierra, gala, aurora, aguamarina, arrullo, nube, riviera), y se completan
+// los "REEMPLAZAR" aquí. Guía: README.md y
 // docs/templates/<número>-<diseño>.md. Antes de desplegar: `npm run check`.
 // ─────────────────────────────────────────────────────────────────────────
 

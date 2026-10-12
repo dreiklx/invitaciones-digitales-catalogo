@@ -2,7 +2,7 @@
 
 /* `short:` = teléfono bajo (320×568, iPhone SE antiguo; o teléfono con la
    barra del navegador abierta). Lo usan las portadas para recomponerse y
-   que "Desliza hacia abajo" quede en la primera pantalla con aire. */
+   que el indicador para seguir leyendo quede en la primera pantalla. */
 @custom-variant short (@media (max-height: 640px) and (max-width: 1023px));
 
 /* Tokens compartidos por los cinco diseños. Los VALORES no se definen aquí:
@@ -134,7 +134,18 @@ body {
   opacity: 0.7;
 }
 
-/* Flecha de "Desliza hacia abajo": rebote corto con pausa. */
+/* Indicador para seguir leyendo (ScrollCue.tsx). Teléfono: la mano sube
+   (el mismo movimiento que debe hacer el dedo), con pausa entre cada
+   pasada. Mouse: la flecha rebota hacia abajo. */
+@keyframes scroll-cue-swipe {
+  0% { transform: translateY(9px); opacity: 0; }
+  15% { opacity: 1; }
+  55% { transform: translateY(-3px); opacity: 1; }
+  70%, 100% { transform: translateY(-6px); opacity: 0; }
+}
+.scroll-cue-swipe {
+  animation: scroll-cue-swipe 2.2s cubic-bezier(0.33, 0, 0.2, 1) infinite;
+}
 @keyframes scroll-cue-bounce {
   0%, 55%, 100% { transform: translateY(0); }
   25% { transform: translateY(7px); }
@@ -253,6 +264,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-cue-arrow,
+  .scroll-cue-swipe,
   .gold-sheen,
   .slow-spin,
   .twinkle,

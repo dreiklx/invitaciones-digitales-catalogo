@@ -80,16 +80,21 @@ monograma quita el tratamiento ("Don", "Doña"…): R · F.
   letra del sistema).
 - Itinerario con línea de tiempo: en escritorio la hora va en su columna;
   en teléfono, dentro del lugar (en una columna angosta se partía).
-- Botones rectos (sin pastillas): olivo lleno para "Cómo llegar", borde
+- Botones rectos (sin pastillas): olivo lleno para "Abrir en Google Maps", borde
   fino para Waze.
 - **Reproductor `lino`:** marcapáginas de tela olivo con ▶/❚❚ y tres barras
   que se mueven al sonar; en escritorio, estado, título en cursiva e
   intérprete.
 
 ## En el teléfono
-- Portada: foto arriba (alto = pantalla − 25 rem, mínimo 11 rem) y el
-  bloque olivo con nombres, ficha y "Desliza hacia abajo" visibles sin
-  desplazar; en teléfonos bajos (`short:`) los nombres bajan un escalón.
+- Portada: foto arriba (alto = pantalla − 30 rem, mínimo 11 rem; − 25 rem
+  en teléfonos bajos) y el bloque olivo con nombres, ficha y "Desliza
+  hacia arriba" visibles sin desplazar. Era − 25 rem hasta el 2026-10-12:
+  con nombres de tres líneas ("Don Ramón / y Doña / Florinda") el
+  indicador quedaba fuera de la pantalla a 360–430 px. En teléfonos bajos
+  (`short:`) los nombres bajan un escalón.
+- Escritorio: el tamaño de los nombres sale de la columna (8 vw); antes
+  "Florinda" se partía en dos a 1024 px.
 - El díptico pone la cita y el retrato lado a lado (7/12 y 5/12).
 - Mosaico igual que en escritorio, más compacto (separación de 8 px).
 

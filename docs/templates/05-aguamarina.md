@@ -91,7 +91,7 @@ menor): ver la auditoría en `photo-map.md`.
 
 ## En el teléfono
 - El ancho del retrato de la portada sale del alto de la pantalla: nombre,
-  XV, fecha y "Desliza hacia abajo" caben sin desplazar.
+  XV, fecha y "Desliza hacia arriba" caben sin desplazar.
 - Programa: la hora a la izquierda de la línea (sin partirse), el momento
   a la derecha.
 

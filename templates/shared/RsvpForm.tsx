@@ -8,8 +8,10 @@ import { CheckIcon, WhatsAppIcon } from "./icons";
 // Formulario de confirmación por WhatsApp, guiado por pasos. La lógica es
 // común; el aspecto lo pone cada diseño con `styles` (clases de Tailwind).
 // Reglas de usabilidad (personas mayores): opciones con borde visible,
-// "Toca una opción en cada paso", y bajo el botón el aviso de que falta
-// presionar Enviar en WhatsApp.
+// "Toca una opción en cada paso", opciones que dicen quién va ("Solo yo",
+// "Varias personas"; antes "Individual"/"Grupo", que se prestaba a dudas),
+// bajo cada botón de WhatsApp el aviso de que falta presionar Enviar y,
+// después de abrir WhatsApp, un aviso con un enlace por si no se abrió.
 // En las demos del catálogo no abre WhatsApp: muestra el mensaje que llegaría.
 
 export type RsvpStyles = {
@@ -60,6 +62,8 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
   const [declineOpen, setDeclineOpen] = useState(false);
   const [declineError, setDeclineError] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  // Invitación real: WhatsApp ya se abrió (o se intentó) con este enlace.
+  const [sent, setSent] = useState<{ url: string; decline: boolean } | null>(null);
   const [deadlinePassed, setDeadlinePassed] = useState(false);
 
   useEffect(() => {
@@ -68,11 +72,12 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
     setDeadlinePassed(Date.now() > Date.parse(rsvp.deadlineEndISO));
   }, [rsvp.deadlineEndISO]);
 
-  const open = (url: string, message: string) => {
+  const open = (url: string, message: string, decline = false) => {
     if (isDemo) {
       setPreview(message);
       return;
     }
+    setSent({ url, decline });
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
@@ -115,12 +120,12 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
 
     const next: Errors = {};
     if (askReferrer && !referrer) next.referrer = "Selecciona de parte de quién recibiste la invitación.";
-    if (!attendance) next.attendanceType = "Indica si confirmarás individualmente o en grupo.";
+    if (!attendance) next.attendanceType = "Elige «Solo yo» o «Varias personas».";
     if (attendance) {
       const invalid = trimmed.map((n, i) => (n ? -1 : i)).filter((i) => i >= 0);
       if (invalid.length) {
         next.invalidNameIndices = invalid;
-        next.guestNames = attendance === "individual" ? "Escribe tu nombre y apellido." : "Escribe el nombre y apellido de cada invitado.";
+        next.guestNames = attendance === "individual" ? "Escribe tu nombre y apellido." : "Falta el nombre de alguna persona: escribe el nombre y apellido de cada una.";
       }
     }
     setErrors(next);
@@ -136,19 +141,20 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
     setDeclineError(!name);
     if (!name) return;
     const url = buildDeclineUrl(rsvp.context, name);
-    open(url, decodeURIComponent(url.split("?text=")[1]));
+    open(url, decodeURIComponent(url.split("?text=")[1]), true);
   };
 
-  const option = (label: string, selected: boolean, onSelect: () => void) => (
+  const option = (label: string, selected: boolean, onSelect: () => void, hint?: string) => (
     <button
       key={label}
       type="button"
       role="radio"
       aria-checked={selected}
       onClick={onSelect}
-      className={`relative min-h-14 px-3 py-4 pr-7 pl-7 text-base font-semibold transition min-[360px]:text-lg ${selected ? s.optionSelected : s.option}`}
+      className={`relative min-h-14 py-4 pl-4 pr-7 text-base min-[360px]:pl-7 font-semibold leading-tight transition min-[360px]:text-lg ${selected ? s.optionSelected : s.option}`}
     >
       {label}
+      {hint && <span className="mt-1 block text-sm font-normal leading-snug opacity-80">{hint}</span>}
       {selected && (
         <span className={`absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full ${s.optionCheck}`}>
           <CheckIcon size={12} />
@@ -214,11 +220,11 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
         {(!askReferrer || referrer) && (
           <fieldset className={`m-0 border-0 p-0 ${askReferrer ? "mt-8" : ""}`}>
             <legend className={`mb-3 block text-base font-semibold ${s.legend}`}>
-              {offset + 1}. ¿Cómo deseas confirmar?&nbsp;<span className={s.required}>*</span>
+              {offset + 1}. ¿Quiénes van a asistir?&nbsp;<span className={s.required}>*</span>
             </legend>
-            <div role="radiogroup" aria-label="¿Individual o en grupo?" className="grid grid-cols-2 gap-3">
-              {option("Individual", attendance === "individual", () => selectAttendance("individual"))}
-              {option("Grupo", attendance === "grupo", () => selectAttendance("grupo"))}
+            <div role="radiogroup" aria-label="¿Quiénes van a asistir?" className="grid grid-cols-2 gap-3">
+              {option("Solo yo", attendance === "individual", () => selectAttendance("individual"), "Confirmo mi lugar")}
+              {option("Varias personas", attendance === "grupo", () => selectAttendance("grupo"), "Yo y mis acompañantes")}
             </div>
             {errors.attendanceType && <p className={`mt-2 text-sm font-semibold ${s.error}`}>{errors.attendanceType}</p>}
           </fieldset>
@@ -241,7 +247,7 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
               </button>
             </div>
             <p className={`mt-3 text-center text-sm ${s.help}`}>
-              Este número incluye a quien confirma. Mínimo {MIN}, máximo {MAX} personas.
+              Cuéntate a ti también. Mínimo {MIN}, máximo {MAX} personas.
             </p>
           </div>
         )}
@@ -256,7 +262,7 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
                 <div key={i}>
                   {attendance === "grupo" && (
                     <label htmlFor={`guestName-${i}`} className={`mb-1 block text-sm font-semibold ${s.label}`}>
-                      {i === 0 ? "Nombre de quien confirma" : `Invitado ${i + 1}`}
+                      {i === 0 ? "Tu nombre y apellido" : `Persona ${i + 1}: nombre y apellido`}
                     </label>
                   )}
                   <input
@@ -298,6 +304,18 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
         )}
       </form>
 
+      {sent && (
+        <div className={`mt-8 p-5 text-center ${s.panel}`} role="status">
+          <p className="text-base font-semibold">{sent.decline ? "Gracias por avisarnos." : "¡Gracias! Ya casi está."}</p>
+          <p className="mt-2 text-sm leading-relaxed">
+            Abrimos WhatsApp con tu mensaje. Para que nos llegue, presiona <strong className="font-bold">Enviar</strong> en WhatsApp.
+          </p>
+          <a href={sent.url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-12 items-center px-2 text-base font-semibold underline underline-offset-4">
+            ¿No se abrió? Toca aquí
+          </a>
+        </div>
+      )}
+
       {preview && (
         <div className={`mt-8 p-5 text-left ${s.panel}`} role="status">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-80">Demostración</p>
@@ -328,9 +346,13 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
                 className={`mt-3 w-full px-4 py-4 text-base focus:outline-none ${s.input} ${declineError ? s.inputError : ""}`}
               />
               {declineError && <p className={`mt-2 text-sm font-semibold ${s.error}`}>Escribe tu nombre y apellido.</p>}
-              <button type="submit" className={`mt-4 flex min-h-12 w-full items-center justify-center px-6 py-3 text-base font-semibold transition ${s.declineSubmit}`}>
-                Avisar por WhatsApp
+              <button type="submit" className={`mt-4 flex min-h-12 w-full items-center justify-center gap-2.5 px-6 py-3 text-base font-semibold transition ${s.declineSubmit}`}>
+                <WhatsAppIcon size={20} className="shrink-0" />
+                <span className="text-balance text-center leading-tight">Avisar por WhatsApp que no asistiré</span>
               </button>
+              <p className={`mt-3 text-center text-sm leading-relaxed ${s.submitNote}`}>
+                Se abrirá WhatsApp con el aviso ya escrito. Solo falta presionar <strong className="font-bold">Enviar</strong>.
+              </p>
             </form>
           )}
         </div>

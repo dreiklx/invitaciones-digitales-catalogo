@@ -4,6 +4,52 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-12 — Arrullo vuelve, Riviera pasa a aniversarios y auditoría de usabilidad
+
+### Qué se hizo
+- **Baby shower = Arrullo otra vez** (crema, salvia y mantequilla):
+  `templates/arrullo/` restaurado del commit `d19a084` (paleta, luna,
+  banderines, puntadas, sellos, cuenta regresiva, miniatura), con la demo
+  y las fotos que tenía Riviera como baby shower (movidas sin cambios a
+  `public/plantillas/arrullo/fotos/`). Reproductor propio `puntada`.
+  `/plantillas/arrullo` vuelve a ser una página.
+- **Riviera se conserva** con su identidad original (cobalto, porcelana,
+  limón, arcos, sellos, Gloock, reproductor `sello`) como diseño **08 de
+  Aniversarios** (aniversario de bodas o renovación de votos), con
+  `couple`. Demo: Elena y Tomás renuevan sus votos; fotos: la sesión del
+  olivar (Igor La Prado, Pexels) que Olivo usó el 2026-10-11, tomada del
+  historial y recortada (no se buscaron fotos nuevas). Motivo y
+  alternativas: PROJECT-CONTEXT. Catálogo: ocho diseños, cuatro
+  categorías (`components/catalog/groups.ts`).
+- **Indicador para seguir leyendo:** "Desliza hacia abajo" → "Desliza
+  hacia arriba" con una mano que sube (táctil) y "Desplázate hacia abajo"
+  (mouse); en escritorio queda fijo al pie de la pantalla hasta su lugar.
+- **Usabilidad** (tabla U1–U16 en `docs/auditoria.md`): aviso de música
+  en la portada y junto al reproductor; "Toca una foto para verla en
+  grande"; "Abrir en Google Maps" / "Abrir en Waze"; RSVP con "Solo yo" /
+  "Varias personas", aviso de no asistir más claro y "¿No se abrió? Toca
+  aquí"; logo del estudio con "Ver en Instagram". Fallos encontrados por
+  las pruebas nuevas y corregidos: Tierra a 320×568 tenía "Abrir
+  invitación" cortado; Olivo dejaba el indicador fuera de la pantalla a
+  360–430 px y partía "Florinda" a 1024 px.
+- **Pruebas:** tamaños con alto (320×568, 320×600…); `scroll-cue.spec.ts`
+  (indicador y portada en los ocho diseños); categorías e identidad propia
+  de cada diseño en `config.test.ts`; RSVP, galería y música ampliadas.
+
+### Verificación
+- `npm run verify` limpio: lint, tipos, `check` y build sin errores;
+  `npm test` 111/111; `npm run test:e2e` 256 pasadas y 8 omitidas a
+  propósito (264), en 14,6 min. Dos corridas anteriores tuvieron fallas de
+  tiempos en las pruebas (aviso de música buscado después de que se
+  ocultara; regreso al catálogo lento con carga); se corrigió la prueba,
+  no se quitó la comprobación. La prueba de la galería encontró que
+  `focus()` al cerrar el visor podía mover la página: corregido con
+  `preventScroll`.
+- Revisión visual: portadas a 320×568, 390×844, 1024×768 y 1366×768;
+  Arrullo y Riviera completos; catálogo a 1440.
+- Pendiente manual: el gesto real de deslizar, el audio y WhatsApp
+  ("¿No se abrió?") en un teléfono físico; el `.ics` en Android.
+
 ## 2026-10-11 (noche) — Datos de demo en `nueva`, música más liviana, fecha de Tierra y pruebas
 
 ### Qué se hizo

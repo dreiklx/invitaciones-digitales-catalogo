@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { quoteCitation, type ResolvedInvitation, type ResolvedLocation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec, Quote } from "@/lib/invitation/types";
 import type { EventDates } from "@/lib/invitation/time";
-import Gate, { GateButton } from "../shared/Gate";
+import Gate, { GateButton, GateMusicNote } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
 import Frame from "../shared/Frame";
@@ -15,7 +15,7 @@ import MusicPlayer from "../shared/MusicPlayer";
 import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
 import { BeforeEvent } from "../shared/event-phase";
-import { LightboxItem, LightboxProvider } from "../shared/Lightbox";
+import { GalleryHint, LightboxItem, LightboxProvider } from "../shared/Lightbox";
 import { ArrowRightIcon, AvoidSwatch, CalendarIcon, PinIcon } from "../shared/icons";
 import Countdown from "./Countdown";
 import { fontClasses } from "./fonts";
@@ -114,7 +114,7 @@ function Stop({ location, last }: { location: ResolvedLocation; last: boolean })
         <div className={`mt-5 grid max-w-md grid-cols-1 gap-3 ${location.wazeUrl ? "min-[420px]:grid-cols-2" : ""}`}>
           <a href={location.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2.5 bg-primary px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-on-primary transition hover:bg-ink">
             <PinIcon size={18} />
-            Cómo llegar
+            Abrir en Google Maps
           </a>
           {location.wazeUrl && (
             <a href={location.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center border border-ink/30 px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-ink transition hover:border-primary hover:text-primary">
@@ -122,7 +122,7 @@ function Stop({ location, last }: { location: ResolvedLocation; last: boolean })
             </a>
           )}
         </div>
-        <p className="mt-2 text-xs text-muted">{location.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+        {location.wazeUrl && <p className="mt-2 text-xs text-muted">Las dos aplicaciones te llevan al mismo lugar.</p>}
       </div>
     </li>
   );
@@ -181,6 +181,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
           {c.welcome.buttonLabel}
           <ArrowRightIcon size={18} />
         </GateButton>
+        {c.music && <GateMusicNote className="mt-3" />}
       </div>
     </div>
   );
@@ -189,10 +190,12 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
     <Shell inv={inv} fontClasses={fontClasses} backClassName="bg-paper/90 text-ink">
       <Gate cover={cover} transitionName={`cover-${inv.template}`}>
         {/* Portada: teléfono = foto arriba (su alto sale del de la pantalla,
-            para que nombres, fecha y "Desliza hacia abajo" quepan sin
-            desplazar) y bloque olivo abajo; escritorio = dos columnas. */}
+            para que nombres, fecha y el indicador para seguir quepan sin
+            desplazar; 30rem deja sitio a nombres de tres líneas como "Don
+            Ramón y Doña Florinda") y bloque olivo abajo; escritorio = dos
+            columnas. */}
         <section className="grid min-h-[100svh] grid-cols-1 grid-rows-[auto_1fr] lg:grid-cols-2 lg:grid-rows-1">
-          <div className="relative h-[max(11rem,calc(100svh-25rem))] lg:order-2 lg:h-auto">
+          <div className="relative h-[max(11rem,calc(100svh-30rem))] short:h-[max(11rem,calc(100svh-25rem))] lg:order-2 lg:h-auto">
             <Image src={photos.portada.src} alt={photos.portada.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" style={{ objectPosition: photos.portada.position }} />
           </div>
           <div className="flex flex-col bg-primary px-6 pb-6 pt-6 text-on-primary sm:px-12 lg:order-1 lg:justify-between lg:px-16 lg:pb-14 lg:pt-28">
@@ -201,10 +204,10 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
               <span className="font-display text-lg italic text-secondary">{monogram}</span>
             </div>
             <div className="mt-5 lg:mt-0">
-              <Names one={names.one} two={names.two} accentClass="text-secondary" size="text-[min(15vw,7.5rem)] short:text-[min(12vw,7.5rem)]" />
+              <Names one={names.one} two={names.two} accentClass="text-secondary" size="text-[min(15vw,7.5rem)] short:text-[min(12vw,7.5rem)] lg:text-[min(8vw,7.5rem)]" />
             </div>
             <DateSheet dates={dates} light className="mt-6 max-w-lg lg:mt-0" />
-            <ScrollCue className="mx-auto mt-4 text-on-primary lg:mx-0 lg:mt-8" circleClassName="border-on-primary/50" />
+            <ScrollCue className="mx-auto mt-4 text-on-primary lg:mx-0 lg:mt-8 lg:bg-primary/85" circleClassName="border-on-primary/50" />
           </div>
         </section>
 
@@ -359,9 +362,9 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
                   <Eyebrow>{c.gallery.eyebrow}</Eyebrow>
                   <Title>{c.gallery.title}</Title>
                 </div>
-                <p className="text-sm text-muted">Toca una foto para verla más grande.</p>
+                <GalleryHint className="text-muted" />
               </Reveal>
-              <LightboxProvider photos={gallery} overlayClassName="bg-ink/92" closeClassName="bg-paper text-ink hover:bg-surface">
+              <LightboxProvider photos={gallery} hint={false} overlayClassName="bg-ink/92" closeClassName="bg-paper text-ink hover:bg-surface">
                 <div className="mt-10 grid grid-cols-12 gap-2 sm:mt-14 sm:gap-4">
                   <Reveal variant="fade" className="col-span-6 sm:col-span-5">
                     <LightboxItem index={0} label={gallery[0].alt}>

@@ -1,8 +1,9 @@
-// Demo del diseño 06 · Riviera (baby shower ficticio de Natalia y Joaquín;
-// el nombre del bebé no se muestra). También es el punto de partida de una
-// invitación nueva: `npm run nueva -- riviera`. Guía: docs/templates/06-riviera.md.
-// Fotos: una sola sesión de baby shower de stock (Pexels; licencia de
-// Pexels) en public/plantillas/riviera/fotos/. Fuentes: photo-map.md.
+// Demo del diseño 08 · Riviera (renovación de votos ficticia de Elena y
+// Tomás por sus diez años de casados). También es el punto de partida de
+// una invitación nueva: `npm run nueva -- riviera`. Guía:
+// docs/templates/08-riviera.md.
+// Fotos: una sola sesión de pareja de stock en un olivar (Pexels; licencia
+// de Pexels) en public/plantillas/riviera/fotos/. Fuentes: photo-map.md.
 
 import type { InvitationOf } from "@/lib/invitation/types";
 import { catalog } from "@/config/catalog";
@@ -15,76 +16,82 @@ export const demo: InvitationOf<"riviera"> = {
     locale: "es-CR",
     timeZone: "America/Costa_Rica",
   },
-  event: { name: "baby shower", article: "el" },
-  // Nombre del bebé opcional: agregar `babyName: "…"` dentro de `shower`
-  // solo si la familia quiere mostrarlo (sin él, la portada usa hero.title).
-  shower: { parents: ["Natalia", "Joaquín"] },
-  date: "2027-05-15",
-  time: "15:00",
-  durationHours: 4,
+  // Aniversario sin renovación: { name: "aniversario de bodas", article: "el" }.
+  event: { name: "renovación de votos", article: "la" },
+  couple: { partnerOne: "Elena", partnerTwo: "Tomás" },
+  date: "2027-09-18",
+  time: "17:00",
+  durationHours: 6,
 
   // Solo los colores que se quieran cambiar de la paleta del diseño, p. ej.:
   // colors: { primary: "#2e6f5e" },
 
-  welcome: { eyebrow: "Baby shower", buttonLabel: "Abrir invitación" },
-  hero: { eyebrow: "Baby shower", title: "Un bebé en camino" },
+  welcome: { eyebrow: "Diez años juntos", buttonLabel: "Abrir invitación" },
+  hero: { eyebrow: "Renovamos nuestros votos", title: "Diez años después" },
 
   openingQuote: {
-    text: "Nuestra familia está por crecer, y queremos celebrarlo con las personas que más queremos.",
-    reference: "Natalia y Joaquín",
+    text: "Diez años después, volveríamos a decir que sí. Y queremos hacerlo con ustedes.",
+    reference: "Elena y Tomás",
   },
 
   story: {
-    caption: "Faltan pocas semanas para conocer a nuestro bebé. Mientras tanto, queremos llenar esta espera de abrazos, risas y buenos deseos.",
-    quote: { text: "El amor más grande llega en tamaño pequeño." },
+    caption: "Nos casamos un domingo de septiembre, entre olivos y con muy pocos invitados. Diez años, dos mudanzas y muchas sobremesas después, queremos celebrarlo en grande.",
+    quote: { text: "Lo mejor de nuestra historia es que la seguimos escribiendo juntos." },
   },
 
   family: {
     intro: "Con el cariño de",
     groups: [
-      { label: "Futuros abuelos", names: ["Lorena Campos Ruiz", "Héctor Méndez Araya", "Silvia Ortiz Leiva"] },
-      { label: "Padrinos", names: ["Karla Méndez Campos", "Federico Ortiz Leiva"] },
+      { label: "Nuestros hijos", names: ["Lucía Arce Montero", "Mateo Arce Montero"] },
+      { label: "Padrinos de la renovación", names: ["Gabriela Montero Solís", "Ricardo Arce Brenes"] },
     ],
   },
 
   countdown: {
-    eyebrow: "Falta poco",
-    title: "Contamos los días",
-    todayMessage: "¡Hoy celebramos!",
-    afterMessage: "Gracias por acompañarnos",
+    eyebrow: "Faltan",
+    title: "Contando los días",
+    todayMessage: "¡Hoy es el día!",
+    afterMessage: "Gracias por celebrar con nosotros",
   },
 
   locations: [
     {
-      label: "Celebración",
-      name: "Jardín Los Robles",
-      address: "San Pablo, Heredia",
-      mapsUrl: "https://maps.google.com/?q=San+Pablo,+Heredia,+Costa+Rica",
-      wazeUrl: "https://waze.com/ul?q=San%20Pablo%20Heredia",
+      label: "Renovación de votos",
+      name: "Quinta El Limonar",
+      address: "Santa Ana, San José",
+      mapsUrl: "https://maps.google.com/?q=Santa+Ana,+San+Jos%C3%A9,+Costa+Rica",
+      wazeUrl: "https://waze.com/ul?q=Santa%20Ana%20San%20Jose",
+    },
+    {
+      label: "Cena",
+      name: "Terraza El Limonar",
+      address: "Santa Ana, San José",
+      time: "18:30",
+      mapsUrl: "https://maps.google.com/?q=Santa+Ana,+San+Jos%C3%A9,+Costa+Rica",
     },
   ],
 
   details: {
-    eyebrow: "Detalles",
-    title: "Para que lo sepas",
+    eyebrow: "Para que disfrutes",
+    title: "Antes de venir",
     notice: {
-      label: "Una sorpresa",
-      title: "Trae *un mensaje escrito* para el bebé.",
-      body: "Lo guardaremos en una caja para que lo lea cuando crezca.",
+      label: "Un detalle",
+      title: "Trae *una foto* de estos diez años.",
+      body: "Armaremos un mural con las fotos de todos durante la cena.",
     },
     dressCode: {
-      title: "Cómodo y casual",
-      description: "Será al aire libre, en un jardín: ven como te sientas a gusto.",
-      avoidColors: [],
+      title: "Formal de verano",
+      description: "Colores claros y telas frescas: la ceremonia será al aire libre, al atardecer.",
+      avoidLabel: "Por favor evita",
+      avoidColors: [{ name: "Blanco", hex: "#ffffff" }],
     },
   },
 
   gifts: {
     eyebrow: "Regalos",
-    title: "Lista de regalos",
-    message: "Tu compañía es lo más importante. Si quieres traer un detalle, preparamos una lista con lo que el bebé va a necesitar:",
-    link: { label: "Ver la lista de regalos", url: "https://example.com/lista-de-regalos" },
-    method: "También por SINPE Móvil",
+    title: "Tu presencia es el mejor regalo",
+    message: "Si quieres tener un detalle con nosotros, puedes hacerlo por SINPE Móvil:",
+    method: "SINPE Móvil",
     value: "8888 0000",
     copyLabel: "Copiar número",
     copiedLabel: "Número copiado",
@@ -92,19 +99,19 @@ export const demo: InvitationOf<"riviera"> = {
 
   rsvp: {
     eyebrow: "Confirmación",
-    title: "¿Nos acompañas?",
-    deadline: "2027-05-01",
+    title: "¿Vienes a celebrar?",
+    deadline: "2027-09-01",
     whatsappNumber: "50600000000",
     minGroupSize: 2,
-    maxGroupSize: 5,
+    maxGroupSize: 6,
     allowDecline: true,
   },
 
-  gallery: { eyebrow: "Detalles del día", title: "Todo listo para recibirte" },
+  gallery: { eyebrow: "Postales", title: "Diez años de días de sol" },
 
-  closingQuote: { text: "Te esperamos con los brazos abiertos." },
+  closingQuote: { text: "Gracias por ser parte de nuestra historia." },
 
-  footer: { message: "Con cariño" },
+  footer: { message: "Te esperamos" },
 
   music: {
     src: "/audio/demo/satie-gymnopedie-1.mp3",
@@ -114,11 +121,11 @@ export const demo: InvitationOf<"riviera"> = {
   },
 
   photos: {
-    portada: { src: "/plantillas/riviera/fotos/futuros-padres.jpg", alt: "Natalia y Joaquín junto a la torta de ositos", position: "50% 25%" },
-    historia: { src: "/plantillas/riviera/fotos/beso-en-la-frente.jpg", alt: "Joaquín le da un beso a Natalia", position: "50% 30%" },
-    galeria1: { src: "/plantillas/riviera/fotos/mesa-dulce.jpg", alt: "Mesa de dulces con flores blancas y ositos", position: "50% 40%" },
-    galeria2: { src: "/plantillas/riviera/fotos/ositos.jpg", alt: "Tres ositos de azúcar sobre un plato", position: "50% 50%" },
-    galeria3: { src: "/plantillas/riviera/fotos/oso-de-peluche.jpg", alt: "Un oso de peluche blanco entre flores", position: "50% 40%" },
-    galeria4: { src: "/plantillas/riviera/fotos/mesa-de-postres.jpg", alt: "Postres y flores de la celebración", position: "50% 50%" },
+    portada: { src: "/plantillas/riviera/fotos/en-el-pasto.jpg", alt: "Elena y Tomás recostados en el pasto, sonriendo", position: "50% 40%" },
+    historia: { src: "/plantillas/riviera/fotos/abrazo-olivar.jpg", alt: "Tomás abraza a Elena entre los olivos", position: "50% 20%" },
+    galeria1: { src: "/plantillas/riviera/fotos/caminata-olivar.jpg", alt: "Elena y Tomás caminan por el olivar", position: "50% 30%" },
+    galeria2: { src: "/plantillas/riviera/fotos/retrato-novia.jpg", alt: "Retrato de Elena sonriendo con el pelo al viento", position: "40% 40%" },
+    galeria3: { src: "/plantillas/riviera/fotos/manos.jpg", alt: "Las manos de Elena y Tomás con sus anillos", position: "50% 50%" },
+    galeria4: { src: "/plantillas/riviera/fotos/en-brazos.jpg", alt: "Tomás lleva a Elena en brazos por la colina", position: "45% 40%" },
   },
 };

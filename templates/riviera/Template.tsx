@@ -1,6 +1,6 @@
 import { quoteCitation, type ResolvedInvitation } from "@/lib/invitation/resolve";
 import type { PhotoSlotSpec } from "@/lib/invitation/types";
-import Gate, { GateButton } from "../shared/Gate";
+import Gate, { GateButton, GateMusicNote } from "../shared/Gate";
 import Reveal from "../shared/Reveal";
 import ScrollCue from "../shared/ScrollCue";
 import Frame from "../shared/Frame";
@@ -18,12 +18,11 @@ import Countdown from "./Countdown";
 import { Sun, TileBand, Wave } from "./ornaments";
 import { fontClasses } from "./fonts";
 
-// 06 · Riviera — baby shower con la identidad original de Riviera
-// (recuperada del historial del catálogo, commit 6c9d245): porcelana, azul
-// cobalto y limón; fotos dentro de arcos, círculos y postales con sello;
-// bandas de azulejo y un sol de limón que gira muy despacio. Fresco,
-// luminoso y elegante. Nada supone el sexo del bebé ni obliga a mostrar su
-// nombre: sin `shower.babyName`, la frase grande es `hero.title`.
+// 08 · Riviera — aniversarios y renovación de votos, con su identidad
+// mediterránea original (commit 6c9d245, cuando era un diseño de boda):
+// porcelana, azul cobalto y limón; fotos dentro de arcos, círculos y
+// postales con sello; bandas de azulejo y un sol de limón que gira muy
+// despacio. Celebra a una pareja (`couple`), como las bodas.
 
 function Heading({ eyebrow, title, light = false }: { eyebrow: string; title: string; light?: boolean }) {
   return (
@@ -66,12 +65,9 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
   const { content: c, photos, dates, meta } = inv;
   const ratio = (key: string) => (meta.photoSlots as Record<string, PhotoSlotSpec>)[key].ratio;
   const gallery = [photos.galeria1, photos.galeria2, photos.galeria3, photos.galeria4];
-  const babyName = inv.shower?.babyName;
-  const parents = inv.shower?.parentsText ?? inv.names.joined;
-  // Frase grande: el nombre del bebé (si se muestra) o hero.title. Un texto
-  // largo baja un escalón (tamaño en vw: no ensancha la página).
-  const headline = babyName ?? c.hero.title ?? "Un bebé en camino";
-  const longHeadline = headline.length > 14;
+  const { names } = inv;
+  // Nombres largos bajan un escalón (tamaño en vw: no ensancha la página).
+  const longNames = Math.max(names.one.length, names.two.length) > 9;
 
   const cover = (
     <div className="flex h-full flex-col bg-paper text-ink">
@@ -82,15 +78,15 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
           <Frame photo={photos.portada} ratio={ratio("portada")} sizes="200px" priority className="rounded-t-full border-4 border-paper shadow-[0_0_0_1.5px_var(--c-primary)]" />
         </div>
         <p className="mt-8 text-xs font-medium uppercase tracking-[0.3em] text-primary">{c.welcome.eyebrow}</p>
-        <h1 className={`mt-3 font-display leading-tight text-ink ${longHeadline ? "text-[min(10vw,3.25rem)]" : "text-[min(13vw,3.75rem)]"}`}>{headline}</h1>
-        <p className="mt-3 text-sm text-muted">
-          {babyName ? "Con cariño, " : "Te invitan "}
-          <span className="font-semibold text-primary">{parents}</span>
-        </p>
-        <p className="mt-2 text-sm tracking-[0.2em] text-muted">{dates.display}</p>
+        <h1 className={`mt-3 font-display leading-tight text-ink ${longNames ? "text-[min(10vw,3rem)]" : "text-[min(12vw,3.5rem)]"}`}>
+          {names.one} <span className="text-primary">&amp;</span> {names.two}
+        </h1>
+        {c.hero.title && <p className="mt-2 font-display text-lg text-primary">{c.hero.title}</p>}
+        <p className="mt-3 text-sm tracking-[0.2em] text-muted">{dates.display}</p>
         <GateButton className="mt-8 rounded-full bg-primary px-9 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-primary shadow-lg shadow-primary/25 transition hover:brightness-110">
           {c.welcome.buttonLabel}
         </GateButton>
+        {c.music && <GateMusicNote className="mt-3" />}
       </div>
       <TileBand id="gate-bottom" className="h-8 flex-shrink-0 text-primary" />
     </div>
@@ -102,26 +98,25 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
         <TileBand id="top" className="h-6 text-primary" />
 
         {/* Arco principal */}
-        <section className="relative overflow-hidden px-6 pb-12 pt-12 text-center short:pt-10 sm:pb-16 sm:pt-24">
+        <section className="relative overflow-hidden px-6 pb-12 pt-12 text-center short:pt-10 sm:pb-16 sm:pt-24 lg:overflow-clip">
           <Reveal variant="fade">
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">{c.hero.eyebrow}</p>
           </Reveal>
           {/* Teléfono: el ancho del arco sale del alto de la pantalla, para que
-              nombres, fecha y "Desliza hacia abajo" quepan sin desplazar. */}
+              nombres, fecha y el indicador para seguir quepan sin desplazar. */}
           <Reveal variant="scale" delay={100} className="relative mx-auto mt-7 short:mt-5 w-[min(70%,max(8rem,calc((100svh-31rem)*0.75)))] max-w-sm sm:mt-10 sm:w-[74%]">
             <Sun className="absolute -right-8 -top-8 z-10 h-20 w-20 text-secondary sm:-right-14 sm:-top-14 sm:h-32 sm:w-32" />
             <Frame photo={photos.portada} ratio={ratio("portada")} sizes="(min-width: 640px) 384px, 74vw" priority className="rounded-t-full border-[6px] border-paper shadow-[0_0_0_2px_var(--c-primary),0_30px_60px_-30px_rgba(20,38,79,0.5)]" />
           </Reveal>
           <Reveal delay={200}>
-            {babyName && c.hero.title && <p className="mt-5 font-display text-xl text-primary sm:mt-8 sm:text-2xl">{c.hero.title}</p>}
-            <h1 className={`font-display leading-[1.02] text-ink ${babyName && c.hero.title ? "mt-1" : "mt-5 short:mt-4 sm:mt-10"} ${longHeadline ? "text-[min(11.5vw,5.5rem)]" : "text-[min(15vw,6.5rem)]"}`}>{headline}</h1>
-            <p className="mt-3 text-base text-muted sm:text-lg">
-              {babyName ? "Con cariño, " : "Te invitan "}
-              <span className="font-semibold text-primary">{parents}</span>
-            </p>
+            <h1 className={`mt-5 font-display leading-[1.02] text-ink short:mt-4 sm:mt-10 ${longNames ? "text-[min(11.5vw,5.5rem)]" : "text-[min(14vw,6.5rem)]"}`}>
+              {names.one}
+              <span className="block text-primary">&amp; {names.two}</span>
+            </h1>
+            {c.hero.title && <p className="mt-3 font-display text-xl text-primary sm:text-2xl">{c.hero.title}</p>}
             <p className="mx-auto mt-4 w-fit rounded-full border-2 border-primary/30 px-6 py-2 text-sm font-medium tracking-[0.2em] text-primary sm:mt-6">{dates.display}</p>
           </Reveal>
-          <ScrollCue className="mx-auto mt-4 text-primary sm:mt-10" circleClassName="border-primary/60" />
+          <ScrollCue className="mx-auto mt-4 text-primary sm:mt-10 lg:bg-paper/85" circleClassName="border-primary/60" />
         </section>
 
         {c.openingQuote && (
@@ -174,7 +169,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
                     <div className="mt-5 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
                       <a href={l.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-base font-semibold text-on-primary transition hover:brightness-110">
                         <PinIcon size={18} />
-                        Cómo llegar
+                        Abrir en Google Maps
                       </a>
                       {l.wazeUrl && (
                         <a href={l.wazeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center rounded-full border-2 border-primary/40 px-5 py-3 text-base font-semibold text-primary transition hover:border-primary">
@@ -182,7 +177,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
                         </a>
                       )}
                     </div>
-                    <p className="mt-2 text-xs text-muted">{l.wazeUrl ? "Se abre en Google Maps o Waze" : "Se abre en Google Maps"}</p>
+                    {l.wazeUrl && <p className="mt-2 text-xs text-muted">Las dos aplicaciones te llevan al mismo lugar.</p>}
                   </article>
                 </Reveal>
               ))}
@@ -198,8 +193,7 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
               </Reveal>
               <Reveal delay={120} className="text-center md:text-left">
                 <Sun className="mx-auto h-12 w-12 text-secondary md:mx-0" />
-                <p className="mt-5 text-xs font-medium uppercase tracking-[0.3em] text-primary">Nuestra espera</p>
-                {c.story.caption && <p className="mt-4 font-display text-2xl leading-snug text-ink sm:text-3xl">{c.story.caption}</p>}
+                {c.story.caption && <p className="mt-6 font-display text-2xl leading-snug text-ink sm:text-3xl">{c.story.caption}</p>}
                 {c.story.quote && (
                   <p className="mt-6 text-base italic text-muted">
                     &ldquo;{c.story.quote.text}&rdquo;
@@ -387,8 +381,9 @@ export default function RivieraTemplate({ inv }: { inv: ResolvedInvitation }) {
           <div className="px-6 py-20 text-center">
             <Sun className="mx-auto h-16 w-16 text-secondary" />
             <p className="mt-6 text-xs font-medium uppercase tracking-[0.3em] text-on-primary/80">{c.footer.message}</p>
-            <p className="mt-4 font-display text-[min(12vw,4.5rem)] leading-tight">{parents}</p>
-            {babyName && <p className="mt-2 font-display text-2xl text-secondary">Esperando a {babyName}</p>}
+            <p className="mt-4 font-display text-[min(12vw,4.5rem)] leading-tight">
+              <span className="block sm:inline">{names.one}</span> <span className="block sm:inline">&amp; {names.two}</span>
+            </p>
             <p className="mt-4 text-sm tracking-[0.25em] text-on-primary/80">{dates.display}</p>
             <MusicCredit music={c.music} className="mt-10 text-on-primary/65" />
           </div>

@@ -45,6 +45,8 @@ export const CheckIcon = ({ size = 20, className }: IconProps) => svg(size, clas
 
 export const CloseIcon = ({ size = 18, className }: IconProps) => svg(size, className, <path d="M6 6l12 12M18 6L6 18" />);
 
+export const ExpandIcon = ({ size = 20, className }: IconProps) => svg(size, className, <path d="M14 4h6v6M10 20H4v-6M20 4l-6.5 6.5M4 20l6.5-6.5" />);
+
 export const ArrowDownIcon = ({ size = 20, className }: IconProps) => svg(size, className, <path d="M12 5v14M6 13l6 6 6-6" />);
 
 export const ArrowLeftIcon = ({ size = 18, className }: IconProps) => svg(size, className, <path d="M19 12H5M11 6l-6 6 6 6" />);

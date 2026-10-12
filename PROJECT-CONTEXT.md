@@ -30,6 +30,12 @@ publicado):
   **Camelia pasa a llamarse Aguamarina** (id `aguamarina`, redirecciones
   permanentes desde `camelia` y `borgona`); Gala muestra la fecha legible;
   el logo de Farley Systems enlaza a su Instagram.
+- **2026-10-12:** el baby shower vuelve a ser **Arrullo** (crema, salvia y
+  mantequilla, restaurado del commit `d19a084`, con las mismas fotos) y
+  **Riviera se conserva** con su identidad en una categoría nueva,
+  **Aniversarios** (aniversario de bodas o renovación de votos): **ocho
+  diseños en cuatro categorías**. Auditoría de usabilidad: el indicador
+  "Desliza hacia abajo" pasa a decir el gesto ("Desliza hacia arriba").
 
 **No recuperar ni reintroducir datos de la boda original**, tampoco desde
 su historial Git antiguo (archivado fuera del proyecto; ver "Riesgos").
@@ -39,24 +45,26 @@ panel, cuentas ni pagos. Nosotros editamos un archivo de datos y
 desplegamos una copia del proyecto por cliente. El catálogo es solo un
 escaparate.
 
-## Estado (2026-10-11)
+## Estado (2026-10-12)
 
-- Siete diseños completos en tres categorías: Bodas (Olivo, Tierra,
-  Gala), Quinceaños (Aurora, Aguamarina) y Bebés (Riviera, baby shower; Nube,
-  primer cumpleaños), un catálogo en `/` con una sección por categoría (título,
+- Ocho diseños completos en cuatro categorías: Bodas (Olivo, Tierra,
+  Gala), Quinceaños (Aurora, Aguamarina), Bebés (Arrullo, baby shower;
+  Nube, primer cumpleaños) y Aniversarios (Riviera), un catálogo en `/` con una sección por categoría (título,
   descripción, tipo de evento en cada tarjeta), transición hacia cada demo
-  y validación `npm run check`. Cada demo usa una sesión coherente: seis
+  y validación `npm run check`. Cada demo usa una sesión coherente: siete
   de stock de Pexels con nombres ficticios y **Olivo con Don Ramón y Doña
   Florinda, fotos aportadas por el dueño con derechos de imagen y de los
   personajes PENDIENTES DE AUTORIZACIÓN**; todas con un aviso visible de
   que son demostraciones (auditoría en photo-map.md).
-- **Pruebas automáticas** (2026-10-11): `npm test` (configuración de los
-  siete diseños y `npm run nueva`, sin navegador) y `npm run test:e2e`
-  (Playwright con el Chrome instalado: desplazamiento lateral en 8 anchos,
-  música real, fecha, calendario, galería, RSVP, regreso y catálogo);
+- **Pruebas automáticas** (2026-10-11, ampliadas el 2026-10-12): `npm test`
+  (configuración de los ocho diseños, categorías e identidad propia de
+  cada uno, y `npm run nueva`, sin navegador) y `npm run test:e2e`
+  (Playwright con el Chrome instalado: desplazamiento lateral en 9
+  tamaños, indicador para seguir leyendo, portada, música real, fecha,
+  calendario, galería, RSVP, regreso y catálogo);
   `npm run verify` corre todo. Detalle en README, "Pruebas".
 - typecheck, lint, check y build sin errores. Revisión visual "teléfono
-  primero" del catálogo y los siete diseños a 320, 360, 390 y 430 px y en
+  primero" del catálogo y los ocho diseños a 320, 360, 390 y 430 px y en
   escritorio (composición, no solo desbordamientos); ver "Teléfono primero".
 - Logo del estudio solo en el pie del catálogo (ver "Marca del estudio").
 - **Git y GitHub:** repositorio **privado**
@@ -116,7 +124,7 @@ lib/invitation/
   names.ts                ← tratamientos, palabra completa y `demoMarkers`
   active.ts, routes.tsx   ← qué se muestra en cada ruta según el modo
 templates/
-  registry.ts             ← metas de los 7 diseños (solo datos; orden del catálogo)
+  registry.ts             ← metas de los 8 diseños (solo datos; orden del catálogo)
   demos.ts, previews.tsx  ← demos (datos) y miniaturas del catálogo
   shared/                 ← lógica común: Gate, MusicPlayer, RsvpForm, Lightbox,
                             CopyValue, StickyRsvp, Reveal, ScrollCue, Frame,
@@ -128,7 +136,7 @@ app/
   plantillas/<diseño>/    ← página, imagen al compartir y .ics de cada diseño
   layout.tsx, icon.tsx, apple-icon.tsx, opengraph-image.tsx, manifest.ts,
   calendario.ics/         ← metadatos y calendario de la invitación del cliente
-components/catalog/       ← página del catálogo
+components/catalog/       ← página del catálogo; groups.ts = sus cuatro categorías
 scripts/                  ← check.ts, new-invitation.ts (+ lib/new-invitation.ts), placeholders.ts, optimize-images.mjs
 tests/unit/, tests/e2e/   ← `npm test` (Node) y `npm run test:e2e` (Playwright); playwright.config.ts
 docs/templates/           ← una guía por diseño
@@ -144,7 +152,7 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   foto (`PhotoSlots`), su paleta, sus tipografías y sus componentes. Los
   componentes reciben la invitación ya resuelta (`ResolvedInvitation`) por
   props; ninguno lee el config ni formatea fechas por su cuenta.
-- **Lógica compartida, aspecto propio.** Portada, música (con siete
+- **Lógica compartida, aspecto propio.** Portada, música (con ocho
   presentaciones en `templates/shared/players.tsx`),
   RSVP, visor, copiar y barra flotante se comparten y cada diseño los
   estiliza con clases. La cuenta regresiva comparte el hook
@@ -160,11 +168,29 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   ("Fiesta de quince años de Mariana"). Con un solo festejado el RSVP no
   pregunta "¿de parte de quién?" salvo que se den `referrerOptions`.
 - **`kind` en cada `meta.ts`** (`boda` · `quinceanos` · `baby-shower` ·
-  `cumpleanos-infantil`): el catálogo arma sus tres categorías (Bodas =
-  `boda`; Quinceaños = `quinceanos`, nombre en una palabra por decisión
-  del dueño; Bebés = `baby-shower` +
-  `cumpleanos-infantil`) y muestra el tipo de evento en cada tarjeta.
-- **Baby shower** (`ShowerTemplateId`, hoy solo Riviera) exige `shower`:
+  `cumpleanos-infantil` · `aniversario`): el catálogo arma sus cuatro
+  categorías (`components/catalog/groups.ts`: Bodas = `boda`; Quinceaños =
+  `quinceanos`, nombre en una palabra por decisión del dueño; Bebés =
+  `baby-shower` + `cumpleanos-infantil`; Aniversarios = `aniversario`) y
+  muestra el tipo de evento en cada tarjeta. Una prueba exige que cada
+  diseño esté en una sola categoría y que el orden siga la numeración.
+- **Bodas y aniversarios** (`CoupleTemplateId`: Olivo, Tierra, Gala,
+  Riviera) usan `couple`; `event.name` dice qué se celebra ("boda",
+  "renovación de votos", "aniversario de bodas").
+- **Arrullo y Riviera (decisión 2026-10-12, no revertir sin el dueño):**
+  el dueño quiere el baby shower en crema, salvia y mantequilla (armoniza
+  con sus fotos) y conservar Riviera. Se evaluó: (a) que Riviera tuviera
+  dos paletas (complica el diseño y el catálogo mostraría dos veces lo
+  mismo); (b) Riviera como cuarta boda (compite con Olivo, Tierra y Gala);
+  (c) **Riviera como aniversario o renovación de votos** (elegida: su
+  estética mediterránea nació para una pareja, el evento se entiende sin
+  explicación y no cambia nada del diseño). Riviera es la 08 para no
+  renumerar; sus fotos son la sesión del olivar que Olivo usó el
+  2026-10-11 (auditada, en el historial), no una búsqueda nueva. Cada
+  diseño tiene paleta y reproductor propios (Arrullo `puntada`, Riviera
+  `sello`), y una prueba lo exige. `/plantillas/arrullo` vuelve a ser una
+  página (se quitó su redirección a Riviera).
+- **Baby shower** (`ShowerTemplateId`, hoy solo Arrullo) exige `shower`:
   `parents` (uno o dos nombres) y `babyName` opcional (muchas familias no
   lo revelan). `resolve.ts` lo unifica: `names.one`/`two` son quienes
   invitan ("Baby shower de Natalia y Joaquín" en título, calendario y
@@ -186,7 +212,7 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   `lib/invitation/names.ts`: quién celebra con y sin tratamiento,
   familiares y lugares) se reemplaza, y `npm run check` da error si
   aparece en una invitación de cliente. `tests/unit/nueva.test.ts` lo
-  comprueba con los siete diseños contra los datos de TODAS las demos.
+  comprueba con los ocho diseños contra los datos de TODAS las demos.
 - **`schedule` (programa del evento)**: opcional en el contenido común;
   lo muestran Aurora (línea de tiempo), Aguamarina (línea con rombos) y Nube
   (tarjetas). Horas en
@@ -222,7 +248,7 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
 - **Modo oscuro forzado bloqueado** (`color-scheme: only light` +
   `<meta name="darkreader-lock">`). Las extensiones y el modo oscuro de
   Chrome invertían los diseños; se detectó en la revisión visual.
-- **Fotos de las siete demos** (ver photo-map.md, "Auditoría de fotos y
+- **Fotos de las ocho demos** (ver photo-map.md, "Auditoría de fotos y
   derechos"): **una sola sesión coherente de stock de Pexels por diseño**,
   con autor, enlace y licencia comprobados foto por foto (2026-10-11). La
   licencia de Pexels permite el uso comercial y en plantillas, pero
@@ -252,7 +278,7 @@ Todas las secciones opcionales se ocultan con `null`.
 
 ## Plantilla vs. invitación personalizada (conceptual)
 
-| | Plantilla (uno de los 7 diseños) | Personalizada |
+| | Plantilla (uno de los 8 diseños) | Personalizada |
 |---|---|---|
 | Base | Un diseño del catálogo, tal cual | Copia del proyecto que se modifica |
 | Qué se cambia | Contenido, fotos, música, colores (`colors`), ocultar secciones | Además: secciones nuevas, otro orden, otro diseño, animaciones, funciones a medida |
@@ -302,9 +328,10 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   `blocked` y el reproductor muestra "Toca para escuchar"; cualquier otro
   fallo es `error` ("No disponible").
 - `preload="none"`: el archivo no se descarga hasta ese toque.
-- **Una sola lógica, siete presentaciones**: `players.tsx` define la forma
+- **Una sola lógica, ocho presentaciones**: `players.tsx` define la forma
   de cada diseño (`lino` Olivo, `ficha` Tierra, `deco` Gala, `destello`
-  Aurora, `broche` Aguamarina, `sello` Riviera, `globo` Nube); el diseño trae
+  Aurora, `broche` Aguamarina, `puntada` Arrullo, `globo` Nube, `sello`
+  Riviera); el diseño trae
   la suya en `meta.musicPlayer` y
   `music.player` la cambia.
 - Estado visual solo desde eventos nativos del `<audio>` (`playing`,
@@ -313,10 +340,15 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   `pause()→play()` ni listeners globales de primera interacción.
 - Teléfono: solo la forma (≥ 48 px). Mientras se ve la portada (justo al
   abrir, cuando empieza a sonar) va **arriba a la derecha**: abajo tapaba
-  fecha, nombres o "Desliza hacia abajo" en 320×568. Al bajar pasa abajo a
+  fecha, nombres o el indicador para seguir en 320×568. Al bajar pasa abajo a
   la derecha, sobre la barra de confirmar. < `lg` se oculta sobre
   `#confirmar` y sobre los créditos del pie (`MusicCredit`). Escritorio:
   forma + título + estado, abajo a la derecha.
+- **Avisos (2026-10-12):** bajo "Abrir invitación", "Con música: podrás
+  pausarla cuando quieras" (`GateMusicNote`), para que no sorprenda; en el
+  teléfono, la primera vez que suena, "Música: toca para pausar" unos
+  6 s junto al reproductor (en renglones cortos: a 320 px no tapa
+  "Diseños").
 - Créditos de la pista (obra, intérprete, licencia) en el pie de cada
   diseño (`MusicCredit`), siempre que haya música.
 - Las animaciones del reproductor solo corren mientras suena y se detienen
@@ -325,8 +357,33 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   automáticas solo confirman que el audio avanza).
 
 ### Usabilidad para personas mayores (60-70+), en todos los diseños
-- "Desliza hacia abajo" con palabras + flecha (`ScrollCue`); tocarla avanza.
-- Botones con forma de botón y ≥ 48 px ("Cómo llegar" + "Se abre en Google Maps").
+- **Indicador para seguir leyendo (`ScrollCue`, rehecho el 2026-10-12, no
+  revertir):** decía "Desliza hacia abajo" con una flecha hacia abajo, y en
+  pruebas con invitados muchos arrastraban el dedo hacia abajo (la página
+  no avanza). Ahora dice el **gesto**: en pantallas táctiles "Desliza
+  hacia arriba" con una mano que sube (dedo y contenido suben juntos: se
+  entiende igual de las dos formas); con mouse (`pointer-fine:`)
+  "Desplázate hacia abajo" con la flecha hacia abajo. Texto y animación
+  dicen lo mismo; con "reducir movimiento" la mano queda quieta y la
+  flechita encima sigue indicando la dirección. Tocarlo avanza a la
+  sección siguiente. En escritorio (lg) es `sticky` al pie de la pantalla
+  sobre una pastilla del color del diseño (varias portadas son más altas
+  que la pantalla y quedaba fuera de la vista); por eso esas portadas usan
+  `lg:overflow-clip` en vez de `overflow-hidden`. Se descartaron: solo
+  cambiar la palabra (la flecha hacia abajo seguía contradiciendo),
+  "Desliza para descubrir" (no dice la dirección) y un tutorial o ventana
+  (invasivo).
+- Botones con forma de botón y ≥ 48 px. Lugares: "Abrir en Google Maps" y
+  "Abrir en Waze" (antes "Cómo llegar" + "Abrir en Waze": dos botones
+  parecidos sin decir cuál era cuál), con "Las dos aplicaciones te llevan
+  al mismo lugar" cuando hay Waze.
+- Galería: "Toca una foto para verla en grande." ("Haz clic…" con mouse)
+  encima de las fotos (en el teléfono no hay lupa que lo sugiera).
+- Confirmación: "¿Quiénes van a asistir?" con "Solo yo" / "Varias
+  personas" (antes "Individual" / "Grupo"); nombres "Tu nombre y
+  apellido", "Persona 2: nombre y apellido"; "Avisar por WhatsApp que no
+  asistiré" con su aviso de Enviar; tras abrir WhatsApp, "¿No se abrió?
+  Toca aquí".
 - "Confirmar por WhatsApp" puede ir en dos líneas equilibradas (Tierra,
   Gala y Aguamarina, con mayúsculas espaciadas, no cabían en una a 320-430 px
   y el texto se salía del botón). No achicar la letra para forzar una línea.
@@ -424,21 +481,25 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 ### Teléfono primero (revisión 2026-10-08, no revertir)
 Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
 - **La portada cabe en la primera pantalla** con "Desliza hacia abajo"
-  visible. En Tierra, Gala, Aguamarina y Riviera el ancho de la foto de
+  visible. En Tierra, Gala, Aguamarina, Arrullo y Riviera el ancho de la foto de
   portada en teléfono sale del alto de la pantalla
   (`w-[min(…,max(…,calc((100svh-Xrem)*ratio)))]`): la proporción sigue
   siendo la de `meta.ts`, solo cambia el tamaño. En Olivo, el alto de la
-  foto (arriba) sale de la pantalla. Medido en los 7 diseños a 320×600, 360×740, 390×844 y
-  430×932: "Desliza hacia abajo" entero y en una línea (a 320 px el texto
-  usa menos espaciado).
+  foto (arriba) sale de la pantalla (− 30 rem desde el 2026-10-12: con
+  nombres de tres líneas el indicador quedaba fuera a 360–430 px). Lo
+  comprueba `tests/e2e/scroll-cue.spec.ts` en los ocho diseños a 320×568,
+  320×600, 360×740, 390×844 y 430×932: indicador entero en la primera
+  pantalla, sin tapar nombres ni reproductor; y en las portadas, "Abrir
+  invitación" entero (la portada no se desplaza: Tierra a 320×568 lo
+  tenía cortado hasta el 2026-10-12).
 - **Teléfonos bajos (variante `short:`** en `globals.css`: alto ≤ 640 px y
   ancho < 1024 px; 320×568, o un teléfono con la barra del navegador
-  abierta): las portadas se recomponen en vez de encogerse. "Desliza hacia
-  abajo" pasa a una fila (flecha al lado del texto, mismo tamaño) y cada
-  diseño ajusta lo suyo: Gala y Riviera, márgenes; Aguamarina, la fecha en una
+  abierta): las portadas se recomponen en vez de encogerse. El indicador
+  pasa a una fila (flecha al lado del texto, mismo tamaño) y cada
+  diseño ajusta lo suyo: Gala, Arrullo y Riviera, márgenes; Aguamarina, la fecha en una
   línea; Olivo, nombres un escalón más chicos; Tierra deja la foto pasar el borde (invita a bajar) y sube la
   flecha a la mitad de la foto (`ScrollCue stacked`). Medido a 320×568: el
-  indicador queda a 20-60 px del borde en los 7 diseños.
+  indicador queda dentro de la pantalla en los 8 diseños (prueba automática).
 - **Nombres:** en teléfono, uno por línea ("Nombre / & Nombre") en portadas
   y pies (también Gala desde 2026-10-08 (5); Olivo deja el "&" solo); en
   escritorio, en una línea o con el "&" aparte.
@@ -501,21 +562,23 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 
 ## Limitaciones conocidas
 
-- Bodas, quinceaños, baby shower y primer cumpleaños, en español (el
+- Bodas, quinceaños, baby shower, primer cumpleaños y aniversarios, en español (el
   nombre del evento es configurable: `event.name`/`article`; los textos de
   interfaz están en español). Otros eventos se harían como personalizados.
-- Música de las demos: solo hay 5 pistas con licencia verificada para 7
-  diseños; Tierra y Riviera comparten la de Satie, Gala y Aguamarina la de
+- Música de las demos: solo hay 5 pistas con licencia verificada para 8
+  diseños; Tierra, Arrullo y Riviera comparten la de Satie, Gala y Aguamarina la de
   Debussy. Cambiarlas requiere otra pista con licencia comprobada.
-- Microtextos de interfaz fijos en los componentes ("Cómo llegar",
-  "Desliza hacia abajo", textos del RSVP…).
+- Microtextos de interfaz fijos en los componentes ("Abrir en Google Maps",
+  "Desliza hacia arriba", textos del RSVP…).
 - Antes/durante/después se calcula en el navegador: el HTML estático
   siempre sale como "antes" y se corrige al cargar.
 - `site.url` se conoce después de crear el proyecto en Vercel (dos despliegues).
-- Sin tests automatizados (la validación es `npm run check`).
+- Las pruebas automáticas usan Chrome de escritorio con emulación de
+  teléfono: el gesto real de deslizar, el audio y WhatsApp se comprueban en
+  un teléfono físico.
 - El catálogo precarga las fuentes de todos los diseños (22 archivos; las
   necesita para las miniaturas). Cada demo precarga solo las suyas (2-3).
-- Las siete demos usan fotos de stock (Pexels) con personas
+- Las demos usan fotos de stock (Pexels) con personas
   identificables, incluidos menores (quinceañeras, una bebé): no
   usarlas como testimonios ni en contextos que sugieran que esas personas
   son clientes o recomiendan el servicio. Las fotos de Olivo hasta el

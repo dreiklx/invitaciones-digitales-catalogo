@@ -1,4 +1,4 @@
-# Auditoría (2026-10-11) y propuestas para una siguiente fase
+# Auditoría (2026-10-11 y usabilidad 2026-10-12) y propuestas para una siguiente fase
 
 Estado real al cierre de la sesión del 2026-10-11 (tarde), actualizada el mismo día (noche). Lo que dice
 "corregido" se verificó en esta sesión. Las propuestas **no** están
@@ -32,6 +32,32 @@ Severidad: crítica · alta · media · baja.
 | 19 | Accesibilidad | El logo de Farley Systems ahora es un enlace: nombre accesible "Farley Systems en Instagram (se abre en una pestaña nueva)", `rel="noopener noreferrer"`, alto de 56/64 px como área táctil, opacidad al pasar el cursor y anillo de foco de 2 px con separación (comprobado con la tecla Tab). | — | Verificado. |
 | 20 | Dependencias | Hay versiones más nuevas: Next 16.4, React 19.3, TypeScript 7 y ESLint 10. No se actualizaron (fuera de alcance; algunos son cambios mayores). | baja | P5. |
 | 21 | Build | El build descarga tipografías de Google Fonts en dos lugares: `next/font/google` (cada diseño) y las imágenes para compartir (`lib/invitation/share-image.tsx`). Si la red falla en ese momento, el build se detiene ("No fonts are loaded" en `/opengraph-image`, o "Can't resolve …/font/google/font"). Pasó dos veces el 2026-10-11 (noche) en local, sin relación con los cambios; repetido el build, pasó. En Vercel no se ha visto. | media | Abierto; P9. |
+
+## Auditoría de usabilidad (2026-10-12)
+
+Recorrido de un invitado que abre el enlace desde WhatsApp en un teléfono,
+en los ocho diseños y el catálogo (320×568 a 1920×1080). "Corregido" =
+implementado y cubierto por pruebas automáticas (`tests/e2e/`), salvo que
+se diga otra cosa.
+
+| # | Área | Hallazgo | Severidad | Estado |
+|---|---|---|---|---|
+| U1 | Desplazamiento | "Desliza hacia abajo" + flecha hacia abajo: describía dónde está el contenido, pero se leía como el gesto; quien arrastra el dedo hacia abajo no avanza. | alta | **Corregido:** el texto dice el gesto ("Desliza hacia arriba" con una mano que sube en pantallas táctiles; "Desplázate hacia abajo" con mouse). Texto y animación coinciden; quieto con "reducir movimiento". |
+| U2 | Primera pantalla | Olivo a 360–430 px: con nombres de tres líneas el indicador quedaba debajo de la primera pantalla. | media | **Corregido** (foto de portada − 30 rem). |
+| U3 | Portada | Tierra a 320×568 y 320×600: "Abrir invitación" terminaba a 599 px; la portada no se desplaza, así que el botón quedaba cortado. Las pruebas anteriores usaban 320×640 y no lo veían. | alta | **Corregido** (variante `short:`) y probado en 9 tamaños. |
+| U4 | Escritorio | En 1024–1920 px varias portadas son más altas que la pantalla: el indicador quedaba fuera de la vista. | media | **Corregido:** en escritorio es `sticky` al pie de la pantalla hasta llegar a su lugar. En Gala y Riviera los nombres siguen debajo de la foto en 1366×768 (composición del diseño, no se cambió; ver P10). |
+| U5 | Escritorio | Olivo a 1024 px partía "Florinda" en dos ("Florin-da"). | media | **Corregido** (tamaño de los nombres según la columna). |
+| U6 | Música | En el teléfono el reproductor es solo ▶/❚❚: no decía que era música ni cómo pausarla; tampoco se avisaba antes de abrir que iba a sonar. | media | **Corregido:** "Con música: podrás pausarla cuando quieras" bajo el botón de abrir y "Música: toca para pausar" unos segundos al empezar. |
+| U7 | Galería | En el teléfono nada indicaba que las fotos se abren (solo Olivo lo decía). | baja | **Corregido:** "Toca una foto para verla en grande" en los ocho diseños. Al cerrar, el foco vuelve a la foto **sin desplazar la página** (`focus({ preventScroll: true })`: con una foto más alta que la pantalla, `focus()` podía moverla); probado con Escape y "Cerrar". |
+| U8 | Lugares | "Cómo llegar" (Google Maps) y "Abrir en Waze": dos botones parecidos y el primero no decía qué abría. | media | **Corregido:** "Abrir en Google Maps" / "Abrir en Waze" y "Las dos aplicaciones te llevan al mismo lugar". |
+| U9 | RSVP | "Individual" / "Grupo" se prestaba a dudas (¿grupo de quién?, ¿me incluye?). | media | **Corregido:** "¿Quiénes van a asistir?" → "Solo yo" / "Varias personas", "Cuéntate a ti también", "Tu nombre y apellido", "Persona 2: nombre y apellido". |
+| U10 | RSVP | El botón de no asistir ("Avisar por WhatsApp") no decía qué avisaba ni que faltaba presionar Enviar. | media | **Corregido:** "Avisar por WhatsApp que no asistiré" + aviso de Enviar; el mensaje dice "no podré asistir" (probado). |
+| U11 | RSVP | Tras abrir WhatsApp, la invitación no mostraba nada: si WhatsApp no se abría (navegador interno, bloqueo), el invitado no sabía qué hacer. | media | **Corregido:** "¡Gracias! Ya casi está… ¿No se abrió? Toca aquí". Solo en invitaciones reales (las demos muestran el mensaje): **probar en un teléfono físico**. |
+| U12 | Catálogo | El logo del estudio no parecía un enlace. | baja | **Corregido:** "Ver en Instagram ↗" visible bajo el logo. |
+| U13 | Catálogo | Con Aniversarios (una sola tarjeta) el encabezado decía "08 — 08 · 1 diseños". | baja | **Corregido:** "08 · 1 diseño". |
+| U14 | Calendario | "Agregar a mi calendario" descarga un `.ics`: en Android algunos teléfonos lo guardan como archivo en vez de abrir el calendario. El enlace "o agregar en Google Calendar" está justo debajo. | baja | Sin cambio; revisar en teléfonos Android reales. |
+| U15 | Foco | Botones y enlaces usan el anillo de foco del navegador; los campos del RSVP tienen el suyo. | — | Verificado; sin cambio. |
+| U16 | Toque | Controles principales ≥ 44 px (abrir ≥ 48, confirmar ≥ 64, música ≥ 48, mapas ≥ 52). | — | Verificado ("Abrir invitación" por prueba). |
 
 ## PROPUESTAS PARA UNA SIGUIENTE FASE
 
@@ -135,3 +161,11 @@ las demás siguen sin implementar.
   licencias OFL).
 - **¿Ahora?:** conviene pronto; es poco frecuente pero bloquea un
   despliegue.
+
+### P10 · Nombres en la primera pantalla de escritorio (Gala y Riviera)
+En 1366×768, Gala y Riviera muestran la foto de portada completa y los
+nombres empiezan debajo. Con el indicador fijo al pie se entiende que hay
+que bajar, pero un invitado en una laptop no ve los nombres sin
+desplazarse. Opción: limitar el alto de la foto por el alto de la
+pantalla también en escritorio (como en el teléfono). Es una decisión de
+composición: revisarla con el dueño antes de cambiarla.

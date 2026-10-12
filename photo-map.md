@@ -8,7 +8,7 @@ componente `templates/shared/Frame.tsx` aplica esa proporción, así que **lo
 que dice la guía es exactamente lo que se ve, en teléfono y en escritorio**.
 
 Resumen de cantidades: Olivo 7 · Tierra 8 · Gala 6 · Aurora 7 · Aguamarina 6 ·
-Riviera 6 · Nube 6.
+Arrullo 6 · Nube 6 · Riviera 6.
 
 ## Dónde van los archivos
 - Invitación de cliente: `public/images/` (nombres que indique
@@ -28,12 +28,12 @@ Riviera 6 · Nube 6.
   un marco vertical o al revés, y si mide menos de 1000 px.
 - Ajustar `position` (p. ej. `"50% 30%"`) a donde están los rostros,
   revisando primero en teléfono.
-- El encuadre de las fotos de las siete demos está revisado (320–1920
+- El encuadre de las fotos de las ocho demos está revisado (320–1920
   px). Con las fotos de cada cliente hay que revisarlo otra vez a 320 y
   390 px. Las
   proporciones y la orientación de cada espacio están en la guía de cada
   diseño (`docs/templates/`).
-- Arcos, óvalos, círculos y marcos tallados (Riviera, Aurora, Nube, Aguamarina) recortan esquinas: sujeto al centro.
+- Arcos, óvalos, círculos y marcos tallados (Riviera, Arrullo, Aurora, Nube, Aguamarina) recortan esquinas: sujeto al centro.
 - Gala muestra todas las fotos en blanco y negro.
 - Optimizar con `npm run optimize-images` (endereza por EXIF, lado largo
   máx. 2400 px). Guardar los originales aparte (`/img`, en `.gitignore`).
@@ -76,7 +76,8 @@ Riviera 6 · Nube 6.
   Prado en un olivar ("Elena y Tomás") se quitó por pedido del dueño del
   proyecto, que pidió volver a Don Ramón y Doña Florinda (ver abajo). No
   fue por un problema de licencia. Queda en el historial Git del
-  repositorio (commit `f3569cf`).
+  repositorio (commit `f3569cf`) y desde el 2026-10-12 la usa **Riviera**
+  (ver su tabla abajo).
 - **Aguamarina, entonces Camelia (hasta 2026-10-10):** sesión de quinceañera en fucsia
   (pexels.com/photo/32274275 y siguientes): se cambió por la dirección
   fotográfica del rediseño (salón de fiesta, vestido aguamarina), no por un
@@ -168,7 +169,10 @@ Riviera 6 · Nube 6.
 | `retrato.jpg` | `galeria2` 1:1 | Retrato con tiara | https://www.pexels.com/photo/16999947/ |
 | `mirada.jpg` | `galeria3` 1:1 | Mira hacia atrás | https://www.pexels.com/photo/16999915/ |
 | `hacia-el-salon.jpg` | `galeria4` 3:4 | En la pista | https://www.pexels.com/photo/16999948/ |
-### Riviera — Natalia y Joaquín (baby shower)
+### Arrullo — Natalia y Joaquín (baby shower)
+Hasta el 2026-10-11 estuvieron en `public/plantillas/riviera/fotos/`
+(cuando Riviera era el baby shower); el 2026-10-12 pasaron sin cambios a
+`public/plantillas/arrullo/fotos/`, junto con la demo.
 - **Autor:** Larissa Teixeira Fotografia (@larissa-teixeira-fotografia-2148191276) · **Plataforma:** Pexels · **Licencia:** Licencia de Pexels ("Free"), comprobada foto por foto en su página el 2026-10-11.
 - **Personas identificables:** sí en 2 fotos (una pareja adulta; ella embarazada). Las otras 4 son decoración.
 - **Riesgo de que parezcan clientes o recomienden el servicio:** bajo-medio; nombres ficticios y aviso. Se descartaron las fotos de la sesión con el letrero "Girl or Boy?".
@@ -181,6 +185,24 @@ Riviera 6 · Nube 6.
 | `ositos.jpg` | `galeria2` 1:1 | Ositos de azúcar | https://www.pexels.com/photo/29964258/ |
 | `oso-de-peluche.jpg` | `galeria3` 1:1 | Oso de peluche | https://www.pexels.com/photo/29964271/ |
 | `mesa-de-postres.jpg` | `galeria4` 3:2 | Mesa de postres | https://www.pexels.com/photo/29964257/ |
+### Riviera — Elena y Tomás (pareja adulta en un olivar; renovación de votos)
+- **Autor:** Igor La Prado (@igor-la-prado-125324398) · **Plataforma:** Pexels · **Licencia:** Licencia de Pexels ("Free"), comprobada foto por foto en su página el 2026-10-11.
+- **Origen en este repositorio:** es la sesión que usó Olivo el 2026-10-11
+  (commit `f3569cf`) y que se quitó de Olivo por pedido del dueño, no por
+  la licencia. El 2026-10-12 se reutilizó para Riviera (aniversarios) en
+  vez de buscar fotos nuevas: copias web de ese commit recortadas a las
+  proporciones de Riviera (JPG 82). `vestido-al-viento.jpg` no se usa.
+- **Personas identificables:** sí, dos adultos con el rostro visible.
+- **Riesgo de que parezcan clientes o recomienden el servicio:** bajo-medio; nombres ficticios y aviso de demostración.
+
+| Archivo | Espacio | Escena | Original |
+|---|---|---|---|
+| `en-el-pasto.jpg` | `portada` 3:4 | Recostados en el pasto | https://www.pexels.com/photo/39117640/ |
+| `abrazo-olivar.jpg` | `historia` 4:5 | Abrazo entre olivos | https://www.pexels.com/photo/39117643/ |
+| `caminata-olivar.jpg` | `galeria1` 4:5 | Caminan por el olivar (B/N) | https://www.pexels.com/photo/39117644/ |
+| `retrato-novia.jpg` | `galeria2` 1:1 | Retrato de ella (B/N) | https://www.pexels.com/photo/39117648/ |
+| `manos.jpg` | `galeria3` 1:1 | Manos con los anillos (B/N) | https://www.pexels.com/photo/39117639/ |
+| `en-brazos.jpg` | `galeria4` 3:2 | Él la lleva en brazos | https://www.pexels.com/photo/39117646/ |
 ### Nube — Emma (primer cumpleaños)
 - **Autor:** Hasan Albari (@hasanalbari) · **Plataforma:** Pexels · **Licencia:** Licencia de Pexels ("Free"), comprobada foto por foto en su página el 2026-10-11.
 - **Personas identificables:** sí; **una bebé** (Pexels la describe como niña; la demo pasó de "Mateo" a **Emma** por coherencia).
