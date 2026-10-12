@@ -129,6 +129,9 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
       }
     }
     setErrors(next);
+    // El cursor va al primer nombre que falta (y en el teléfono se abre el
+    // teclado): se ve y se entiende qué completar.
+    if (next.invalidNameIndices?.length) document.getElementById(`guestName-${next.invalidNameIndices[0]}`)?.focus();
     if (Object.keys(next).length || !attendance) return;
 
     const details = { guestNames: trimmed, referrer: askReferrer ? referrer : null, attendanceType: attendance };
@@ -213,7 +216,7 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
                 })
               )}
             </div>
-            {errors.referrer && <p className={`mt-2 text-sm font-semibold ${s.error}`}>{errors.referrer}</p>}
+            {errors.referrer && <p role="alert" className={`mt-2 text-sm font-semibold ${s.error}`}>{errors.referrer}</p>}
           </fieldset>
         )}
 
@@ -226,7 +229,7 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
               {option("Solo yo", attendance === "individual", () => selectAttendance("individual"), "Confirmo mi lugar")}
               {option("Varias personas", attendance === "grupo", () => selectAttendance("grupo"), "Yo y mis acompañantes")}
             </div>
-            {errors.attendanceType && <p className={`mt-2 text-sm font-semibold ${s.error}`}>{errors.attendanceType}</p>}
+            {errors.attendanceType && <p role="alert" className={`mt-2 text-sm font-semibold ${s.error}`}>{errors.attendanceType}</p>}
           </fieldset>
         )}
 
@@ -281,7 +284,7 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
                 </div>
               ))}
             </div>
-            {errors.guestNames && <p className={`mt-2 text-sm font-semibold ${s.error}`}>{errors.guestNames}</p>}
+            {errors.guestNames && <p role="alert" className={`mt-2 text-sm font-semibold ${s.error}`}>{errors.guestNames}</p>}
 
             <p className={`mt-6 text-sm ${s.help}`}>
               <span className={s.required}>*</span> Todos los campos son obligatorios.
@@ -341,11 +344,14 @@ export default function RsvpForm({ rsvp, isDemo, styles: s }: { rsvp: ResolvedRs
                 type="text"
                 autoComplete="name"
                 placeholder="Ejemplo: Ana Rodríguez"
+                // Aparece en lugar del botón que se acaba de tocar: el foco
+                // pasa aquí (si no, se perdía al desaparecer ese botón).
+                autoFocus
                 aria-invalid={declineError}
                 onChange={() => declineError && setDeclineError(false)}
                 className={`mt-3 w-full px-4 py-4 text-base focus:outline-none ${s.input} ${declineError ? s.inputError : ""}`}
               />
-              {declineError && <p className={`mt-2 text-sm font-semibold ${s.error}`}>Escribe tu nombre y apellido.</p>}
+              {declineError && <p role="alert" className={`mt-2 text-sm font-semibold ${s.error}`}>Escribe tu nombre y apellido.</p>}
               <button type="submit" className={`mt-4 flex min-h-12 w-full items-center justify-center gap-2.5 px-6 py-3 text-base font-semibold transition ${s.declineSubmit}`}>
                 <WhatsAppIcon size={20} className="shrink-0" />
                 <span className="text-balance text-center leading-tight">Avisar por WhatsApp que no asistiré</span>

@@ -55,7 +55,10 @@ evento (`schedule`: vals, brindis, pastel…), opcional.
 - `export const invitation: Invitation | null = null;` → **catálogo**:
   `/` muestra los diseños y `/plantillas/<id>` cada demo.
 - Con los datos de una invitación → **invitación**: `/` muestra su invitación
-  con el diseño elegido; las demás demos dan 404.
+  con el diseño elegido; las demás demos dan 404, las fotos de las demos
+  no se sirven (404) y la página pide a los buscadores no indexarla
+  (`noindex`: trae nombres, lugares, teléfono y a veces una cuenta; la
+  vista previa en WhatsApp no cambia).
 
 ## Ver el catálogo localmente
 
@@ -353,8 +356,8 @@ la copia de un cliente basta `npm run check` y la revisión manual.
   diseños" no existe en una invitación de cliente y en las demos lista los
   ocho por categoría.
 
-**`npm run test:e2e`** (Playwright, `tests/e2e/`, 304 pruebas (8 se omiten a propósito: Tierra y Aguamarina
-ocultan el indicador en escritorio), ~22 min;
+**`npm run test:e2e`** (Playwright, `tests/e2e/`, 338 pruebas (9 se omiten a propósito: Tierra y Aguamarina
+ocultan el indicador en escritorio; la prueba de letra grande del selector es solo de teléfono), ~24 min;
 necesita `npm run build` antes; levanta `next start` en el puerto 3210 o
 reutiliza uno abierto):
 - `responsive.spec.ts`: catálogo y ocho diseños en 320×568, 320×600,
@@ -378,7 +381,11 @@ reutiliza uno abierto):
   mouse), abre y cierra (Escape y "Cerrar") sin desbordar y la página
   queda donde estaba; la confirmación ("Solo yo") valida el nombre,
   muestra el mensaje con el aviso de Enviar, y "No podrás asistir" valida
-  y arma un aviso que dice "no podré asistir" (no "confirmar");
+  y arma un aviso que dice "no podré asistir" (no "confirmar"); "Varias
+  personas": el contador respeta mínimo y máximo, cada persona tiene su
+  campo con nombre, si falta un nombre el error se anuncia (`role=alert`)
+  y el cursor va a ese campo, el mensaje lleva todos los nombres y volver
+  a "Solo yo" deja un campo sin errores;
   "Otros diseños" → "Volver al catálogo completo" vuelve al catálogo.
 - `scroll-cue.spec.ts`: el indicador para seguir leyendo en los ocho
   diseños. Teléfono (5 tamaños, puntero táctil): dice "Desliza hacia
@@ -397,10 +404,14 @@ reutiliza uno abierto):
   tape, y pasa el foco a la sección; "Inicio" vuelve a la portada;
   "Confirmar" lleva al formulario, la barra se aparta al escribir y no
   tapa "Confirmar por WhatsApp", y la música sigue sonando; teclado (Enter
-  abre y elige); "reducir movimiento" (salto inmediato); "Otros diseños"
-  (también sobre la portada y desde el panel del teléfono) muestra las
-  cuatro categorías, marca el actual, cambia de diseño y vuelve al
-  catálogo; la barra del catálogo salta a cada categoría.
+  abre el menú, el foco entra en él y Tab llega a la sección); "reducir
+  movimiento" (salto inmediato); "Otros diseños" (también sobre la portada
+  y desde el panel del teléfono) muestra las cuatro categorías, marca el
+  actual, cambia de diseño y vuelve al catálogo; en los ocho diseños
+  "Otros diseños" no queda encima del visor de fotos ni del panel de
+  secciones, y Tab/Shift+Tab no sacan el foco del selector, del visor ni
+  del panel; con la letra al 125 % a 320 px ningún texto sale de las
+  tarjetas del selector; la barra del catálogo salta a cada categoría.
 - `catalog.spec.ts`: el catálogo enlaza los ocho diseños y cada uno está
   en la sección de su categoría; cada página y
   su imagen para compartir responden, las rutas viejas redirigen (308) y

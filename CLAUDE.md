@@ -35,6 +35,9 @@ Lee primero, en este orden:
   `lugares`, `programa`, `detalles`, `galeria`, `regalos`, `confirmar`).
   El selector "Otros diseños" es solo de las demos (`inv.isDemo`); nunca
   en una invitación de cliente. Ver PROJECT-CONTEXT, "Navegación".
+- Capas modales (panel, visor, selector): `lockPageScroll` + `trapFocus`
+  y el orden de capas de PROJECT-CONTEXT ("Capas"). Una invitación de
+  cliente no sirve fotos de las demos y lleva `noindex` (no quitarlo).
 - No cambiar la arquitectura sin justificarlo y documentarlo.
 - Sin secretos, sin `.env`, sin datos reales de clientes en el repo o la
   documentación. No recuperar nada de la boda original ni de su historial Git.

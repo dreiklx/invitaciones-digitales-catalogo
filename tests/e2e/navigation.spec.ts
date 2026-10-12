@@ -164,8 +164,11 @@ for (const [width, height] of [
       await trigger.press("Enter");
       const menu = page.locator(mobile ? '[data-page-nav="sheet"]' : '[data-page-nav="dropdown"]');
       await expect(menu).toBeVisible();
+      // El foco entra en el menú (teléfono: "Cerrar"; escritorio: la sección
+      // actual) y Tab llega a la galería sin pasar por la página.
+      await expect.poll(() => menu.evaluate((m) => m.contains(document.activeElement))).toBe(true);
       const target = menu.locator('[data-nav-item="galeria"]');
-      await target.focus();
+      for (let i = 0; i < 12 && !(await target.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
       await expect(target).toBeFocused();
       // Indicador de foco visible (anillo del navegador o el del diseño).
       expect(await target.evaluate((el) => getComputedStyle(el).outlineStyle !== "none" || getComputedStyle(el).boxShadow !== "none" || getComputedStyle(el).backgroundColor !== "rgba(0, 0, 0, 0)")).toBe(true);
@@ -173,6 +176,59 @@ for (const [width, height] of [
       await expect(menu).toBeHidden();
       await expect.poll(() => page.evaluate(() => document.activeElement?.id)).toBe("galeria");
     });
+
+    for (const id of templateIds) {
+      test(`${id}: «Otros diseños» no queda sobre el visor ni el panel, y Tab no sale de ellos`, async ({ page }) => {
+        // ¿Lo de arriba en el centro del botón es el botón mismo?
+        const triggerOnTop = () =>
+          page.evaluate(() => {
+            const t = document.querySelector<HTMLElement>("[data-designs-trigger]")!;
+            const r = t.getBoundingClientRect();
+            if (getComputedStyle(t).opacity === "0") return false;
+            return t.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+          });
+        // Tab y Shift+Tab varias veces: el foco sigue dentro de la capa.
+        const focusStaysIn = async (layer: Locator) => {
+          for (const key of ["Tab", "Tab", "Tab", "Tab", "Tab", "Tab", "Shift+Tab", "Shift+Tab"]) {
+            await page.keyboard.press(key);
+            expect(await layer.evaluate((l) => l.contains(document.activeElement)), `${key} sacó el foco de la capa`).toBe(true);
+          }
+        };
+
+        await page.goto(`/plantillas/${id}`);
+        await openInvitation(page);
+        // El selector de diseños mismo.
+        await page.getByRole("button", { name: "Otros diseños" }).click();
+        const designs = page.locator("[data-designs-menu]");
+        await expect(designs).toBeVisible();
+        await focusStaysIn(designs);
+        await page.keyboard.press("Escape");
+        await expect(designs).toBeHidden();
+
+        // Visor de fotos. Se sube un poco antes de tocar la foto: así
+        // "Otros diseños" vuelve a mostrarse (se esconde al bajar).
+        const photo = page.locator("#galeria button[aria-label^='Ver en grande']").first();
+        await photo.scrollIntoViewIfNeeded();
+        await page.mouse.wheel(0, -200);
+        await page.waitForTimeout(400);
+        await photo.click();
+        const viewer = page.getByRole("dialog").filter({ has: page.getByRole("button", { name: "Cerrar" }) });
+        await expect(viewer).toBeVisible();
+        expect(await triggerOnTop(), "«Otros diseños» sobre el visor").toBe(false);
+        await focusStaysIn(viewer);
+        await page.keyboard.press("Escape");
+        await expect(viewer).toBeHidden();
+
+        if (mobile) {
+          await expect(bar(page, true)).toHaveCSS("opacity", "1");
+          const sheet = await openMenu(page, true);
+          expect(await triggerOnTop(), "«Otros diseños» sobre el panel de secciones").toBe(false);
+          await focusStaysIn(sheet);
+          await page.keyboard.press("Escape");
+          await expect(sheet).toBeHidden();
+        }
+      });
+    }
 
     test("con «reducir movimiento» el salto es inmediato", async ({ browser }) => {
       const ctx = await browser.newContext({ ...viewport(width, height), reducedMotion: "reduce" });
@@ -219,6 +275,29 @@ for (const [width, height] of [
       await dialog.getByRole("link", { name: /volver al catálogo completo/i }).click();
       await expect(page).toHaveURL(/\/(#disenos)?$/, { timeout: 30_000 });
       await expect(page.locator('a[href="/plantillas/arrullo"]').first()).toBeAttached();
+    });
+
+    test("«Otros diseños» con la letra del sistema agrandada: nada sale de las tarjetas a 320 px", async ({ browser }) => {
+      test.skip(!mobile, "solo teléfono");
+      const ctx = await browser.newContext(viewport(320, 568));
+      const page = await ctx.newPage();
+      await page.goto("/plantillas/tierra");
+      await page.addStyleTag({ content: "html { font-size: 125% !important; }" });
+      await page.getByRole("button", { name: "Otros diseños" }).click();
+      const list = page.locator("[data-designs-menu] .overflow-y-auto");
+      await expect(list).toBeVisible();
+      // Sin desplazamiento lateral dentro del panel ni textos fuera de su tarjeta.
+      expect(await list.evaluate((l) => l.scrollWidth - l.clientWidth)).toBeLessThanOrEqual(1);
+      const outside = await list.evaluate((l) =>
+        Array.from(l.querySelectorAll("li")).flatMap((li) => {
+          const box = li.getBoundingClientRect();
+          return Array.from(li.querySelectorAll("span"))
+            .filter((s) => s.getBoundingClientRect().right > box.right + 1)
+            .map((s) => s.textContent);
+        }),
+      );
+      expect(outside).toEqual([]);
+      await ctx.close();
     });
 
     test("catálogo: la barra salta a cada categoría", async ({ page }) => {

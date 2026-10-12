@@ -161,6 +161,50 @@ for (const width of [390, 1366]) {
           }
         });
 
+        test("confirmación de varias personas: contador, nombres que faltan y cambio a «Solo yo»", async ({ page }) => {
+          test.skip(!inv.rsvp, "sin confirmación");
+          const rsvp = inv.rsvp!;
+          await page.goto(`/plantillas/${id}`);
+          await openInvitation(page);
+          await scrollToSection(page, "#confirmar");
+
+          const referrer = page.getByRole("radiogroup", { name: /de parte de quién/i });
+          if (await referrer.count()) await referrer.getByRole("radio").first().click();
+          await page.getByRole("radio", { name: /^Varias personas/ }).click();
+          await expect(page.getByText("Cuéntate a ti también.")).toBeVisible();
+
+          // El contador respeta el mínimo y el máximo de la configuración.
+          const minus = page.getByRole("button", { name: "Restar una persona" });
+          const plus = page.getByRole("button", { name: "Sumar una persona" });
+          await expect(minus).toBeDisabled();
+          await plus.click();
+          const names = page.locator('input[id^="guestName-"]');
+          await expect(names).toHaveCount(Math.min(rsvp.maxGroupSize, rsvp.minGroupSize + 1));
+          await expect(page.getByLabel("Tu nombre y apellido")).toBeVisible();
+          await expect(page.getByLabel("Persona 2: nombre y apellido")).toBeVisible();
+
+          // Falta un nombre: el error se explica, se anuncia y el cursor va a ese campo.
+          await names.nth(0).fill("Persona Uno");
+          const submit = page.getByRole("button", { name: /confirmar por whatsapp/i });
+          await submit.click();
+          await expect(page.getByRole("alert").filter({ hasText: "Falta el nombre de alguna persona" })).toBeVisible();
+          await expect(names.nth(1)).toBeFocused();
+          await expect(names.nth(1)).toHaveAttribute("aria-invalid", "true");
+
+          const count = await names.count();
+          for (let i = 1; i < count; i++) await names.nth(i).fill(`Persona ${i + 1}`);
+          await submit.click();
+          const sent = page.getByRole("status").filter({ hasText: "Persona Uno" });
+          await expect(sent).toBeVisible();
+          await expect(sent).toContainText(`Persona ${count}`);
+
+          // Volver a «Solo yo» deja un solo campo y sin errores.
+          await page.getByRole("radio", { name: /^Solo yo/ }).click();
+          await expect(names).toHaveCount(1);
+          await expect(page.locator("#confirmar").getByRole("alert")).toHaveCount(0);
+          await expectNoHorizontalOverflow(page, width, "varias personas");
+        });
+
         test("regreso al catálogo", async ({ page }) => {
           await page.goto(`/plantillas/${id}`);
           await page.getByRole("button", { name: "Otros diseños" }).click();

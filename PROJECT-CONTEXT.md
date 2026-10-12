@@ -7,8 +7,8 @@ duplicar esta información en otros `.md`; actualizar estos archivos.
 
 ## Propósito y origen
 
-Proyecto interno para producir invitaciones digitales (bodas, quinceaños
-y bebés) para un posible servicio. Nació como **copia** de la
+Proyecto interno para producir invitaciones digitales (bodas, quinceaños,
+bebés y aniversarios) para un posible servicio. Nació como **copia** de la
 invitación que el autor hizo para su propia boda (proyecto aparte, ya
 publicado):
 
@@ -36,6 +36,9 @@ publicado):
   **Aniversarios** (aniversario de bodas o renovación de votos): **ocho
   diseños en cuatro categorías**. Auditoría de usabilidad: el indicador
   "Desliza hacia abajo" pasa a decir el gesto ("Desliza hacia arriba").
+  Después: barra de navegación por secciones y selector "Otros diseños";
+  auditoría integral con correcciones de capas, foco, confirmación y
+  privacidad de las invitaciones de clientes (`docs/auditoria.md`).
 
 **No recuperar ni reintroducir datos de la boda original**, tampoco desde
 su historial Git antiguo (archivado fuera del proyecto; ver "Riesgos").
@@ -236,7 +239,7 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   `next.config.ts`; sin eso, Turbopack junta el CSS de las fuentes de todo
   el sitio en un solo archivo.
 - **Rutas en español con nombre** (`/plantillas/olivo`, no `/plantillas/01`):
-  más fáciles de recordar y dictar; el número (01–05) aparece en el
+  más fáciles de recordar y dictar; el número (01–08) aparece en el
   catálogo, en la metadata y en los nombres de `docs/templates/`.
 - **Transición catálogo → diseño:** View Transitions de React
   (`<ViewTransition name="cover-<id>" share="cover-morph">` en la tarjeta y
@@ -342,7 +345,7 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 - Teléfono: solo la forma (≥ 48 px). Mientras se ve la portada (justo al
   abrir, cuando empieza a sonar) va **arriba a la derecha**: abajo tapaba
   fecha, nombres o el indicador para seguir en 320×568. Al bajar pasa abajo a
-  la derecha, sobre la barra de confirmar. < `lg` se oculta sobre
+  la derecha, sobre la barra de navegación. < `lg` se oculta sobre
   `#confirmar` y sobre los créditos del pie (`MusicCredit`). Escritorio:
   forma + título + estado, abajo a la derecha.
 - **Avisos (2026-10-12):** bajo "Abrir invitación", "Con música: podrás
@@ -393,7 +396,11 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
   Enlaces secundarios (Google Calendar, WhatsApp del RSVP) ≥ 44 px de alto.
 - RSVP: opciones con borde visible, "Toca una opción en cada paso" y
   "Solo falta presionar Enviar" bajo el botón.
-- Barra flotante: se oculta sobre el formulario; < 375 px solo el botón.
+- Barra de navegación: aparece al bajar, se aparta al escribir y sobre el
+  formulario de confirmación (teléfono); ver "Navegación".
+- Confirmación: si falta un nombre, el error se anuncia (`role="alert"`)
+  y el cursor va a ese campo; al tocar "¿No podrás asistir?" el cursor
+  pasa al campo del nombre (antes el foco se perdía).
 - Visor: botón "Cerrar" con texto, sin anterior/siguiente; Escape cierra y
   el foco vuelve a la foto.
 - Fechas romanas (Gala) siempre acompañadas de la fecha normal.
@@ -481,8 +488,8 @@ es personalizado). Textos reescritos muchas veces. Música sin licencia.
 
 ### Teléfono primero (revisión 2026-10-08, no revertir)
 Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
-- **La portada cabe en la primera pantalla** con "Desliza hacia abajo"
-  visible. En Tierra, Gala, Aguamarina, Arrullo y Riviera el ancho de la foto de
+- **La portada cabe en la primera pantalla** con el indicador para
+  seguir ("Desliza hacia arriba") visible. En Tierra, Gala, Aguamarina, Arrullo y Riviera el ancho de la foto de
   portada en teléfono sale del alto de la pantalla
   (`w-[min(…,max(…,calc((100svh-Xrem)*ratio)))]`): la proporción sigue
   siendo la de `meta.ts`, solo cambia el tamaño. En Olivo, el alto de la
@@ -570,6 +577,9 @@ Dos navegaciones distintas, en lugares distintos, para que no se confundan:
      pasa el foco a la sección (teclado y lectores de pantalla).
    - Cada diseño le da su aspecto con `styles` (los mismos colores que tenía
      su barra de confirmar: `bar`, `item`, `primary`, `panelFont`).
+   - Escritorio: al abrir "Secciones" el foco entra en la lista (en la
+     sección actual); sacar el foco con Tab, Escape o un clic fuera lo
+     cierran.
 2. **Otros diseños** (`templates/shared/DesignsMenu.tsx`), **solo en las
    demos**: botón arriba a la izquierda ("Otros diseños"; "Diseños" por
    debajo de 400 px, donde chocaba con el aviso de música), también sobre
@@ -600,6 +610,30 @@ devuelve la lista solo si `inv.isDemo`; Shell monta el selector solo
 entonces. En el proyecto de un cliente `isDemo` es falso, la página no
 recibe nombres ni fotos de las demos, y además las rutas de los otros
 diseños dan 404 (`lib/invitation/routes.tsx`). Sin login ni CMS.
+Comprobado el 2026-10-12 con una invitación generada por `npm run nueva`
+y compilada: sin selector, sin aviso de demostración, sin enlaces a
+`/plantillas/` ni nombres de las demos; su panel solo trae sus secciones.
+Ese día se cerró lo que sí quedaba expuesto (2026-10-12, no revertir):
+- Las fotos de las demos (`public/plantillas/*/fotos`, incluidas las de
+  Olivo con derechos pendientes) se podían abrir por su URL desde el
+  dominio del cliente. Ahora `next.config.ts`, solo con una invitación,
+  las responde con 404 (`beforeFiles`, antes que los archivos de
+  `public/`) y limita el optimizador de imágenes a `/images/**`
+  (`images.localPatterns`). Las fotos del cliente van siempre en
+  `public/images/` (README); otra carpeta daría error al compilar.
+- La invitación de un cliente lleva `robots: noindex, nofollow`
+  (`app/layout.tsx`): no aparece en buscadores; la tarjeta al compartir
+  en WhatsApp sigue igual. El catálogo y las demos sí se indexan.
+  Si un cliente quisiera su página en Google, quitarlo en su copia.
+
+**Capas (orden y foco, 2026-10-12):** de abajo arriba: barra y
+reproductor (z-40), portada "Abrir invitación" (z-70), "Otros diseños"
+(z-80, por encima de la portada a propósito), panel de secciones y visor
+de fotos (z-85) y el selector de diseños (z-90). Antes el botón "Otros
+diseños" quedaba encima del visor y del panel. Toda capa modal usa
+`lockPageScroll` (scroll-lock.ts) y `trapFocus` (focus-trap.ts): Tab y
+Shift+Tab no salen de ella (antes el foco seguía por la página tapada).
+Una capa nueva debe hacer lo mismo.
 
 ### Ancla `#confirmar`
 La usan la barra de navegación (botón "Confirmar" y apartarse sobre el
@@ -632,6 +666,8 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
   "Desliza hacia arriba", textos del RSVP…).
 - Antes/durante/después se calcula en el navegador: el HTML estático
   siempre sale como "antes" y se corrige al cargar.
+- Las rutas viejas con barra final (`/plantillas/camelia/`) hacen dos
+  saltos (Next quita la barra y después redirige); sin barra, uno.
 - `site.url` se conoce después de crear el proyecto en Vercel (dos despliegues).
 - Las pruebas automáticas usan Chrome de escritorio con emulación de
   teléfono: el gesto real de deslizar, el audio y WhatsApp se comprueban en
@@ -679,4 +715,4 @@ Lecciones: `SERIAL`, `router.refresh()` tras Server Actions fuera de
 - Probar audio y WhatsApp en un teléfono real con la primera invitación
   (las pruebas automáticas usan Chrome de escritorio con emulación) y
   escuchar una vez las pistas comprimidas en un teléfono.
-- Si se ofrecerán otros eventos (baby showers, bautizos), revisar textos fijos.
+- Si se ofrecerán otros eventos (bautizos, graduaciones…), revisar textos fijos.

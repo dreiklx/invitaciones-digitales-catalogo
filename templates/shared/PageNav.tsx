@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ArrowUpIcon, ChevronDownIcon, CloseIcon, GridIcon, MenuIcon } from "./icons";
+import { trapFocus } from "./focus-trap";
 import { lockPageScroll } from "./scroll-lock";
 import { useDesignsMenu } from "./DesignsMenu";
 
@@ -127,31 +128,45 @@ export default function PageNav({
     triggerRef.current?.focus({ preventScroll: true });
   }, []);
 
-  // Panel del teléfono: bloquea la página, Escape cierra, foco en "Cerrar".
+  // Panel del teléfono: bloquea la página, Escape cierra, foco en "Cerrar"
+  // y Tab no sale del panel.
   useEffect(() => {
     if (open !== "sheet") return;
     closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
     const unlock = lockPageScroll(sheetRef.current);
+    const release = trapFocus(sheetRef.current);
     return () => {
       window.removeEventListener("keydown", onKey);
       unlock();
+      release();
     };
   }, [open, close]);
 
-  // Menú de escritorio: Escape o un clic fuera lo cierran.
+  // Menú de escritorio: el foco entra en la lista (en la sección actual),
+  // así Tab y Enter la recorren enseguida (antes había que pasar por
+  // "Confirmar asistencia"). Escape, un clic fuera o sacar el foco con Tab
+  // lo cierran.
   useEffect(() => {
     if (open !== "dropdown") return;
+    const menu = dropdownRef.current?.querySelector("[data-page-nav=dropdown]");
+    (menu?.querySelector<HTMLElement>("[aria-current]") ?? menu?.querySelector<HTMLElement>("button"))?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     const onDown = (e: MouseEvent) => {
       if (!dropdownRef.current?.contains(e.target as Node)) setOpen(null);
     };
+    const onFocusOut = (e: FocusEvent) => {
+      if (e.relatedTarget instanceof Node && !dropdownRef.current?.contains(e.relatedTarget)) setOpen(null);
+    };
+    const box = dropdownRef.current;
     window.addEventListener("keydown", onKey);
     document.addEventListener("mousedown", onDown);
+    box?.addEventListener("focusout", onFocusOut);
     return () => {
       window.removeEventListener("keydown", onKey);
       document.removeEventListener("mousedown", onDown);
+      box?.removeEventListener("focusout", onFocusOut);
     };
   }, [open, close]);
 
@@ -249,7 +264,9 @@ export default function PageNav({
 
       {/* Panel del teléfono con todas las secciones. */}
       {open === "sheet" && (
-        <div ref={sheetRef} className="fixed inset-0 z-[65] flex flex-col justify-end lg:hidden">
+        // z-85: por encima de "Otros diseños" (z-80, demos), que antes quedaba
+        // sobre el fondo oscuro del panel.
+        <div ref={sheetRef} className="fixed inset-0 z-[85] flex flex-col justify-end lg:hidden">
           <div aria-hidden="true" className="absolute inset-0 bg-ink/45 backdrop-blur-[2px]" onClick={close} />
           <div
             id={panelId}

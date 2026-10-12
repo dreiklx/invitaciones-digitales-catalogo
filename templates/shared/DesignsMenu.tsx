@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { ArrowLeftIcon, ArrowRightIcon, CloseIcon, GridIcon } from "./icons";
+import { trapFocus } from "./focus-trap";
 import { lockPageScroll } from "./scroll-lock";
 
 // "Otros diseños": SOLO en las demos del catálogo (Shell.tsx lo monta
@@ -89,9 +90,11 @@ export default function DesignsMenu({
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
     const unlock = lockPageScroll(layerRef.current);
+    const release = trapFocus(layerRef.current);
     return () => {
       window.removeEventListener("keydown", onKey);
       unlock();
+      release();
     };
   }, [isOpen, close]);
 
@@ -157,9 +160,12 @@ export default function DesignsMenu({
                           </span>
                           <span className="flex min-w-0 flex-1 flex-col">
                             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">{d.event}</span>
-                            <span className="mt-0.5 flex items-baseline gap-2">
+                            {/* Con la letra del sistema agrandada a 320 px, "Aguamarina"
+                                salía de la tarjeta: el nombre (una palabra que no se parte)
+                                tiene tope en vw y el número puede pasar arriba. */}
+                            <span className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
                               <span className="font-display text-base italic text-muted">{d.number}</span>
-                              <span className="font-display text-2xl leading-tight">{d.name}</span>
+                              <span className="font-display text-[min(1.5rem,7vw)] leading-tight">{d.name}</span>
                             </span>
                             <span className="mt-1.5 flex" aria-hidden="true">
                               {d.colors.map((c, i) => (

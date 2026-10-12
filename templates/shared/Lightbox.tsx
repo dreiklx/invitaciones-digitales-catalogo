@@ -4,6 +4,7 @@ import Image from "next/image";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Photo } from "@/lib/invitation/types";
 import { CloseIcon, ExpandIcon } from "./icons";
+import { trapFocus } from "./focus-trap";
 import { lockPageScroll } from "./scroll-lock";
 
 // Visor de fotos de la galería. Cada diseño compone su galería como quiera
@@ -51,9 +52,11 @@ export function LightboxProvider({
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
     const unlock = lockPageScroll(overlayRef.current);
+    const release = trapFocus(overlayRef.current);
     return () => {
       window.removeEventListener("keydown", onKey);
       unlock();
+      release();
     };
   }, [active, close]);
 
@@ -67,9 +70,11 @@ export function LightboxProvider({
       {hint && <GalleryHint className={`mt-6 sm:mt-8 ${hintClassName}`} />}
       {children}
       {/* Teléfono: la foto empieza debajo de "Cerrar" (antes podía quedar
-          tapada en pantallas bajas) y todo respeta la zona segura. */}
+          tapada en pantallas bajas) y todo respeta la zona segura. z-85:
+          por encima de "Otros diseños" (z-80, demos), que antes flotaba
+          sobre la foto. */}
       {active !== null && (
-        <div ref={overlayRef} className={`fixed inset-0 z-[60] flex items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[calc(max(1rem,env(safe-area-inset-top))+4rem)] sm:p-10 ${overlayClassName}`} onClick={close} role="dialog" aria-modal="true" aria-label={photos[active].alt}>
+        <div ref={overlayRef} className={`fixed inset-0 z-[85] flex items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[calc(max(1rem,env(safe-area-inset-top))+4rem)] sm:p-10 ${overlayClassName}`} onClick={close} role="dialog" aria-modal="true" aria-label={photos[active].alt}>
           <button
             ref={closeRef}
             type="button"

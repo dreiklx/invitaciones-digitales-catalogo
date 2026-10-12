@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     // sin esto, cada página precargaba las tipografías de los cinco diseños.
     cssChunking: { type: "graph", requestCost: 2000 },
   },
+  // Invitación de un cliente: el optimizador de imágenes solo acepta sus
+  // fotos (public/images/, README "Fotos"), no las de las demos (ver
+  // rewrites).
+  ...(invitation ? { images: { localPatterns: [{ pathname: "/images/**" }] } } : {}),
   // Diseños renombrados (2026-10-10: Borgoña → Camelia; 2026-10-11: Camelia
   // pasó a llamarse Aguamarina): los enlaces viejos de las demos siguen
   // funcionando, siempre en un solo salto. /plantillas/arrullo volvió a ser
@@ -21,9 +25,21 @@ const nextConfig: NextConfig = {
     ];
   },
   // Invitación de un cliente: "/" muestra la página de su diseño
-  // (app/plantillas/<diseño>), sin cambiar la URL.
+  // (app/plantillas/<diseño>), sin cambiar la URL. Las fotos de las demos
+  // (public/plantillas/*/fotos) viajan en la copia del proyecto, pero desde
+  // el dominio de un cliente no se sirven (404): no son suyas y algunas
+  // tienen derechos de imagen pendientes (photo-map.md). `beforeFiles` se
+  // revisa antes que los archivos de public/.
   async rewrites() {
-    return invitation ? { beforeFiles: [{ source: "/", destination: `/plantillas/${invitation.template}` }], afterFiles: [], fallback: [] } : [];
+    if (!invitation) return [];
+    return {
+      beforeFiles: [
+        { source: "/", destination: `/plantillas/${invitation.template}` },
+        { source: "/plantillas/:design/fotos/:path*", destination: "/no-disponible" },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 

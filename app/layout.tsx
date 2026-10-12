@@ -15,6 +15,11 @@ export const metadata: Metadata = inv
       description: inv.siteDescription,
       openGraph: { title: inv.siteTitle, description: inv.siteDescription, locale: inv.content.site.locale.replace("-", "_"), type: "website" },
       twitter: { card: "summary_large_image", title: inv.siteTitle, description: inv.siteDescription },
+      // Invitación de un cliente: se comparte por enlace (WhatsApp) y trae
+      // nombres, lugares, teléfono y a veces una cuenta bancaria; no debe
+      // aparecer en buscadores. La vista previa al compartir no cambia
+      // (WhatsApp lee las etiquetas Open Graph igual). El catálogo sí se indexa.
+      robots: { index: false, follow: false },
     }
   : {
       metadataBase: new URL(catalog.url),

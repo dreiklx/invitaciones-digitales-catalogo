@@ -15,12 +15,18 @@ Arrullo 6 · Nube 6 · Riviera 6.
   `config/invitation.ts`; `npm run nueva` propone `portada.jpg`,
   `galeria-1.jpg`…).
 - Demos del catálogo: `public/plantillas/<diseño>/fotos/`, una sesión
-  coherente por diseño: seis con fotos de stock de Pexels y **Olivo con
+  coherente por diseño: siete con fotos de stock de Pexels y **Olivo con
   fotos aportadas por el dueño del proyecto, de derechos PENDIENTES DE
   AUTORIZACIÓN** (auditoría abajo).
   `npm run placeholders` (imágenes abstractas para un diseño nuevo) nunca
   toca una carpeta `fotos/`. `npm run check` da error si una invitación de
   cliente sigue usando una foto de `/plantillas/`.
+- **El dominio de un cliente no sirve las fotos de las demos** (desde el
+  2026-10-12): viajan en la copia del proyecto, pero `next.config.ts`
+  responde 404 a `/plantillas/*/fotos/*` y el optimizador de imágenes
+  solo acepta `/images/**` cuando `config/invitation.ts` tiene datos.
+  Antes se podían abrir por su URL desde cualquier invitación (incluidas
+  las de Olivo, con derechos pendientes).
 
 ## Reglas
 - Respetar la orientación de cada espacio (las fotos se recortan con

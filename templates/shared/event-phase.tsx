@@ -52,17 +52,12 @@ export function useEventPhase(startISO: string, endISO: string): EventPhase {
   return phase;
 }
 
-// Muestra su contenido solo antes de que empiece el evento (RSVP, barra
-// "Confirmar asistencia"). Después ya no tiene sentido pedir confirmación.
+// Muestra su contenido solo antes de que empiece el evento (la
+// confirmación; la barra de navegación deja de ofrecerla al no encontrarla).
+// Después ya no tiene sentido pedir confirmación.
 export function BeforeEvent({ startISO, endISO, children }: { startISO: string; endISO: string; children: ReactNode }) {
   const phase = useEventPhase(startISO, endISO);
   return phase === "before" ? <>{children}</> : null;
-}
-
-// Lo contrario: solo durante o después del evento.
-export function FromEvent({ startISO, endISO, children }: { startISO: string; endISO: string; children: ReactNode }) {
-  const phase = useEventPhase(startISO, endISO);
-  return phase === "before" ? null : <>{children}</>;
 }
 
 export function pad(value: number): string {

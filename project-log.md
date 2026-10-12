@@ -4,6 +4,39 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-12 (noche) — Auditoría integral: capas, foco, RSVP y privacidad de clientes
+
+### Qué se hizo
+- **Auditoría integral** (detalle, hallazgos A1–A14 y propuestas P11–P18
+  priorizadas en `docs/auditoria.md`): catálogo, navegación, separación
+  demo/cliente con una invitación REAL generada (`nueva -- nube`) y
+  compilada, recorrido del invitado, 9 tamaños + letra al 125 % con las
+  capas abiertas, contenido de las ocho demos, `.ics`, metadatos, peso,
+  `npm audit`.
+- **Corregido:** "Otros diseños" quedaba encima del visor de fotos y del
+  panel de secciones (capas a z-85); Tab sacaba el foco de las tres capas
+  modales (`templates/shared/focus-trap.ts`); el menú "Secciones" de
+  escritorio no recibía el foco; "Aguamarina" salía de su tarjeta en el
+  selector con letra grande a 320 px; errores del RSVP anunciados y con el
+  cursor en el nombre que falta; foco al abrir "¿No podrás asistir?";
+  `FromEvent` sin uso eliminado.
+- **Privacidad de clientes** (`next.config.ts`, `app/layout.tsx`): con una
+  invitación, las fotos de las demos ya no se sirven por URL (404) ni por
+  el optimizador (solo `/images/**`), y la página lleva `noindex`.
+- Documentación al día (textos viejos en PROJECT-CONTEXT y photo-map;
+  regla de capas en CLAUDE.md).
+
+### Verificación
+- `npm run verify` limpio: lint, tipos, `check` y build; `npm test`
+  131/131; `npm run test:e2e` 329 pasadas y 9 omitidas a propósito (338),
+  23,8 min. Nuevas: capas y foco en los ocho diseños (teléfono y
+  escritorio), "Varias personas" en los ocho, selector con letra al 125 %,
+  y la prueba de teclado llega al menú con Tab (ya no fuerza el foco).
+- Invitación de cliente compilada a mano: fotos de demo 404/400, foto del
+  cliente 200, sin selector ni datos de demos; `config/invitation.ts`
+  restaurado a `null`.
+- Pendiente manual (P11): teléfonos reales desde WhatsApp.
+
 ## 2026-10-12 (tarde) — Navegación permanente y "Otros diseños"
 
 ### Qué se hizo
