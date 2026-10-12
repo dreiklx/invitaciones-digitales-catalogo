@@ -103,3 +103,10 @@ menor): ver la auditoría en `photo-map.md`.
 ## Uso
 `npm run nueva -- aguamarina` → editar `config/invitation.ts` (nombre en
 "REEMPLAZAR", edad, programa, corte de honor) → fotos → `npm run check`.
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): píldora azul petróleo con "Confirmar" champán.
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`, `programa`); el menú
+  muestra solo las que existen según la configuración.

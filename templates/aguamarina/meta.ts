@@ -25,6 +25,7 @@ export const meta: TemplateMeta<"aguamarina"> = {
   },
   fonts: { display: "Cormorant Garamond", body: "Jost" },
   musicPlayer: "broche",
+  navLabels: { historia: "Sobre mí" },
   photoSlots: {
     portada: { ratio: [4, 5], where: "Portada, en el marco tallado", position: "50% 25%" },
     historia: { ratio: [4, 5], where: "Sobre mí, en el marco tallado", position: "50% 30%" },

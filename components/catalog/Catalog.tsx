@@ -2,14 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import { paletteStyle, resolveInvitation } from "@/lib/invitation/resolve";
-import type { Palette, TemplateId } from "@/lib/invitation/types";
+import type { TemplateId } from "@/lib/invitation/types";
 import { templateIds, templateMetas } from "@/templates/registry";
 import { templatePreviews } from "@/templates/previews";
 import { demos } from "@/templates/demos";
 import Reveal from "@/templates/shared/Reveal";
 import { ArrowDownIcon, ArrowRightIcon } from "@/templates/shared/icons";
+import PageNav from "@/templates/shared/PageNav";
 import { catalogFonts } from "./fonts";
-import { catalogGroups as groups, eventLabel } from "./groups";
+import { catalogGroups as groups, catalogPalette as neutral, eventLabel } from "./groups";
 
 // Catálogo público: "/" cuando config/invitation.ts es null. Presenta los
 // ocho diseños en cuatro categorías (Bodas, Quinceaños, Bebés,
@@ -20,18 +21,6 @@ import { catalogGroups as groups, eventLabel } from "./groups";
 // diseño, su miniatura se transforma en la portada de la demo (View
 // Transitions, mismo nombre `cover-<diseño>` que en Gate.tsx).
 
-const neutral: Palette = {
-  background: "#f4f1ea",
-  surface: "#ebe6dc",
-  text: "#1f1c18",
-  textMuted: "#6c655a",
-  primary: "#1f1c18",
-  onPrimary: "#f4f1ea",
-  secondary: "#a69a85",
-  accent: "#1f1c18",
-  onAccent: "#f4f1ea",
-  line: "#d9d2c5",
-};
 
 
 // "Creamos invitaciones para:": el color de cada punto viene de un
@@ -200,7 +189,7 @@ export default function Catalog() {
           blancas con brillo azul) y es su único lugar en todo el sitio (nunca
           en una invitación). Enlaza al Instagram del estudio en otra pestaña. */}
       <footer className="bg-ink text-paper">
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 pb-[max(env(safe-area-inset-bottom),2.5rem)] pt-12 sm:flex-row sm:items-end sm:justify-between sm:px-10 sm:py-14">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 pb-[calc(6.5rem+env(safe-area-inset-bottom))] pt-12 sm:flex-row sm:items-end sm:justify-between sm:px-10 sm:pt-14 lg:pb-14">
           <div>
             <p className="font-display text-2xl italic">Invitaciones digitales</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-paper/65">Diseños para personalizar con sus datos, fotos y colores.</p>
@@ -235,6 +224,16 @@ export default function Catalog() {
           </div>
         </div>
       </footer>
+
+      {/* Barra para saltar a una categoría (la misma de las invitaciones,
+          con la paleta del catálogo). En el teléfono, el pie deja espacio. */}
+      <PageNav
+        sections={groups.map((g) => ({ id: g.id, label: g.title }))}
+        styles={{ bar: "rounded-full bg-ink/95 backdrop-blur", item: "text-paper/90 hover:bg-current/10", primary: "", panelFont: "font-display" }}
+        menuLabel="Categorías"
+        panelTitle="Ir a una categoría"
+        ariaLabel="Categorías del catálogo"
+      />
     </div>
   );
 }

@@ -25,6 +25,7 @@ export const meta: TemplateMeta<"nube"> = {
   },
   fonts: { display: "Fredoka", body: "Nunito" },
   musicPlayer: "globo",
+  navLabels: { historia: "Sobre mí" },
   photoSlots: {
     portada: { ratio: [1, 1], where: "Portada, en un círculo con la edad", position: "50% 40%" },
     historia: { ratio: [4, 5], where: "Junto al mensaje", position: "50% 35%" },

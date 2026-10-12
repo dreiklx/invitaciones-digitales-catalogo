@@ -341,4 +341,7 @@ export type TemplateMeta<T extends TemplateId = TemplateId> = {
   photoSlots: Record<PhotoSlots[T], PhotoSlotSpec>;
   // Reproductor de música del diseño.
   musicPlayer: MusicPlayerStyle;
+  // Nombre de una sección en la barra de navegación cuando el diseño la
+  // titula distinto ("Sobre mí"). Ver lib/invitation/sections.ts.
+  navLabels?: Partial<Record<"historia", string>>;
 };

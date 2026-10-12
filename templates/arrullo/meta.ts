@@ -25,6 +25,7 @@ export const meta: TemplateMeta<"arrullo"> = {
   },
   fonts: { display: "Gilda Display", body: "DM Sans" },
   musicPlayer: "puntada",
+  navLabels: { historia: "Nuestra espera" },
   photoSlots: {
     portada: { ratio: [3, 4], where: "Portada, dentro del arco", position: "50% 30%" },
     historia: { ratio: [4, 5], where: "Nuestra espera, dentro del arco", position: "50% 35%" },

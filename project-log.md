@@ -4,6 +4,44 @@ Historial del proyecto (lo más reciente primero). El historial de la boda
 de la que nació (sesiones 2026-09-13 a 2026-09-29) queda en el proyecto
 original; sus lecciones vigentes están en `PROJECT-CONTEXT.md`.
 
+## 2026-10-12 (tarde) — Navegación permanente y "Otros diseños"
+
+### Qué se hizo
+- **Barra de navegación** (`templates/shared/PageNav.tsx`) en los ocho
+  diseños y el catálogo: abajo en el teléfono ("Inicio", "Secciones",
+  "Confirmar"; panel con todas las secciones y la actual marcada), arriba a
+  la derecha en escritorio ("Inicio", "Secciones: <actual>" con menú y
+  "Confirmar asistencia"). Aparece al empezar a bajar, se aparta al
+  escribir y sobre el formulario de confirmación (en el teléfono), salto
+  suave con el foco en la sección. Reemplaza a `StickyRsvp`. Cada diseño
+  la pinta con los colores que tenía su barra de confirmar.
+- **Secciones centralizadas:** `navSections()` (`lib/invitation/sections.ts`)
+  desde la configuración (lo que está en `null` no aparece); `id` comunes
+  en los ocho diseños (`historia`, `fecha`, `lugares`, `programa`,
+  `detalles`, `galeria`, `regalos`, `confirmar`; antes `ceremonia`
+  cambiaba de significado); `navLabels` en meta para "Nuestra espera",
+  "Mi mensaje" y "Sobre mí".
+- **"Otros diseños"** (`templates/shared/DesignsMenu.tsx`), solo en demos:
+  arriba a la izquierda (reemplaza a "← Diseños") y desde el panel del
+  teléfono; los ocho diseños por categoría con foto, número, tipo de
+  evento y colores; vuelve al catálogo. `designsMenuFor()` devuelve null
+  en una invitación de cliente.
+- El catálogo usa la misma barra para sus cuatro categorías.
+
+### Verificación
+- `npm run verify` limpio: `npm test` 131/131; `npm run test:e2e` 296
+  pasadas y 8 omitidas a propósito (304), 22 min. Nuevas:
+  `tests/unit/sections.test.ts` y `tests/e2e/navigation.spec.ts` (salto a
+  cada sección de cada diseño con el título visible, teclado, reducir
+  movimiento, RSVP y música con la barra, cambio de diseño y regreso).
+- Las pruebas encontraron y se corrigió: la barra tapaba "Confirmar por
+  WhatsApp" cuando quedaba al pie de la pantalla, y "Otros diseños"
+  chocaba con el aviso de música a 320 px.
+- Revisión visual de la barra en los ocho diseños (360 px), del panel, del
+  selector (390 y 1366) y del menú de escritorio.
+- Pendiente manual: probar la barra con una mano en teléfonos reales
+  (zona segura de iPhone, teclado abierto en el RSVP).
+
 ## 2026-10-12 — Arrullo vuelve, Riviera pasa a aniversarios y auditoría de usabilidad
 
 ### Qué se hizo

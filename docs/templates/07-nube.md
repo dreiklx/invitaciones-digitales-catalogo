@@ -114,3 +114,10 @@ llamaba "Mateo" y pasó a **Emma** (2026-10-11) por coherencia.
 ## Advertencias
 - No usar texto de color claro: el diseño pone el color en las formas.
 - Si se agregan más lugares, se muestran en dos columnas en escritorio.
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): píldora tinta con "Confirmar" coral.
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`, `programa`); el menú
+  muestra solo las que existen según la configuración.

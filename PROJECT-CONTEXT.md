@@ -127,7 +127,7 @@ templates/
   registry.ts             ← metas de los 8 diseños (solo datos; orden del catálogo)
   demos.ts, previews.tsx  ← demos (datos) y miniaturas del catálogo
   shared/                 ← lógica común: Gate, MusicPlayer, RsvpForm, Lightbox,
-                            CopyValue, StickyRsvp, Reveal, ScrollCue, Frame,
+                            CopyValue, PageNav, DesignsMenu, Reveal, ScrollCue, Frame,
                             Shell, event-phase, icons…
   <diseño>/               ← meta.ts, fonts.ts, demo.ts, Template.tsx,
                             Countdown.tsx, Preview.tsx (+ ornamentos propios)
@@ -154,7 +154,7 @@ next.config.ts            ← reescritura "/" → diseño del cliente; cssChunki
   props; ninguno lee el config ni formatea fechas por su cuenta.
 - **Lógica compartida, aspecto propio.** Portada, música (con ocho
   presentaciones en `templates/shared/players.tsx`),
-  RSVP, visor, copiar y barra flotante se comparten y cada diseño los
+  RSVP, visor, copiar y barra de navegación se comparten y cada diseño los
   estiliza con clases. La cuenta regresiva comparte el hook
   (`useCountdown`) pero cada diseño dibuja la suya. No se forzó compartir
   marcado de secciones: cada `Template.tsx` es libre.
@@ -273,7 +273,8 @@ lugares con Google Maps y Waze opcional · aviso importante (`*resaltado*`)
 · vestimenta con colores a evitar · regalos (copiar con alternativa si el
 navegador lo bloquea, enlace a mesa de regalos) · RSVP por WhatsApp guiado
 + "no podré asistir" + fecha límite · galería con visor · música · barra
-flotante "Confirmar asistencia" · tarjeta al compartir e ícono con la paleta.
+de navegación por secciones (con "Confirmar") · tarjeta al compartir e
+ícono con la paleta.
 Todas las secciones opcionales se ocultan con `null`.
 
 ## Plantilla vs. invitación personalizada (conceptual)
@@ -509,9 +510,10 @@ Las invitaciones se abren casi siempre desde WhatsApp en un teléfono.
   Tierra y del antiguo Borgoña **no aparecían nunca** (estaba en producción).
 - **Botones de lugar:** mismo ancho, ≥ 52 px de alto, uno debajo del otro
   o en dos columnas según el ancho.
-- **Barra flotante:** también se oculta sobre el `<footer>` (tapaba los
-  nombres del cierre).
-- **"← Diseños" (demos):** se esconde al bajar y vuelve al subir.
+- **Barra de navegación:** ver "Navegación". El final de la página deja
+  espacio para ella (antes la barra "Confirmar asistencia" tapaba los
+  nombres del cierre y se ocultaba sobre el `<footer>`).
+- **"Otros diseños" (demos):** se esconde al bajar y vuelve al subir.
 - Botón "Confirmar por WhatsApp": el ícono no se encoge (`shrink-0`) y el
   texto baja a 17 px por debajo de 360 px.
 - Animaciones de aparición más cortas en teléfono (0.8 s, 16 px).
@@ -542,9 +544,67 @@ Decisiones:
   catálogo. A 32 px la "F" con degradados y brillo pierde detalle.
 - Mostrarlos con `next/image` (los PNG pesan 250–650 KB; Next los optimiza).
 
+### Navegación (2026-10-12, no revertir sin el dueño)
+Dos navegaciones distintas, en lugares distintos, para que no se confundan:
+
+1. **Secciones de ESTA invitación** (`templates/shared/PageNav.tsx`), en
+   todas las invitaciones (demos y clientes) y en el catálogo (sus
+   categorías):
+   - **Teléfono (< lg):** barra fija **abajo** (al alcance del pulgar) con
+     tres botones con texto: "Inicio" (vuelve a la portada), "Secciones"
+     (panel desde abajo con todas las secciones, la actual marcada "Estás
+     aquí", botón "Cerrar", Escape y tocar fuera cierran) y "Confirmar"
+     (si hay confirmación). Reemplaza a la antigua barra "Confirmar
+     asistencia" (`StickyRsvp`, eliminada).
+   - **Escritorio (lg):** pastilla **arriba a la derecha** con "Inicio",
+     "Secciones: <actual>" (menú desplegable) y "Confirmar asistencia".
+     No es la barra del teléfono estirada; no tapa las composiciones.
+   - Aparece cuando se empieza a bajar (> 60 px, cuando se apaga "Desliza
+     hacia arriba"): nunca tapa la portada ni el indicador. En el teléfono
+     se aparta mientras se escribe en un campo y mientras el formulario de
+     confirmación pasa por debajo (tapaba "Confirmar por WhatsApp"); el
+     visor de fotos la cubre. Al final de la página hay espacio para ella
+     (Shell en clientes; el aviso de demostración en las demos).
+   - El salto es suave (inmediato con "reducir movimiento"), deja el
+     comienzo de la sección arriba (debajo de la pastilla en escritorio) y
+     pasa el foco a la sección (teclado y lectores de pantalla).
+   - Cada diseño le da su aspecto con `styles` (los mismos colores que tenía
+     su barra de confirmar: `bar`, `item`, `primary`, `panelFont`).
+2. **Otros diseños** (`templates/shared/DesignsMenu.tsx`), **solo en las
+   demos**: botón arriba a la izquierda ("Otros diseños"; "Diseños" por
+   debajo de 400 px, donde chocaba con el aviso de música), también sobre
+   la portada y desde el panel de secciones del teléfono ("Ver otros
+   diseños", separado bajo "Demostración"). Abre un panel con los ocho
+   diseños por categoría (foto de la portada, número, nombre, tipo de
+   evento, colores), marca el actual y lleva al catálogo completo. Usa la
+   paleta neutra del catálogo. Reemplaza al enlace "← Diseños".
+
+**Lista de secciones (centralizada):** `navSections()` en
+`lib/invitation/sections.ts` la arma desde la configuración: una sección en
+`null` (o sin datos) nunca aparece; los nombres son claros ("Fecha y cuenta
+regresiva", "Ubicación" o los rótulos de los lugares, "Información y
+vestimenta", "Galería de fotos", "Confirmar asistencia"), y un diseño puede
+usar el título que muestra (`navLabels` en su meta: "Nuestra espera", "Mi
+mensaje", "Sobre mí"). La barra ordena por posición en la página y
+descarta lo que no está (p. ej. la confirmación desde que empieza el
+evento). Los ocho diseños usan los mismos `id`: `historia`, `fecha`
+(cuenta regresiva y calendario), `lugares`, `programa`, `detalles`,
+`galeria`, `regalos`, `confirmar`. Hasta el 2026-10-12 `ceremonia`
+significaba cosas distintas según el diseño. **Agregar una sección:** su
+clave, condición y nombre en `sections.ts` + el `id` en los diseños que la
+muestran; `tests/e2e/navigation.spec.ts` falla si un diseño no la tiene.
+La familia no está en el menú (es breve y va junto a la historia).
+
+**Demos vs. clientes:** `designsMenuFor(inv)` (`templates/shared/designs.ts`)
+devuelve la lista solo si `inv.isDemo`; Shell monta el selector solo
+entonces. En el proyecto de un cliente `isDemo` es falso, la página no
+recibe nombres ni fotos de las demos, y además las rutas de los otros
+diseños dan 404 (`lib/invitation/routes.tsx`). Sin login ni CMS.
+
 ### Ancla `#confirmar`
-La usan la barra flotante y el reproductor para ocultarse sobre el
-formulario. Cada diseño la pone en su sección de RSVP. No renombrarla.
+La usan la barra de navegación (botón "Confirmar" y apartarse sobre el
+formulario) y el reproductor (ocultarse sobre él). Cada diseño la pone en
+su sección de RSVP. No renombrarla.
 
 ## Panel de invitados (no incluido)
 

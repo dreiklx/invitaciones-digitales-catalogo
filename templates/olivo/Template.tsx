@@ -10,7 +10,8 @@ import Frame from "../shared/Frame";
 import Emphasis from "../shared/Emphasis";
 import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
-import StickyRsvp from "../shared/StickyRsvp";
+import PageNav from "../shared/PageNav";
+import { navSections } from "@/lib/invitation/sections";
 import MusicPlayer from "../shared/MusicPlayer";
 import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
@@ -260,7 +261,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
         )}
 
         {/* Cuenta regresiva en franja olivo + calendario */}
-        <section className="bg-primary px-6 py-20 text-on-primary sm:px-12 sm:py-28">
+        <section id="fecha" className="bg-primary px-6 py-20 text-on-primary sm:px-12 sm:py-28">
           <div className="mx-auto max-w-6xl">
             <Reveal>
               <Eyebrow light>{c.countdown.eyebrow}</Eyebrow>
@@ -287,7 +288,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
         </section>
 
         {/* Itinerario: hora | línea de tiempo | lugar */}
-        <section id="ceremonia" className="px-6 py-20 sm:px-12 sm:py-28">
+        <section id="lugares" className="px-6 py-20 sm:px-12 sm:py-28">
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-12">
             <Reveal className="md:col-span-4">
               <Eyebrow>Itinerario</Eyebrow>
@@ -456,11 +457,7 @@ export default function OlivoTemplate({ inv }: { inv: ResolvedInvitation }) {
           </div>
         </footer>
 
-        {inv.rsvp && (
-          <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <StickyRsvp date={dates.compact} time={dates.time} barClassName="bg-ink/95 backdrop-blur" textClassName="font-display text-paper/90" buttonClassName="bg-secondary font-bold text-ink" />
-          </BeforeEvent>
-        )}
+        <PageNav sections={navSections(inv)} styles={{ bar: "bg-ink/95 backdrop-blur", item: "text-paper/90 hover:bg-current/10", primary: "bg-secondary font-bold text-ink", panelFont: "font-display" }} />
         {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>

@@ -49,13 +49,13 @@ for (const [width, height] of MOBILE_SIZES) {
         }
         const player = page.getByRole("button", { name: /^(Pausar la música|Escuchar música)/ });
         if (await player.isVisible()) expect(overlaps(box, (await player.boundingBox())!), "el indicador queda debajo del reproductor").toBe(false);
-        // El aviso breve de la música no tapa el enlace "Diseños".
+        // El aviso breve de la música no tapa el botón "Otros diseños".
         // (Se mide de una vez: el aviso desaparece solo a los pocos segundos.)
         const rects = await page.evaluate(() => {
           const r = (el: Element | null) => (el ? (({ x, y, width, height }) => ({ x, y, width, height }))(el.getBoundingClientRect()) : null);
-          return { bubble: r(document.querySelector("[data-music-hint]")), back: r(document.querySelector('a[href="/#disenos"]')) };
+          return { bubble: r(document.querySelector("[data-music-hint]")), back: r(document.querySelector("[data-designs-trigger]")) };
         });
-        if (rects.bubble && rects.back) expect(overlaps(rects.bubble, rects.back), "el aviso de la música tapa «Diseños»").toBe(false);
+        if (rects.bubble && rects.back) expect(overlaps(rects.bubble, rects.back), "el aviso de la música tapa «Otros diseños»").toBe(false);
 
         // Tocarlo avanza a la sección siguiente y luego se desvanece.
         await cue!.click();

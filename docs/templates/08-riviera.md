@@ -51,7 +51,7 @@ hero: { eyebrow: "Renovamos nuestros votos", title: "Diez años después" },
 | `textMuted` | `#4b5b7d` | Texto secundario |
 | `primary` | `#1f4fa3` | Cobalto: azulejos, botones, bloque RSVP, pie |
 | `onPrimary` | `#f8f6f0` | Texto sobre cobalto |
-| `secondary` | `#e8c440` | Limón: sol, botón "Confirmar" (sobre cobalto), barra flotante |
+| `secondary` | `#e8c440` | Limón: sol, botón "Confirmar" (sobre cobalto y en la barra de navegación) |
 | `accent` | `#1f4fa3` | Igual al cobalto |
 | `onAccent` | `#f8f6f0` | Texto sobre el acento |
 | `line` | `#c8d3e5` | Bordes |
@@ -116,3 +116,10 @@ pareja, evento, lugares…: todo lo que diga "REEMPLAZAR") → fotos →
 - Los arcos recortan las esquinas superiores: evitar fotos con caras cerca de los bordes.
 - Los errores del formulario usan `red-100`/`red-300` sobre el cobalto (del
   diseño original); si se cambia `primary` a un tono rojizo, revisarlos.
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): píldora cobalto con "Confirmar" limón.
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`); el menú
+  muestra solo las que existen según la configuración.

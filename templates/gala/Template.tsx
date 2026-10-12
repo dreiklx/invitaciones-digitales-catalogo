@@ -8,7 +8,8 @@ import Frame from "../shared/Frame";
 import Emphasis from "../shared/Emphasis";
 import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
-import StickyRsvp from "../shared/StickyRsvp";
+import PageNav from "../shared/PageNav";
+import { navSections } from "@/lib/invitation/sections";
 import MusicPlayer from "../shared/MusicPlayer";
 import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
@@ -208,7 +209,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
         {c.openingQuote && <GalaQuote quote={c.openingQuote} />}
 
         {/* Cuenta regresiva y programa */}
-        <section id="ceremonia" className="bg-surface px-6 py-20 sm:py-28">
+        <section id="fecha" className="bg-surface px-6 py-20 sm:py-28">
           <div className="mx-auto max-w-4xl">
             <Reveal>
               <Heading eyebrow={c.countdown.eyebrow} title={c.countdown.title} />
@@ -227,7 +228,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
             </Reveal>
 
             {/* Programa: línea dorada vertical con cada lugar */}
-            <div className="relative mt-20">
+            <div id="lugares" className="relative mt-20">
               <span className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-primary/0 via-primary/50 to-primary/0 sm:block" aria-hidden="true" />
               {inv.locations.map((l, i) => (
                 <Reveal key={l.name + i} delay={i * 100} className="relative py-8 text-center">
@@ -457,11 +458,7 @@ export default function GalaTemplate({ inv }: { inv: ResolvedInvitation }) {
           </Reveal>
         </footer>
 
-        {inv.rsvp && (
-          <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <StickyRsvp date={dates.compact} time={dates.time} barClassName="border border-primary/40 bg-paper/95 backdrop-blur" textClassName="font-display text-ink/90" buttonClassName="bg-primary text-on-primary tracking-[0.15em]" />
-          </BeforeEvent>
-        )}
+        <PageNav sections={navSections(inv)} styles={{ bar: "border border-primary/40 bg-paper/95 backdrop-blur", item: "text-ink/90 hover:bg-current/10", primary: "bg-primary text-on-primary tracking-[0.15em]", panelFont: "font-display" }} />
         {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>

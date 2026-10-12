@@ -7,7 +7,8 @@ import Frame from "../shared/Frame";
 import Emphasis from "../shared/Emphasis";
 import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
-import StickyRsvp from "../shared/StickyRsvp";
+import PageNav from "../shared/PageNav";
+import { navSections } from "@/lib/invitation/sections";
 import MusicPlayer from "../shared/MusicPlayer";
 import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
@@ -198,7 +199,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
         )}
 
         {/* Cuenta regresiva en bloques de juguete */}
-        <section id="ceremonia" className="relative overflow-hidden px-6 py-16 sm:py-24">
+        <section id="fecha" className="relative overflow-hidden px-6 py-16 sm:py-24">
           <div className="mx-auto max-w-4xl text-center">
             <Reveal>
               <Heading eyebrow={c.countdown.eyebrow} title={c.countdown.title} />
@@ -457,11 +458,7 @@ export default function NubeTemplate({ inv }: { inv: ResolvedInvitation }) {
           </div>
         </footer>
 
-        {inv.rsvp && (
-          <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-ink/90 backdrop-blur" textClassName="font-display text-paper/90" buttonClassName="rounded-full bg-accent font-bold text-on-accent" />
-          </BeforeEvent>
-        )}
+        <PageNav sections={navSections(inv)} styles={{ bar: "rounded-full bg-ink/90 backdrop-blur", item: "text-paper/90 hover:bg-current/10", primary: "rounded-full bg-accent font-bold text-on-accent", panelFont: "font-display" }} />
         {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>

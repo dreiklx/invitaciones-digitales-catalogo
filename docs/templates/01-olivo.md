@@ -117,3 +117,10 @@ monograma quita el tratamiento ("Don", "Doña"…): R · F.
 - Las fotos de la demo muestran personajes y actores reconocibles con
   derechos pendientes de autorización: ver `photo-map.md`.
 - Nombres con tratamiento ("Doña Florinda") son largos: revisados a 320 px.
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): franja tinta con "Confirmar" en lino (esquinas rectas, editorial).
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`); el menú
+  muestra solo las que existen según la configuración.

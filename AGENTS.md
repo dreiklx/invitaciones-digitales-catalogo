@@ -27,6 +27,9 @@ Aplica a cualquier agente (Claude Code, Codex…). CLAUDE.md lo resume.
   (p. ej., precios: PENDIENTE DE DEFINICIÓN CON FOTOLAB).
 - Mantener la documentación al día cuando cambien decisiones,
   comportamiento, arquitectura, instrucciones o limitaciones.
+- Al agregar o quitar una sección de un diseño, mantener su `id` y
+  `lib/invitation/sections.ts` (la barra de navegación sale de ahí;
+  `tests/e2e/navigation.spec.ts` lo comprueba).
 
 ## Al terminar (en la MISMA tarea, sin que se pida aparte)
 1. Implementar, probar y corregir lo encontrado (`npm run verify`: lint,

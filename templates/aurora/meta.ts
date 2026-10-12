@@ -23,6 +23,7 @@ export const meta: TemplateMeta<"aurora"> = {
   },
   fonts: { display: "Italiana", body: "Figtree" },
   musicPlayer: "destello",
+  navLabels: { historia: "Mi mensaje" },
   photoSlots: {
     portada: { ratio: [3, 4], where: "Portada, dentro del espejo ovalado", position: "50% 30%" },
     historia: { ratio: [4, 5], where: "Junto al mensaje de la quinceañera", position: "50% 30%" },

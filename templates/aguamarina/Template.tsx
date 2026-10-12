@@ -9,7 +9,8 @@ import Frame from "../shared/Frame";
 import Emphasis from "../shared/Emphasis";
 import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
-import StickyRsvp from "../shared/StickyRsvp";
+import PageNav from "../shared/PageNav";
+import { navSections } from "@/lib/invitation/sections";
 import MusicPlayer from "../shared/MusicPlayer";
 import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
@@ -168,7 +169,7 @@ export default function AguamarinaTemplate({ inv }: { inv: ResolvedInvitation })
         )}
 
         {/* Cuenta regresiva en gemas talladas */}
-        <section className="relative overflow-hidden bg-primary bg-[radial-gradient(ellipse_at_50%_0%,color-mix(in_srgb,var(--c-accent)_35%,var(--c-primary))_0%,var(--c-primary)_70%)] px-6 py-20 text-on-primary sm:py-28">
+        <section id="fecha" className="relative overflow-hidden bg-primary bg-[radial-gradient(ellipse_at_50%_0%,color-mix(in_srgb,var(--c-accent)_35%,var(--c-primary))_0%,var(--c-primary)_70%)] px-6 py-20 text-on-primary sm:py-28">
           <div className="mx-auto max-w-4xl">
             <Reveal>
               <Heading eyebrow={c.countdown.eyebrow} title={c.countdown.title} light />
@@ -192,7 +193,7 @@ export default function AguamarinaTemplate({ inv }: { inv: ResolvedInvitation })
         </section>
 
         {/* Dónde: tarjetas talladas */}
-        <section id="ceremonia" className="px-6 py-20 sm:py-28">
+        <section id="lugares" className="px-6 py-20 sm:py-28">
           <div className="mx-auto max-w-5xl">
             <Reveal>
               <Heading eyebrow="Te espero" title="Dónde celebraremos" />
@@ -448,11 +449,7 @@ export default function AguamarinaTemplate({ inv }: { inv: ResolvedInvitation })
           </div>
         </footer>
 
-        {inv.rsvp && (
-          <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-primary/95 backdrop-blur" textClassName="text-on-primary/90" buttonClassName="rounded-full bg-secondary font-semibold text-primary" />
-          </BeforeEvent>
-        )}
+        <PageNav sections={navSections(inv)} styles={{ bar: "rounded-full bg-primary/95 backdrop-blur", item: "text-on-primary/90 hover:bg-current/10", primary: "rounded-full bg-secondary font-semibold text-primary", panelFont: "font-display" }} />
         {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>

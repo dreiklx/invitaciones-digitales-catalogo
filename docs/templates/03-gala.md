@@ -92,3 +92,10 @@ recortadas a la proporción de cada marco.
 - Fotos en B/N fijas: si el cliente las quiere a color es un cambio de diseño (personalizada).
 - El monograma usa la primera letra de cada nombre.
 - Con fotos muy oscuras el B/N pierde detalle: preferir fotos con buena luz.
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): negro translúcido con filete dorado y "Confirmar" dorado con letras espaciadas (art déco).
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`); el menú
+  muestra solo las que existen según la configuración.

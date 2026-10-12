@@ -29,6 +29,12 @@ Lee primero, en este orden:
   página (rompe la carga de tipografías por página; ver PROJECT-CONTEXT).
 - Fotos: proporción fija por espacio en `meta.ts` y siempre con
   `templates/shared/Frame.tsx`.
+- Navegación: las secciones de la barra salen de
+  `lib/invitation/sections.ts` (no se escriben a mano por invitación) y
+  usan los mismos `id` en los ocho diseños (`historia`, `fecha`,
+  `lugares`, `programa`, `detalles`, `galeria`, `regalos`, `confirmar`).
+  El selector "Otros diseños" es solo de las demos (`inv.isDemo`); nunca
+  en una invitación de cliente. Ver PROJECT-CONTEXT, "Navegación".
 - No cambiar la arquitectura sin justificarlo y documentarlo.
 - Sin secretos, sin `.env`, sin datos reales de clientes en el repo o la
   documentación. No recuperar nada de la boda original ni de su historial Git.

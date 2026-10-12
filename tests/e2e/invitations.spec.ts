@@ -163,7 +163,8 @@ for (const width of [390, 1366]) {
 
         test("regreso al catálogo", async ({ page }) => {
           await page.goto(`/plantillas/${id}`);
-          await page.getByRole("link", { name: "Diseños" }).click();
+          await page.getByRole("button", { name: "Otros diseños" }).click();
+          await page.getByRole("dialog", { name: "Otros diseños" }).getByRole("link", { name: /volver al catálogo completo/i }).click();
           // Con muchas pruebas en paralelo el servidor local puede tardar en
           // responder la navegación (siempre ocurre; ver project-log).
           await expect(page).toHaveURL(/\/(#disenos)?$/, { timeout: 30_000 });

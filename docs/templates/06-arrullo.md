@@ -105,3 +105,10 @@ mesa de postres. Se descartaron las fotos de la sesión con el letrero
 ## Uso
 `npm run nueva -- arrullo` → editar `config/invitation.ts` (`parents` en
 "REEMPLAZAR"; `babyName` solo si la familia quiere) → fotos → `npm run check`.
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): píldora salvia con "Confirmar" mantequilla.
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`); el menú
+  muestra solo las que existen según la configuración.

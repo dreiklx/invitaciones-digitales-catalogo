@@ -103,3 +103,10 @@ sus padres. El lila del vestido es el de la paleta.
   bien, pero conviene revisarlo a 320 px.
 - Si se cambia `accent`, mantener contraste con texto blanco (el botón de
   confirmar es blanco sobre `accent`).
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): píldora violeta con "Confirmar" en rosa cuarzo.
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`, `programa`); el menú
+  muestra solo las que existen según la configuración.

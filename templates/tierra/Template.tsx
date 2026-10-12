@@ -7,7 +7,8 @@ import Frame from "../shared/Frame";
 import Emphasis from "../shared/Emphasis";
 import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
-import StickyRsvp from "../shared/StickyRsvp";
+import PageNav from "../shared/PageNav";
+import { navSections } from "@/lib/invitation/sections";
 import MusicPlayer from "../shared/MusicPlayer";
 import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
@@ -220,7 +221,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
         )}
 
         {/* El día: fecha monumental, cuenta regresiva y lugares */}
-        <section id="ceremonia" className="bg-primary px-6 py-20 text-on-primary sm:px-10 sm:py-28">
+        <section id="fecha" className="bg-primary px-6 py-20 text-on-primary sm:px-10 sm:py-28">
           <div className="mx-auto max-w-6xl">
             <Reveal>
               <Chapter eyebrow={c.countdown.eyebrow} title={c.countdown.title} light />
@@ -252,7 +253,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
               </Reveal>
             </div>
 
-            <div className="mt-16">
+            <div id="lugares" className="mt-16">
               {inv.locations.map((l, i) => (
                 <Reveal key={l.name + i} delay={i * 80}>
                   <div className="grid grid-cols-1 gap-4 border-t border-on-primary/20 py-8 sm:grid-cols-12 sm:gap-6">
@@ -454,11 +455,7 @@ export default function TierraTemplate({ inv }: { inv: ResolvedInvitation }) {
           </div>
         </footer>
 
-        {inv.rsvp && (
-          <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <StickyRsvp date={dates.compact} time={dates.time} barClassName="bg-primary/95 backdrop-blur" textClassName="font-display text-on-primary/90" buttonClassName="bg-accent text-on-accent" />
-          </BeforeEvent>
-        )}
+        <PageNav sections={navSections(inv)} styles={{ bar: "bg-primary/95 backdrop-blur", item: "text-on-primary/90 hover:bg-current/10", primary: "bg-accent text-on-accent", panelFont: "font-display" }} />
         {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>

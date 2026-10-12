@@ -1,4 +1,4 @@
-// Íconos de trazo simple usados por los cinco diseños (heredan el color).
+// Íconos de trazo simple usados por los diseños (heredan el color).
 
 import type { ReactNode } from "react";
 
@@ -48,6 +48,20 @@ export const CloseIcon = ({ size = 18, className }: IconProps) => svg(size, clas
 export const ExpandIcon = ({ size = 20, className }: IconProps) => svg(size, className, <path d="M14 4h6v6M10 20H4v-6M20 4l-6.5 6.5M4 20l6.5-6.5" />);
 
 export const ArrowDownIcon = ({ size = 20, className }: IconProps) => svg(size, className, <path d="M12 5v14M6 13l6 6 6-6" />);
+
+export const ArrowUpIcon = ({ size = 20, className }: IconProps) => svg(size, className, <path d="M12 19V5M6 11l6-6 6 6" />);
+
+export const ChevronDownIcon = ({ size = 18, className }: IconProps) => svg(size, className, <path d="M6 9l6 6 6-6" />);
+
+export const MenuIcon = ({ size = 20, className }: IconProps) => svg(size, className, <path d="M4 7h16M4 12h16M4 17h10" />);
+
+export const GridIcon = ({ size = 20, className }: IconProps) =>
+  svg(size, className, <>
+    <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
+    <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
+    <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
+    <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
+  </>);
 
 export const ArrowLeftIcon = ({ size = 18, className }: IconProps) => svg(size, className, <path d="M19 12H5M11 6l-6 6 6 6" />);
 

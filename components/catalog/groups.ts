@@ -1,7 +1,23 @@
-// Categorías del catálogo (datos, sin componentes: también las usan las
-// pruebas, tests/unit/config.test.ts).
+// Categorías y paleta neutra del catálogo (datos, sin componentes: también
+// los usan las pruebas y el selector "Otros diseños" de las demos,
+// templates/shared/DesignsMenu.tsx).
 
-import type { EventKind } from "@/lib/invitation/types";
+import type { EventKind, Palette } from "@/lib/invitation/types";
+
+// Identidad neutra del catálogo (distinta de los ocho diseños).
+export const catalogPalette: Palette = {
+  background: "#f4f1ea",
+  surface: "#ebe6dc",
+  text: "#1f1c18",
+  textMuted: "#6c655a",
+  primary: "#1f1c18",
+  onPrimary: "#f4f1ea",
+  secondary: "#a69a85",
+  accent: "#1f1c18",
+  onAccent: "#f4f1ea",
+  line: "#d9d2c5",
+};
+
 
 // Las cuatro categorías del catálogo; cada diseño entra por su `kind`
 // (meta.ts): 3 bodas + 2 quinceaños + 2 bebés + 1 aniversario. La categoría

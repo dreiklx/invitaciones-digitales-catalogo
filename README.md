@@ -113,8 +113,20 @@ mano. Los lugares pueden tener su propia hora (`time: "18:00"`).
 **Antes, durante y después:** desde la hora de inicio la cuenta regresiva
 muestra `countdown.todayMessage`; al terminar (`durationHours`) muestra
 `countdown.afterMessage`. Desde el inicio desaparecen el formulario de
-confirmación y la barra "Confirmar asistencia". Pasada `rsvp.deadline`, el
+confirmación y el botón "Confirmar" de la barra. Pasada `rsvp.deadline`, el
 formulario se reemplaza por un aviso con el WhatsApp de contacto.
+
+## Navegación
+
+Cada invitación trae una barra para saltar a sus secciones (abajo en el
+teléfono: "Inicio", "Secciones" y "Confirmar"; arriba a la derecha en
+escritorio). **No se configura:** la lista sale sola de los datos
+(`lib/invitation/sections.ts`) y una sección en `null` no aparece. En las
+demos del catálogo, además, "Otros diseños" (arriba a la izquierda) abre
+un selector con los ocho diseños; **una invitación de cliente no lo
+tiene**. El catálogo usa la misma barra para sus categorías. Detalle,
+nombres de las secciones y cómo agregar una: PROJECT-CONTEXT,
+"Navegación".
 
 ## Colores
 
@@ -303,7 +315,7 @@ de un enlace: compartirlo solo después del despliegue final.
 | `npm run build` | Build de producción (incluye `check`) |
 | `npm run optimize-images` | Comprime y endereza (EXIF) las fotos de `public/images/` |
 | `npm run placeholders` | Regenera las imágenes de demostración del catálogo |
-| `npm test` | Pruebas sin navegador (configuración y `nueva`), ~5 s |
+| `npm test` | Pruebas sin navegador (configuración, navegación y `nueva`), ~5 s |
 | `npm run test:e2e` | Pruebas en el navegador sobre el build (`npm run build` antes) |
 | `npm run verify` | Todo: lint, tipos, `npm test`, build (con `check`) y `test:e2e` |
 
@@ -333,8 +345,16 @@ la copia de un cliente basta `npm run check` y la revisión manual.
   errores; el archivo generado es TypeScript válido; el comando escribe
   con `--salida` sin tocar `config/invitation.ts` ni las demos.
 
-**`npm run test:e2e`** (Playwright, `tests/e2e/`, 264 pruebas (8 se omiten a propósito: Tierra y Aguamarina
-ocultan el indicador en escritorio), ~15 min;
+- `sections.test.ts`: la barra ofrece una entrada por sección presente,
+  con nombre; con `story`, `details`, `gallery`, `gifts`, `rsvp` y
+  `schedule` en `null` solo quedan la fecha y los lugares; los nombres
+  salen de los datos ("Ubicación", "Ceremonia y recepción", "Vestimenta"…)
+  y del diseño ("Nuestra espera", "Mi mensaje"); el selector "Otros
+  diseños" no existe en una invitación de cliente y en las demos lista los
+  ocho por categoría.
+
+**`npm run test:e2e`** (Playwright, `tests/e2e/`, 304 pruebas (8 se omiten a propósito: Tierra y Aguamarina
+ocultan el indicador en escritorio), ~22 min;
 necesita `npm run build` antes; levanta `next start` en el puerto 3210 o
 reutiliza uno abierto):
 - `responsive.spec.ts`: catálogo y ocho diseños en 320×568, 320×600,
@@ -359,16 +379,28 @@ reutiliza uno abierto):
   queda donde estaba; la confirmación ("Solo yo") valida el nombre,
   muestra el mensaje con el aviso de Enviar, y "No podrás asistir" valida
   y arma un aviso que dice "no podré asistir" (no "confirmar");
-  "Diseños" vuelve al catálogo.
+  "Otros diseños" → "Volver al catálogo completo" vuelve al catálogo.
 - `scroll-cue.spec.ts`: el indicador para seguir leyendo en los ocho
   diseños. Teléfono (5 tamaños, puntero táctil): dice "Desliza hacia
   arriba" con la mano animada hacia arriba (nunca "Desliza hacia abajo"),
   queda entero en la primera pantalla, no tapa los nombres ni el
-  reproductor, el aviso de la música no tapa "Diseños", y tocarlo avanza
+  reproductor, el aviso de la música no tapa "Otros diseños", y tocarlo avanza
   y lo oculta. Con "reducir movimiento" la mano queda quieta. Escritorio
   (4 tamaños): dice "Desplázate hacia abajo", está a la vista y se oculta
   al usar la rueda. Portada: "Abrir invitación" (≥ 44 px) y el aviso de
   música caben enteros en los 9 tamaños.
+- `navigation.spec.ts` (teléfono 390×844 y escritorio 1366×768): en
+  los ocho diseños la barra no está sobre la portada y aparece al bajar;
+  el menú ofrece exactamente las secciones de la configuración, en el
+  orden de la página y todas existen; Escape y "Cerrar" lo cierran; saltar
+  a CADA sección la deja arriba con su título visible, sin que la barra lo
+  tape, y pasa el foco a la sección; "Inicio" vuelve a la portada;
+  "Confirmar" lleva al formulario, la barra se aparta al escribir y no
+  tapa "Confirmar por WhatsApp", y la música sigue sonando; teclado (Enter
+  abre y elige); "reducir movimiento" (salto inmediato); "Otros diseños"
+  (también sobre la portada y desde el panel del teléfono) muestra las
+  cuatro categorías, marca el actual, cambia de diseño y vuelve al
+  catálogo; la barra del catálogo salta a cada categoría.
 - `catalog.spec.ts`: el catálogo enlaza los ocho diseños y cada uno está
   en la sección de su categoría; cada página y
   su imagen para compartir responden, las rutas viejas redirigen (308) y

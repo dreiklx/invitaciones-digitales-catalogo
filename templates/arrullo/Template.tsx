@@ -7,7 +7,8 @@ import Frame from "../shared/Frame";
 import Emphasis from "../shared/Emphasis";
 import CopyValue from "../shared/CopyValue";
 import RsvpForm, { type RsvpStyles } from "../shared/RsvpForm";
-import StickyRsvp from "../shared/StickyRsvp";
+import PageNav from "../shared/PageNav";
+import { navSections } from "@/lib/invitation/sections";
 import MusicPlayer from "../shared/MusicPlayer";
 import MusicCredit from "../shared/MusicCredit";
 import Shell from "../shared/Shell";
@@ -134,7 +135,7 @@ export default function ArrulloTemplate({ inv }: { inv: ResolvedInvitation }) {
         )}
 
         {/* Sellos de la cuenta regresiva y postales de los lugares */}
-        <section id="ceremonia" className="bg-surface px-6 py-20 sm:py-28">
+        <section id="fecha" className="bg-surface px-6 py-20 sm:py-28">
           <div className="mx-auto max-w-5xl">
             <Reveal>
               <Heading eyebrow={c.countdown.eyebrow} title={c.countdown.title} />
@@ -158,7 +159,7 @@ export default function ArrulloTemplate({ inv }: { inv: ResolvedInvitation }) {
               </div>
             </Reveal>
 
-            <div className={`mx-auto mt-16 grid grid-cols-1 gap-8 ${inv.locations.length > 1 ? "md:grid-cols-2" : "max-w-xl"}`}>
+            <div id="lugares" className={`mx-auto mt-16 grid grid-cols-1 gap-8 ${inv.locations.length > 1 ? "md:grid-cols-2" : "max-w-xl"}`}>
               {inv.locations.map((l, i) => (
                 <Reveal key={l.name + i} delay={i * 100}>
                   {/* Postal: borde blanco, sello con la luna y puntada */}
@@ -393,11 +394,7 @@ export default function ArrulloTemplate({ inv }: { inv: ResolvedInvitation }) {
           </div>
         </footer>
 
-        {inv.rsvp && (
-          <BeforeEvent startISO={inv.startISO} endISO={inv.endISO}>
-            <StickyRsvp date={dates.compact} time={dates.time} barClassName="rounded-full bg-primary/95 backdrop-blur" textClassName="text-on-primary/90" buttonClassName="rounded-full bg-secondary font-bold text-ink" />
-          </BeforeEvent>
-        )}
+        <PageNav sections={navSections(inv)} styles={{ bar: "rounded-full bg-primary/95 backdrop-blur", item: "text-on-primary/90 hover:bg-current/10", primary: "rounded-full bg-secondary font-bold text-ink", panelFont: "font-display" }} />
         {c.music && <MusicPlayer music={c.music} fallback={inv.meta.musicPlayer} />}
       </Gate>
     </Shell>

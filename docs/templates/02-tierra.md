@@ -106,3 +106,10 @@ Las fotos ya vienen recortadas a la proporción de su marco, así que el
 - Los nombres van muy grandes: con nombres largos ("María Fernanda") conviene probar a 320 px.
 - `story.caption` es un párrafo; la primera letra se vuelve capital, así que debe empezar con letra.
 - La foto `retrato` no aparece en teléfono (se dejó así para no alargar el formulario).
+
+## Navegación
+- Barra de secciones (`PageNav`, ver PROJECT-CONTEXT, "Navegación"): franja café con "Confirmar" en arcilla (esquinas rectas, de revista).
+  En escritorio, la misma paleta en la pastilla de arriba a la derecha.
+- Las secciones llevan los `id` comunes (`historia`, `fecha`, `lugares`,
+  `detalles`, `galeria`, `regalos`, `confirmar`); el menú
+  muestra solo las que existen según la configuración.
